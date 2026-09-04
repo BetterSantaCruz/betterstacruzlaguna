@@ -21,6 +21,8 @@ dist-ssr
 e2e/**/*.spec.ts-snapshots/
 e2e/**/__screenshots__/
 e2e/**/__snapshots__/
+# Reference-checkout screenshots are not current Santa Cruz evidence.
+/.github/pr-screenshots/
 
 # Editor directories and files
 .vscode/*
