@@ -37,8 +37,8 @@ const Ideas: FC = () => {
           </div>
           <p className='text-kapwa-text-support mx-auto max-w-3xl text-sm md:text-lg'>
             Ideas will be published only after their scope, evidence, and
-            maintenance path are clear. No inherited BetterLB idea list or vote
-            counts are presented here.
+            maintenance path are clear. No inherited idea list or vote counts
+            are presented here.
           </p>
         </header>
 
