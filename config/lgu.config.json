@@ -1,0 +1,63 @@
+{
+  "lgu": {
+    "name": "Santa Cruz",
+    "fullName": "Municipality of Santa Cruz",
+    "province": "Laguna",
+    "region": "Region IV-A",
+    "regionCode": "CALABARZON",
+    "type": "municipality",
+    "officialWebsite": "",
+    "provinceWebsite": ""
+  },
+  "portal": {
+    "name": "BetterSantaCruz",
+    "domain": "",
+    "baseUrl": "",
+    "description": "Independent, community-run civic information for Santa Cruz, Laguna.",
+    "brandColor": "#0f766e",
+    "footerBrandName": "BetterSantaCruz",
+    "logoWhitePath": "/logos/svg/bettersantacruz-mark.svg",
+    "navbarLogoPath": "/logos/svg/bettersantacruz-mark.svg",
+    "defaultOgImagePath": "/logos/svg/bettersantacruz-mark.svg",
+    "faviconPath": "/logos/svg/bettersantacruz-mark.svg",
+    "faviconSvgPath": "/logos/svg/bettersantacruz-mark.svg",
+    "appleTouchIconPath": "/logos/svg/bettersantacruz-mark.svg",
+    "githubUrl": "",
+    "discordUrl": "",
+    "facebookUrl": "",
+    "contactEmail": ""
+  },
+  "location": {
+    "coordinates": null,
+    "weather": {
+      "enabled": false,
+      "defaultCity": ""
+    }
+  },
+  "transparency": {
+    "procurement": {
+      "organizationName": "MUNICIPALITY OF SANTA CRUZ, LAGUNA",
+      "externalDashboard": "https://transparency.bettergov.ph/organizations/MUNICIPALITY%20OF%20SANTA%20CRUZ%2C%20LAGUNA"
+    },
+    "infrastructure": {
+      "searchString": "Santa Cruz, Laguna",
+      "exactMatchTargets": [
+        "santa cruz, laguna",
+        "municipality of santa cruz, laguna"
+      ]
+    }
+  },
+  "dataPaths": {
+    "departments": "src/data/directory/departments.json",
+    "barangays": "src/data/directory/barangays.json",
+    "services": "src/data/services/categories"
+  },
+  "features": {
+    "openLGU": false,
+    "transparency": false,
+    "tourism": false,
+    "statistics": false,
+    "weather": false,
+    "forex": false
+  }
+}
