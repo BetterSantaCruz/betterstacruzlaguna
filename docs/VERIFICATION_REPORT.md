@@ -1,6 +1,6 @@
 # Verification report
 
-Research and repository audit date: 2026-09-04
+Research and repository audit date: 2026-09-05
 
 ## Verified in this pass
 
@@ -27,4 +27,4 @@ Research and repository audit date: 2026-09-04
 
 ## Repository verification status
 
-The initial provenance test is green. Full typecheck/build/lint/E2E verification remains pending until configuration, data payloads, and route empty states are sanitized. No public repository or external deployment is claimed by this report.
+Civic-data validation, 358 unit tests, lint, TypeScript, Prettier, and the production build pass. The current Chrome browser smoke suite passes all 9 tests, including axe checks, source-ledger rendering, empty-state coverage, and disabled-feed assertions. The broader inherited E2E files remain retained architecture/reference coverage and are not claimed as a full passing suite. No public repository or external deployment is claimed by this report.

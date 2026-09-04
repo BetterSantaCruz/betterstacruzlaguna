@@ -2,7 +2,7 @@
 
 Future AI agents: read this file before making any implementation decision. Do not override factual claims here without verifying a newer primary source. This repository is an independent, evidence-gated civic information project. It is not an official Municipality of Santa Cruz website, government system, directory listing, or endorsement.
 
-## Mission and current state — 2026-09-04
+## Mission and current state — 2026-09-05
 
 Build BetterSantaCruz as a trustworthy, source-led public-information portal for Santa Cruz, Laguna while preserving the reusable BetterLB/OpenLGU architecture. The site must make uncertainty visible, keep source observations separate from canonical public data, and avoid inventing officials, contacts, budgets, procurement facts, services, schedules, fees, addresses, statistics, barangay records, or outcomes.
 
@@ -10,6 +10,8 @@ Build BetterSantaCruz as a trustworthy, source-led public-information portal for
 - The full BetterLB-derived repository architecture has been restored and is being sanitized in place. Do not prune directories or delete reusable pipeline, function, test, documentation, or schema structure merely because Santa Cruz data is not ready.
 - BetterLGU registration is handled separately by the maintainer through Antigravity. Upstream PR [#244](https://github.com/jmacj/better-lgu-directory/pull/244), `Add Santa Cruz, Laguna to directory`, is currently **OPEN** and records `@Diannn3` as maintainer with status `🔵 Planned`.
 - This workstream must not create, submit, or update another BetterLGU directory registration PR. Re-check PR #244 only when the user supplies a merged/current directory state or asks for a refresh.
+- The local implementation is checkpointed on `main` in focused commits for project foundation, evidence/docs, civic data states, review-gated pipelines, frontend surfaces, browser QA, and formatting. No remote repository has been configured and nothing has been pushed.
+- Current local QA is green for civic-data validation, 358 unit tests, lint, TypeScript, Prettier, production build, and the 9-test Chrome smoke/axe suite. The broader inherited E2E files remain retained architecture/reference coverage; the active CI workflow runs the current Santa Cruz smoke boundary.
 - Pagsanjan remains a separate BetterLGU directory entry with status `🔵 Planned` and maintainer `@rswlljms`; its existing public project is `https://github.com/rswlljms/betterpagsanjan`. Do not create a competing Pagsanjan app or impersonate that maintainer.
 - No public BetterSantaCruz repository or domain should be treated as established until the local implementation is sanitized, tested, and intentionally published.
 
@@ -62,12 +64,10 @@ The architecture is intentionally retained even while civic payloads are empty. 
 
 ## Next gates
 
-1. Finish the source registry, data-policy documents, and clean-room sanitization.
-2. Replace Los Baños factual payloads and branding while preserving reusable architecture.
-3. Make the app render honest empty states and a public source ledger.
-4. Add data validation and clean-room checks, then run tests, typecheck, build, and browser-oriented QA.
-5. Inspect the final diff for leaked BetterLB/Los Baños claims before any public repository creation or push.
-6. Refresh this file if the user supplies the merged/current BetterLGU directory state; until then, PR #244 remains the authoritative current registration state.
+1. Continue source freshness and corroboration work; promote only evidence-backed Santa Cruz records.
+2. Keep services, directories, officials, statistics, tourism, transparency, weather, and contact channels empty or disabled until their source and publication gates are met.
+3. Inspect each future diff for leaked BetterLB/Los Baños claims before any public repository creation or push.
+4. Refresh this file if the user supplies the merged/current BetterLGU directory state; until then, PR #244 remains the authoritative current registration state.
 
 The upstream OpenLGU terminology reference below is retained as architecture documentation. It is not a claim that the BetterLB factual dataset is valid for Santa Cruz.
 

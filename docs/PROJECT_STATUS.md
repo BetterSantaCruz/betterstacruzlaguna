@@ -1,6 +1,6 @@
 # Project status
 
-As of 2026-09-04, BetterSantaCruz is a local foundation under active implementation.
+As of 2026-09-05, BetterSantaCruz is a local foundation under active implementation.
 
 ## Completed
 
@@ -10,13 +10,14 @@ As of 2026-09-04, BetterSantaCruz is a local foundation under active implementat
 - Initial provenance schema and failing-then-green unit test.
 - Santa Cruz and Pagsanjan source inventories and collaboration draft.
 - Current BetterLGU PR #244 recorded; no duplicate registration PR is part of this workstream.
+- Civic-data validation, 358 unit tests, lint, TypeScript, Prettier, production build, and the current 9-test Chrome smoke/axe suite are green.
 
 ## In progress
 
 - Continue Santa Cruz source verification and corroboration before promoting civic data.
 - Maintain machine-readable source/civic registries and build-time data checks.
 - Keep source-ledger UI and honest empty states aligned with the evidence boundary.
-- Run clean-room audit, tests, typecheck, build, and browser QA before publication.
+- Continue the clean-room audit and source corroboration before any publication or repository push.
 
 ## Not yet claimed
 
