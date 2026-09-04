@@ -1,0 +1,19 @@
+{
+  "meta": {
+    "location": {
+      "region": "Region IV-A (CALABARZON)",
+      "province": "Laguna",
+      "municipality": "Santa Cruz"
+    },
+    "source": "Not yet verified",
+    "notes": "No population series is published until a directly inspectable PSA source is corroborated.",
+    "censusDates": {}
+  },
+  "municipality": {
+    "name": "Santa Cruz",
+    "history": [],
+    "growthRates": []
+  },
+  "barangays": []
+}
+

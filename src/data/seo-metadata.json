@@ -1,0 +1,54 @@
+{
+  "/": {
+    "title": "{{portal.name}} | {{lgu.name}}, {{lgu.province}}",
+    "description": "Independent, source-led civic information for {{lgu.name}}, {{lgu.province}}."
+  },
+  "/about": {
+    "title": "About {{portal.name}}",
+    "description": "How {{portal.name}} handles sources, uncertainty, and review."
+  },
+  "/accessibility": {
+    "title": "Accessibility | {{portal.name}}",
+    "description": "Accessibility statement and current checks."
+  },
+  "/contact": {
+    "title": "Contact {{portal.name}}",
+    "description": "Current support and collaboration channel status."
+  },
+  "/contribute": {
+    "title": "Contribute | {{portal.name}}",
+    "description": "How evidence and corrections can be reviewed."
+  },
+  "/government": {
+    "title": "Government information | {{portal.name}}",
+    "description": "Directory status and current data gaps."
+  },
+  "/ideas": {
+    "title": "Project ideas | {{portal.name}}",
+    "description": "Review-gated future ideas."
+  },
+  "/join-us": {
+    "title": "Join {{portal.name}}",
+    "description": "Collaboration status for the independent civic project."
+  },
+  "/search": {
+    "title": "Search | {{portal.name}}",
+    "description": "Search reviewed civic information."
+  },
+  "/services": {
+    "title": "Services | {{portal.name}}",
+    "description": "Reviewed service records and current data gaps."
+  },
+  "/sitemap": {
+    "title": "Sitemap | {{portal.name}}",
+    "description": "Current page map."
+  },
+  "/sources": {
+    "title": "Source ledger | {{portal.name}}",
+    "description": "Upstream sources, retrieval dates, and verification states."
+  },
+  "/terms-of-service": {
+    "title": "Terms of Service | {{portal.name}}",
+    "description": "Use, source, and uncertainty guidance."
+  }
+}

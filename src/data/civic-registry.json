@@ -1,0 +1,35 @@
+{
+  "municipality": "Santa Cruz",
+  "province": "Laguna",
+  "region": "Region IV-A (CALABARZON)",
+  "facts": [
+    {
+      "id": "sc-procuring-entity-name",
+      "label": "PhilGEPS procuring-entity name",
+      "value": "MUNICIPALITY OF SANTA CRUZ, LAGUNA",
+      "municipality": "Santa Cruz",
+      "sourceId": "sc-philgeps-11459794",
+      "sourceTitle": "Printable Bid Notice Abstract 11459794",
+      "sourceUrl": "https://notices.philgeps.gov.ph/GEPSNONPILOT/Tender/PrintableBidNoticeAbstractUI.aspx?refid=11459794",
+      "sourceOrganization": "PhilGEPS / MUNICIPALITY OF SANTA CRUZ, LAGUNA",
+      "publishedAt": "2024-11-11T00:00:00+08:00",
+      "retrievedAt": "2026-09-04",
+      "lastVerifiedAt": "2026-09-04",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "sc-sb-reported-barangay-count",
+      "label": "Barangay count reported by Sangguniang Bayan source",
+      "value": 26,
+      "municipality": "Santa Cruz",
+      "sourceId": "sc-sb-about",
+      "sourceTitle": "About Us — Sangguniang Bayan of Santa Cruz, Laguna",
+      "sourceUrl": "https://sbstacruz.com/aboutUs",
+      "sourceOrganization": "Sangguniang Bayan of Santa Cruz, Laguna",
+      "publishedAt": null,
+      "retrievedAt": "2026-09-04",
+      "lastVerifiedAt": "2026-09-04",
+      "verificationStatus": "observed"
+    }
+  ]
+}
