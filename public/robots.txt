@@ -1,0 +1,5 @@
+User-Agent: *
+Disallow: /
+
+# No public BetterSantaCruz domain is configured yet. Revisit this file as part
+# of an intentional publication review.

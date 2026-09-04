@@ -1,0 +1,109 @@
+{
+  "hero": {
+    "title": "BetterSantaCruz",
+    "subtitle": "Independenteng impormasyong sibiko na nakabatay sa mga pinagmulan para sa Santa Cruz, Laguna. Hindi ito opisyal na website ng munisipyo.",
+    "quickAccess": "Tuklasin",
+    "nationalId": "Talaan ng sources",
+    "birthCertificate": "Mga kakulangan sa datos",
+    "businessRegistration": "Mag-ambag ng ebidensya",
+    "searchPlaceholder": "Maghanap ng beripikadong nilalaman...",
+    "searchLabel": "Maghanap ng impormasyong sibiko",
+    "noResults": "Walang tumugmang beripikadong nilalaman.",
+    "financialReports": "Transparency",
+    "financialReportsDesc": "Kasalukuyang bineberipika ang datos",
+    "infrastructure": "Mga proyekto",
+    "infrastructureDesc": "Mga rekord na may source lamang",
+    "legislation": "Lehislasyon",
+    "legislationDesc": "Hindi pa tapos ang pagsusuri",
+    "government": "Pamahalaan",
+    "governmentDesc": "Hindi pa beripikado ang direktoryo",
+    "statistics": "Istatistika",
+    "statisticsDesc": "Nakabinbin ang access sa PSA source"
+  },
+  "services": {
+    "title": "Mga serbisyo",
+    "governmentServices": "Mga serbisyo ng pamahalaan",
+    "description": "Maglalagay lamang ng serbisyo kapag nasuri ang kasalukuyang opisyal na Citizens' Charter o katumbas na source.",
+    "viewAll": "Tingnan ang status ng serbisyo",
+    "viewAllCategory": "Tingnan ang mga serbisyo"
+  },
+  "weather": {
+    "title": "Mga update sa panahon"
+  },
+  "forex": {
+    "title": "Palitan ng pera"
+  },
+  "news": {
+    "title": "Balita at mga update"
+  },
+  "footer": {
+    "copyright": "Independenteng community infrastructure ang BetterSantaCruz. Kailangan ng source verification para sa mga lokal na datos."
+  },
+  "navbar": {
+    "home": "Home",
+    "services": "Mga serbisyo",
+    "statistics": "Istatistika",
+    "government": "Pamahalaan",
+    "legislative": "Lehislasyon",
+    "transparency": "Transparency",
+    "sources": "Sources",
+    "contact": "Makipag-ugnayan",
+    "legislation": "Lehislasyon",
+    "openlgu": "OpenLGU"
+  },
+  "joinUs": {
+    "stripTitle": "Tumulong sa pagpapabuti ng pampublikong impormasyon",
+    "stripSubtitle": "Mag-ambag ng sources, corrections, accessibility feedback, o code.",
+    "joinNow": "Mag-ambag",
+    "discord": "Komunidad",
+    "bannerTitle": "Tumulong sa pagpapabuti ng pampublikong impormasyon",
+    "bannerSubtitle": "Magbahagi ng pampublikong ebidensya at panatilihing malinaw ang mga hindi pa tiyak.",
+    "bannerHighlight": "Independent. Source-led. Pinapatakbo ng komunidad.",
+    "joinMovement": "Mag-ambag",
+    "or": "o",
+    "joinDiscord": "Tingnan ang gabay sa pag-aambag",
+    "features": "Sources • Accessibility • Research • Code"
+  },
+  "data": {
+    "title": "Mga serbisyo ng datos",
+    "description": "Ang ilang pambansang serbisyo ng datos ay hiwalay sa lokal na rekord sibiko.",
+    "weatherForecast": "Pagtataya ng panahon",
+    "realtimeConditions": "Kondisyon sa real time",
+    "viewArrow": "Tingnan →",
+    "weatherDescription": "Hindi pinagana ang lokal na panahon hanggang ma-verify ang coordinates at kasalukuyang source.",
+    "manila": "Manila",
+    "cebu": "Cebu",
+    "davao": "Davao",
+    "moreCities": "Iba pang lungsod",
+    "forexRates": "Forex rates",
+    "liveExchange": "Live exchange rates",
+    "forexDescription": "Hiwalay ang foreign exchange data sa mga lokal na rekord sibiko ng Santa Cruz.",
+    "usd": "USD",
+    "eur": "EUR",
+    "jpy": "JPY",
+    "moreCurrencies": "Iba pang pera"
+  },
+  "promotion": {
+    "philsysTitle": "Impormasyon tungkol sa National ID",
+    "philsysDescription": "Beripikahin ang pambansang serbisyo sa kasalukuyang opisyal na source bago ito ilista rito.",
+    "registerNow": "Tingnan ang source"
+  },
+  "government": {
+    "title": "Impormasyon tungkol sa pamahalaan",
+    "description": "Bineberipika ang direktoryo ng pamahalaan ng Santa Cruz. Wala pang opisyal o contact ng tanggapan na inilalathala.",
+    "executiveTitle": "Sangay na tagapagpaganap",
+    "executiveDescription": "Hindi pa beripikado ang kasalukuyang officeholder data.",
+    "legislativeTitle": "Sangay na tagapagbatas",
+    "legislativeDescription": "Nakatala ang source ng Sangguniang Bayan; hindi pa inilalathala ang canonical records.",
+    "barangaysTitle": "Mga barangay",
+    "barangaysDescription": "Nakabinbin ang direktang corroboration ng opisyal na listahan mula sa PSA.",
+    "departmentsTitle": "Mga kagawaran ng munisipyo",
+    "departmentsDescription": "Lilitaw ang records pagkatapos ng pagsusuri ng source at freshness.",
+    "electedofficialsTitle": "Mga nahalal na opisyal",
+    "electedofficialsDescription": "Hindi pa beripikado para sa publikasyon ang kasalukuyang officials.",
+    "learnMore": "Tingnan ang status",
+    "directoryTitle": "Direktoryo",
+    "directoryDescription": "Tingnan lamang ang mga rekord na pumasa sa evidence gate.",
+    "viewDirectory": "Tingnan ang direktoryo"
+  }
+}

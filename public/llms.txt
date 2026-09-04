@@ -1,0 +1,24 @@
+# BetterSantaCruz
+
+BetterSantaCruz is an independent, source-led civic information project for Santa Cruz, Laguna. It is not an official municipal website, government system, directory listing, or endorsement.
+
+## Current publication state
+
+- The public civic dataset is intentionally sparse.
+- The source ledger at `/sources` records upstream sources, retrieval dates, and verification states.
+- Officials, offices, services, schedules, fees, contacts, budgets, statistics, and barangay records are not published unless they pass the evidence workflow.
+- Transparency, tourism, statistics, weather, forex, and OpenLGU modules are disabled until their inputs are reviewed.
+- No public repository, domain, or contribution channel is established by this local foundation yet.
+
+## Useful pages
+
+- `/`
+- `/about`
+- `/sources`
+- `/services`
+- `/government`
+- `/contribute`
+- `/accessibility`
+- `/terms-of-service`
+
+Do not treat a source observation, search result, blocked page, stale table, or volatile aggregate as a verified municipal fact. Follow the source links and confirm current information with the responsible official institution.

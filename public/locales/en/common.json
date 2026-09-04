@@ -1,0 +1,109 @@
+{
+  "hero": {
+    "title": "BetterSantaCruz",
+    "subtitle": "Independent, source-led civic information for Santa Cruz, Laguna. This project is not the official municipal website.",
+    "quickAccess": "Explore",
+    "nationalId": "Source ledger",
+    "birthCertificate": "Data gaps",
+    "businessRegistration": "Contribute evidence",
+    "searchPlaceholder": "Search verified content...",
+    "searchLabel": "Search civic information",
+    "noResults": "No matching verified content.",
+    "financialReports": "Transparency",
+    "financialReportsDesc": "Data currently being verified",
+    "infrastructure": "Projects",
+    "infrastructureDesc": "Source-backed records only",
+    "legislation": "Legislation",
+    "legislationDesc": "Review not yet complete",
+    "government": "Government",
+    "governmentDesc": "Directory not yet verified",
+    "statistics": "Statistics",
+    "statisticsDesc": "PSA source access pending"
+  },
+  "services": {
+    "title": "Services",
+    "governmentServices": "Government services",
+    "description": "Service records will be added only after a current official Citizens' Charter or equivalent source is reviewed.",
+    "viewAll": "View service status",
+    "viewAllCategory": "View services"
+  },
+  "weather": {
+    "title": "Weather updates"
+  },
+  "forex": {
+    "title": "Foreign exchange rates"
+  },
+  "news": {
+    "title": "News and updates"
+  },
+  "footer": {
+    "copyright": "BetterSantaCruz is independent community infrastructure. Local facts require source verification."
+  },
+  "navbar": {
+    "home": "Home",
+    "services": "Services",
+    "statistics": "Statistics",
+    "government": "Government",
+    "legislative": "Legislation",
+    "transparency": "Transparency",
+    "sources": "Sources",
+    "contact": "Contact",
+    "legislation": "Legislation",
+    "openlgu": "OpenLGU"
+  },
+  "joinUs": {
+    "stripTitle": "Help improve public information",
+    "stripSubtitle": "Contribute sources, corrections, accessibility feedback, or code.",
+    "joinNow": "Contribute",
+    "discord": "Community",
+    "bannerTitle": "Help improve public information",
+    "bannerSubtitle": "Share public evidence and help keep uncertainty visible.",
+    "bannerHighlight": "Independent. Source-led. Community-run.",
+    "joinMovement": "Contribute",
+    "or": "or",
+    "joinDiscord": "View contribution guidance",
+    "features": "Sources • Accessibility • Research • Code"
+  },
+  "data": {
+    "title": "Data services",
+    "description": "Some national data services remain separate from local civic records.",
+    "weatherForecast": "Weather forecast",
+    "realtimeConditions": "Real-time conditions",
+    "viewArrow": "View →",
+    "weatherDescription": "Local weather is not enabled until coordinates and a current source are verified.",
+    "manila": "Manila",
+    "cebu": "Cebu",
+    "davao": "Davao",
+    "moreCities": "More cities",
+    "forexRates": "Forex rates",
+    "liveExchange": "Live exchange rates",
+    "forexDescription": "Foreign exchange data is separate from Santa Cruz civic facts.",
+    "usd": "USD",
+    "eur": "EUR",
+    "jpy": "JPY",
+    "moreCurrencies": "More currencies"
+  },
+  "promotion": {
+    "philsysTitle": "National ID information",
+    "philsysDescription": "National services should be verified against their current official source before being listed here.",
+    "registerNow": "Check source"
+  },
+  "government": {
+    "title": "Government information",
+    "description": "The Santa Cruz government directory is being verified. No officials or office contacts are published yet.",
+    "executiveTitle": "Executive branch",
+    "executiveDescription": "Current officeholder data is not yet verified.",
+    "legislativeTitle": "Legislative branch",
+    "legislativeDescription": "The Sangguniang Bayan source is recorded; canonical records are not yet published.",
+    "barangaysTitle": "Barangays",
+    "barangaysDescription": "The official barangay list is pending direct PSA corroboration.",
+    "departmentsTitle": "Municipal departments",
+    "departmentsDescription": "Department records will appear after source and freshness review.",
+    "electedofficialsTitle": "Elected officials",
+    "electedofficialsDescription": "Current officials are not yet verified for publication.",
+    "learnMore": "View status",
+    "directoryTitle": "Directory",
+    "directoryDescription": "Browse only records that have passed the evidence gate.",
+    "viewDirectory": "View directory"
+  }
+}
