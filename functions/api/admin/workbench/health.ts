@@ -25,7 +25,9 @@ export async function handleGetHealth(context: {
       env.BETTERSANTACRUZ_DB.prepare(
         'SELECT COUNT(*) as count FROM review_decisions'
       ).first<{ count: number }>(),
-      env.BETTERSANTACRUZ_DB.prepare('SELECT COUNT(*) as count FROM terms').first<{
+      env.BETTERSANTACRUZ_DB.prepare(
+        'SELECT COUNT(*) as count FROM terms'
+      ).first<{
         count: number;
       }>(),
     ]);

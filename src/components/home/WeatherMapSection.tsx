@@ -124,10 +124,7 @@ export default function WeatherMapSection() {
 
       // Create the map
       mapInstance = L.map(container, {
-        center: [
-          lat,
-          lon,
-        ],
+        center: [lat, lon],
         zoom: 15,
         scrollWheelZoom: false,
         zoomControl: true,
@@ -143,10 +140,7 @@ export default function WeatherMapSection() {
       }).addTo(mapInstance);
 
       // Add marker
-      const marker = L.marker([
-        lat,
-        lon,
-      ]).addTo(mapInstance);
+      const marker = L.marker([lat, lon]).addTo(mapInstance);
       const popupContent = document.createElement('div');
       popupContent.textContent = `${config.lgu.fullName} Municipal Hall`;
       const popupSub = document.createElement('div');

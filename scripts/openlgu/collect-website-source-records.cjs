@@ -45,9 +45,14 @@ function loadSources(configPath) {
       const url = new URL(source.url);
       if (!['http:', 'https:'].includes(url.protocol)) throw new Error();
     } catch {
-      throw new Error(`Source URL must be an absolute HTTP(S) URL: ${source.url}`);
+      throw new Error(
+        `Source URL must be an absolute HTTP(S) URL: ${source.url}`
+      );
     }
-    if (!Array.isArray(source.column_mappings) || source.column_mappings.length === 0) {
+    if (
+      !Array.isArray(source.column_mappings) ||
+      source.column_mappings.length === 0
+    ) {
       throw new Error(`Source ${source.key} must define column_mappings.`);
     }
 

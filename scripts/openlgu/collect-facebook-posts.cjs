@@ -396,7 +396,9 @@ function main() {
     `Extracted ${totalDocs} document(s) from ${files.length - skippedFiles}/${files.length} file(s)`
   );
   console.log(`Emitted ${allRecords.length} source record(s)`);
-  console.log(`Output: ${path.join(args.outputRoot, args.sourceKey, 'latest')}`);
+  console.log(
+    `Output: ${path.join(args.outputRoot, args.sourceKey, 'latest')}`
+  );
 }
 
 try {

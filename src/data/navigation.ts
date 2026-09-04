@@ -29,7 +29,10 @@ const conditionalNavigation: NavigationItem[] = [
           children: [
             { label: 'Ordinances', href: '/openlgu?type=ordinance' },
             { label: 'Resolutions', href: '/openlgu?type=resolution' },
-            { label: 'Executive Orders', href: '/openlgu?type=executive_order' },
+            {
+              label: 'Executive Orders',
+              href: '/openlgu?type=executive_order',
+            },
           ],
         },
       ]

@@ -27,7 +27,9 @@ test.describe('BetterSantaCruz sanity suite', () => {
   });
 
   // RULE 3: Navigation & Breadcrumbs (Ensures the site "Flow" works)
-  test('directory navigation exposes an empty, review-gated state', async ({ page }) => {
+  test('directory navigation exposes an empty, review-gated state', async ({
+    page,
+  }) => {
     await page.goto('/government/departments');
     await expect(page.locator('h1').first()).toBeVisible();
     await expect(page.getByRole('status')).toContainText(

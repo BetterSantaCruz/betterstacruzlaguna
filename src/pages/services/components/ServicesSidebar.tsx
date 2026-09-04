@@ -76,7 +76,10 @@ export default function ServicesSidebar({
         ) : (
           <p className='text-kapwa-text-support text-xs leading-relaxed'>
             The public contribution repository is not published yet. Use the{' '}
-            <a className='text-kapwa-text-brand font-semibold underline' href='/sources'>
+            <a
+              className='text-kapwa-text-brand font-semibold underline'
+              href='/sources'
+            >
               source ledger
             </a>{' '}
             for current project context.

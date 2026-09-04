@@ -8,7 +8,10 @@ import {
   type SourceRecord,
 } from '../src/lib/provenance';
 
-const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const projectRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '..'
+);
 const today = new Date().toISOString().slice(0, 10);
 
 function readJson(relativePath: string): unknown {
@@ -47,7 +50,7 @@ function assertNoInheritedClaims(relativePaths: string[]): void {
 
   if (hits.length > 0) {
     throw new Error(
-      `Inherited Los Baños/BetterLB content remains in publishable data or UI files:\n${hits.join('\n')}`,
+      `Inherited Los Baños/BetterLB content remains in publishable data or UI files:\n${hits.join('\n')}`
     );
   }
 }
@@ -58,16 +61,23 @@ function assertUniqueRecords(value: unknown, relativePath: string): void {
   for (const record of value) {
     if (!record || typeof record !== 'object') continue;
     const candidate = record as Record<string, unknown>;
-    const key = candidate.slug ?? candidate.id ?? candidate.documentNumber ?? candidate.serviceNumber;
+    const key =
+      candidate.slug ??
+      candidate.id ??
+      candidate.documentNumber ??
+      candidate.serviceNumber;
     if (typeof key !== 'string' || key.length === 0) continue;
-    if (seen.has(key)) throw new Error(`Duplicate record key ${key} in ${relativePath}`);
+    if (seen.has(key))
+      throw new Error(`Duplicate record key ${key} in ${relativePath}`);
     seen.add(key);
   }
 }
 
 function assertNoNegativeAmounts(value: unknown, location = 'data'): void {
   if (Array.isArray(value)) {
-    value.forEach((item, index) => assertNoNegativeAmounts(item, `${location}[${index}]`));
+    value.forEach((item, index) =>
+      assertNoNegativeAmounts(item, `${location}[${index}]`)
+    );
     return;
   }
   if (!value || typeof value !== 'object') return;
@@ -76,7 +86,9 @@ function assertNoNegativeAmounts(value: unknown, location = 'data'): void {
     if (
       typeof child === 'number' &&
       child < 0 &&
-      /(amount|price|budget|cost|fee|revenue|expenditure|abc|income|expense)/i.test(key)
+      /(amount|price|budget|cost|fee|revenue|expenditure|abc|income|expense)/i.test(
+        key
+      )
     ) {
       throw new Error(`Negative currency-like value at ${location}.${key}`);
     }
@@ -85,11 +97,13 @@ function assertNoNegativeAmounts(value: unknown, location = 'data'): void {
 }
 
 function main(): void {
-  const sources = validateSourceRegistry(readJson('src/data/sources/source-registry.json'));
+  const sources = validateSourceRegistry(
+    readJson('src/data/sources/source-registry.json')
+  );
   const civicRegistry = validateCivicRegistry(
     readJson('src/data/civic-registry.json'),
     sources,
-    today,
+    today
   );
 
   const config = readJson('config/lgu.config.json') as {
@@ -101,13 +115,17 @@ function main(): void {
     config.lgu?.province !== 'Laguna' ||
     config.lgu?.region !== 'Region IV-A'
   ) {
-    throw new Error('LGU config identity must be Santa Cruz, Laguna, Region IV-A');
+    throw new Error(
+      'LGU config identity must be Santa Cruz, Laguna, Region IV-A'
+    );
   }
   if (
     config.transparency?.procurement?.organizationName !==
     'MUNICIPALITY OF SANTA CRUZ, LAGUNA'
   ) {
-    throw new Error('Procurement organization name is not the verified Santa Cruz identity');
+    throw new Error(
+      'Procurement organization name is not the verified Santa Cruz identity'
+    );
   }
 
   const requiredSourceIds = ['sc-philgeps-11459794', 'sc-sb-about'];
@@ -147,22 +165,30 @@ function main(): void {
   }
   assertNoInheritedClaims(allDataFiles);
 
-  const rawFiles = walkFiles('raw_data').filter(relativePath => !relativePath.endsWith('README.md'));
+  const rawFiles = walkFiles('raw_data').filter(
+    relativePath => !relativePath.endsWith('README.md')
+  );
   if (rawFiles.length > 0) {
-    throw new Error(`raw_data contains unreviewed files: ${rawFiles.join(', ')}`);
+    throw new Error(
+      `raw_data contains unreviewed files: ${rawFiles.join(', ')}`
+    );
   }
 
   const logoFiles = walkFiles('public/logos');
-  const inheritedLogoFiles = logoFiles.filter(relativePath => /betterlb|lb-seal/i.test(relativePath));
+  const inheritedLogoFiles = logoFiles.filter(relativePath =>
+    /betterlb|lb-seal/i.test(relativePath)
+  );
   if (inheritedLogoFiles.length > 0) {
-    throw new Error(`Inherited BetterLB logo assets remain: ${inheritedLogoFiles.join(', ')}`);
+    throw new Error(
+      `Inherited BetterLB logo assets remain: ${inheritedLogoFiles.join(', ')}`
+    );
   }
 
   const santaCruzFacts = civicRegistry.facts.filter(
-    fact => fact.municipality === 'Santa Cruz',
+    fact => fact.municipality === 'Santa Cruz'
   );
   console.log(
-    `Civic data validation passed: ${sources.length} sources, ${santaCruzFacts.length} Santa Cruz facts, ${today} cutoff.`,
+    `Civic data validation passed: ${sources.length} sources, ${santaCruzFacts.length} Santa Cruz facts, ${today} cutoff.`
   );
 }
 

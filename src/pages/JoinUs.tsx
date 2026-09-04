@@ -23,7 +23,10 @@ const JoinUs: FC = () => {
         <div className='container mx-auto px-4 py-16 md:py-24'>
           <div className='mx-auto max-w-3xl text-center'>
             <div className='bg-kapwa-bg-surface/15 mb-6 inline-flex rounded-full p-4'>
-              <UsersIcon className='text-kapwa-text-inverse h-10 w-10' aria-hidden='true' />
+              <UsersIcon
+                className='text-kapwa-text-inverse h-10 w-10'
+                aria-hidden='true'
+              />
             </div>
             <h1 className='text-kapwa-text-inverse kapwa-heading-xl font-extrabold'>
               Join BetterSantaCruz

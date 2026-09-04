@@ -126,7 +126,9 @@ async function getSessionsList(context: { request: Request; env: Env }) {
               WHERE session_id IN (${placeholders})
             `;
 
-            const absencesResult = await env.BETTERSANTACRUZ_DB.prepare(absencesSql)
+            const absencesResult = await env.BETTERSANTACRUZ_DB.prepare(
+              absencesSql
+            )
               .bind(...batch)
               .all();
 

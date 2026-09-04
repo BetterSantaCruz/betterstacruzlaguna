@@ -268,7 +268,10 @@ export default function ElectedOfficialsPage() {
           description='Current leadership records are not yet verified for publication.'
           breadcrumb={[
             { label: 'Government', href: '/government' },
-            { label: 'Elected Officials', href: '/government/elected-officials' },
+            {
+              label: 'Elected Officials',
+              href: '/government/elected-officials',
+            },
           ]}
         />
         <DataStatus

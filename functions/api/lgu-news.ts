@@ -9,7 +9,10 @@
 export async function onRequest(context: {
   request: Request;
 }): Promise<Response> {
-  if (context.request.method !== 'GET' && context.request.method !== 'OPTIONS') {
+  if (
+    context.request.method !== 'GET' &&
+    context.request.method !== 'OPTIONS'
+  ) {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
       status: 405,
       headers: { 'Content-Type': 'application/json' },

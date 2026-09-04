@@ -12,11 +12,12 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
     await expect(page.locator('h1').first()).toBeVisible();
 
     await expect(page.locator('h1')).toBeVisible();
-    await expect(page.getByText(/Independent community project/i)).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Source ledger' }).first()).toHaveAttribute(
-      'href',
-      '/sources'
-    );
+    await expect(
+      page.getByText(/Independent community project/i)
+    ).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: 'Source ledger' }).first()
+    ).toHaveAttribute('href', '/sources');
     await expect(page.locator('body')).not.toContainText(/Los Baños|BetterLB/i);
   });
 
@@ -26,7 +27,9 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
     await page.goto('/sources');
     await expect(page.locator('h1').first()).toBeVisible();
 
-    await expect(page.getByRole('heading', { name: 'Source ledger' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Source ledger' })
+    ).toBeVisible();
     await expect(page.getByText(/source records shown/i)).toContainText('15');
     await expect(page.getByText(/Evidence before publication/i)).toBeVisible();
 
@@ -35,12 +38,21 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
     await expect(page.locator('body')).not.toContainText(/Los Baños|BetterLB/i);
   });
 
-  test('unverified civic datasets are explicit empty states', async ({ page }) => {
-    for (const route of ['/services', '/government/departments', '/government/barangays', '/government/elected-officials']) {
+  test('unverified civic datasets are explicit empty states', async ({
+    page,
+  }) => {
+    for (const route of [
+      '/services',
+      '/government/departments',
+      '/government/barangays',
+      '/government/elected-officials',
+    ]) {
       await page.goto(route);
       await expect(page.locator('h1').first()).toBeVisible();
       await expect(page.getByRole('status').first()).toBeVisible();
-      await expect(page.getByRole('status').first()).toContainText(/not yet|not published|published yet|not available|being verified/i);
+      await expect(page.getByRole('status').first()).toContainText(
+        /not yet|not published|published yet|not available|being verified/i
+      );
     }
   });
 
@@ -60,12 +72,16 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
     expect(externalRequests).toEqual([]);
   });
 
-  test('home, sources, and services pass an axe smoke scan', async ({ page }) => {
+  test('home, sources, and services pass an axe smoke scan', async ({
+    page,
+  }) => {
     for (const route of ['/', '/sources', '/services']) {
       await page.goto(route);
       await expect(page.locator('h1').first()).toBeVisible();
       const results = await new AxeBuilder({ page }).analyze();
-      expect(results.violations, `${route} accessibility violations`).toEqual([]);
+      expect(results.violations, `${route} accessibility violations`).toEqual(
+        []
+      );
     }
   });
 });

@@ -63,7 +63,9 @@ export function validateSourceRecord(value: unknown): SourceRecord {
 }
 
 export function validateSourceRegistry(value: unknown): SourceRecord[] {
-  const registry = z.object({ sources: z.array(sourceRecordSchema) }).parse(value);
+  const registry = z
+    .object({ sources: z.array(sourceRecordSchema) })
+    .parse(value);
   const ids = new Set<string>();
 
   for (const source of registry.sources) {
@@ -79,7 +81,7 @@ export function validateSourceRegistry(value: unknown): SourceRecord[] {
 export function validateCivicRegistry(
   value: unknown,
   sources: SourceRecord[],
-  today = new Date().toISOString().slice(0, 10),
+  today = new Date().toISOString().slice(0, 10)
 ): CivicRegistry {
   const registry = civicRegistrySchema.parse(value);
   const sourceById = new Map(sources.map(source => [source.sourceId, source]));
@@ -97,7 +99,7 @@ export function validateCivicRegistry(
     }
     if (source.municipality !== fact.municipality) {
       throw new Error(
-        `Municipality mismatch for ${fact.id}: ${fact.municipality} versus ${source.municipality}`,
+        `Municipality mismatch for ${fact.id}: ${fact.municipality} versus ${source.municipality}`
       );
     }
 

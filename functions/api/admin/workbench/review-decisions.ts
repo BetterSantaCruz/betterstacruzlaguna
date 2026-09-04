@@ -131,7 +131,11 @@ export async function handleCreateDecision(context: {
       }
     }
 
-    const result = await createDecision(env.BETTERSANTACRUZ_DB, auth.user.login, body);
+    const result = await createDecision(
+      env.BETTERSANTACRUZ_DB,
+      auth.user.login,
+      body
+    );
 
     return Response.json(result, { status: 201 });
   } catch (error) {

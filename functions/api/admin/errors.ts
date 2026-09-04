@@ -204,7 +204,9 @@ async function deleteError(context: {
     }
 
     // Delete the error record
-    await env.BETTERSANTACRUZ_DB.prepare(`DELETE FROM parse_errors WHERE id = ?1`)
+    await env.BETTERSANTACRUZ_DB.prepare(
+      `DELETE FROM parse_errors WHERE id = ?1`
+    )
       .bind(errorId)
       .run();
 

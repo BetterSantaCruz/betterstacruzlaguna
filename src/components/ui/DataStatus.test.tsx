@@ -14,15 +14,14 @@ describe('DataStatus', () => {
           message='No department records are published yet.'
           sourceHref='/sources'
         />
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     expect(screen.getByRole('status')).toHaveTextContent(
-      'Data currently being verified',
+      'Data currently being verified'
     );
-    expect(screen.getByRole('link', { name: 'View source ledger' })).toHaveAttribute(
-      'href',
-      '/sources',
-    );
+    expect(
+      screen.getByRole('link', { name: 'View source ledger' })
+    ).toHaveAttribute('href', '/sources');
   });
 });

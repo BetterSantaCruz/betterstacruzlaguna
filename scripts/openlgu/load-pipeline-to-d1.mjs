@@ -266,9 +266,7 @@ function loadStagedPersonRefs(isRemote) {
 
 function loadReviewDecisions(isRemote) {
   console.log('\nLoading review_decisions...');
-  const decisions = readJsonl(
-    path.join(pipelineDir, 'review-decisions.jsonl')
-  );
+  const decisions = readJsonl(path.join(pipelineDir, 'review-decisions.jsonl'));
   if (!decisions.length) {
     console.log('  No review decisions found (expected on first run).');
     return;

@@ -161,7 +161,9 @@ async function getPersonsList(context: { request: Request; env: Env }) {
             WHERE cm.person_id IN (${placeholders})
             ORDER BY cm.term_id, c.name ASC
           `;
-          const committeeResult = await env.BETTERSANTACRUZ_DB.prepare(committeeSql)
+          const committeeResult = await env.BETTERSANTACRUZ_DB.prepare(
+            committeeSql
+          )
             .bind(...personIds)
             .all<CommitteeMembershipRow>();
           committeeMemberships = committeeResult.results;
@@ -384,7 +386,9 @@ async function getPersonDetail(context: { request: Request; env: Env }) {
           WHERE m.person_id = ?
           ORDER BY t.term_number DESC
         `;
-        const membershipsResult = await env.BETTERSANTACRUZ_DB.prepare(membershipsSql)
+        const membershipsResult = await env.BETTERSANTACRUZ_DB.prepare(
+          membershipsSql
+        )
           .bind(personId)
           .all();
 
@@ -412,7 +416,9 @@ async function getPersonDetail(context: { request: Request; env: Env }) {
             WHERE cm.person_id = ? AND cm.term_id IN (${placeholders})
             ORDER BY cm.term_id, c.name ASC
           `;
-          const committeeResult = await env.BETTERSANTACRUZ_DB.prepare(committeeSql)
+          const committeeResult = await env.BETTERSANTACRUZ_DB.prepare(
+            committeeSql
+          )
             .bind(personId, ...termIds)
             .all();
 
@@ -456,7 +462,9 @@ async function getPersonDetail(context: { request: Request; env: Env }) {
           ORDER BY d.date_enacted DESC
           LIMIT 100
         `;
-        const documentsResult = await env.BETTERSANTACRUZ_DB.prepare(documentsSql)
+        const documentsResult = await env.BETTERSANTACRUZ_DB.prepare(
+          documentsSql
+        )
           .bind(personId)
           .all();
 
@@ -470,7 +478,9 @@ async function getPersonDetail(context: { request: Request; env: Env }) {
           LEFT JOIN session_absences sa ON sa.session_id = s.id AND sa.person_id = m.person_id
           WHERE m.person_id = ?
         `;
-        const attendanceResult = await env.BETTERSANTACRUZ_DB.prepare(attendanceSql)
+        const attendanceResult = await env.BETTERSANTACRUZ_DB.prepare(
+          attendanceSql
+        )
           .bind(personId)
           .first<{
             total_sessions: number;

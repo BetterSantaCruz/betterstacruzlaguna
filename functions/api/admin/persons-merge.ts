@@ -132,7 +132,8 @@ async function handleGetDuplicates(context: {
       LIMIT 50
     `;
 
-    const middleResults = await env.BETTERSANTACRUZ_DB.prepare(sql_middle).all();
+    const middleResults =
+      await env.BETTERSANTACRUZ_DB.prepare(sql_middle).all();
 
     for (const row of middleResults.results as Array<{
       id1: string;
@@ -350,7 +351,9 @@ async function handleMerge(context: {
     for (const id of merge_person_ids) {
       if (deletion_mode === 'delete') {
         statements.push(
-          env.BETTERSANTACRUZ_DB.prepare(`DELETE FROM persons WHERE id = ?1`).bind(id)
+          env.BETTERSANTACRUZ_DB.prepare(
+            `DELETE FROM persons WHERE id = ?1`
+          ).bind(id)
         );
         deleted_ids.push(id);
       } else if (deletion_mode === 'flag') {

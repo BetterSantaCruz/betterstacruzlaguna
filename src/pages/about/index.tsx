@@ -2,7 +2,11 @@ import { FC } from 'react';
 
 import { Link } from 'react-router-dom';
 
-import { BookOpenCheckIcon, HeartHandshakeIcon, ShieldCheckIcon } from 'lucide-react';
+import {
+  BookOpenCheckIcon,
+  HeartHandshakeIcon,
+  ShieldCheckIcon,
+} from 'lucide-react';
 
 import { SEO } from '@/components/layout/SEO';
 import { DataStatus } from '@/components/ui/DataStatus';
@@ -16,7 +20,12 @@ const AboutPage: FC = () => {
       <SEO
         title='About BetterSantaCruz'
         description='How BetterSantaCruz handles sources, uncertainty, and community contributions for Santa Cruz, Laguna.'
-        keywords={['BetterSantaCruz', 'civic tech', 'source registry', 'Santa Cruz Laguna']}
+        keywords={[
+          'BetterSantaCruz',
+          'civic tech',
+          'source registry',
+          'Santa Cruz Laguna',
+        ]}
       />
 
       <div className='container mx-auto px-4 py-8 md:py-12'>

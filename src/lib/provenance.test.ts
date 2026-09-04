@@ -24,7 +24,7 @@ describe('validateSourceRecord', () => {
         verificationStatus: 'verified',
         localArchiveFilename: null,
         notes: 'Test record',
-      }),
+      })
     ).toThrow(/sourceUrl/);
   });
 });
@@ -73,8 +73,8 @@ describe('validateCivicRegistry', () => {
           ],
         },
         [source],
-        '2026-09-04',
-      ),
+        '2026-09-04'
+      )
     ).toThrow(/unknown sourceId/);
   });
 
@@ -103,14 +103,14 @@ describe('validateCivicRegistry', () => {
           ],
         },
         [source],
-        '2026-09-04',
-      ).facts,
+        '2026-09-04'
+      ).facts
     ).toHaveLength(1);
   });
 
   it('rejects duplicate source IDs before civic data is validated', () => {
     expect(() => validateSourceRegistry({ sources: [source, source] })).toThrow(
-      /Duplicate sourceId/,
+      /Duplicate sourceId/
     );
   });
 });

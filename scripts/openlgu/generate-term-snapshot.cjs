@@ -43,10 +43,12 @@ function loadTerms(inputPath) {
     );
   }
   const resolved = path.resolve(inputPath);
-  if (!fs.existsSync(resolved)) throw new Error(`Terms input not found: ${resolved}`);
+  if (!fs.existsSync(resolved))
+    throw new Error(`Terms input not found: ${resolved}`);
   const payload = JSON.parse(fs.readFileSync(resolved, 'utf8'));
   const terms = Array.isArray(payload) ? payload : payload.terms;
-  if (!Array.isArray(terms)) throw new Error('Terms input must be an array or contain a terms array.');
+  if (!Array.isArray(terms))
+    throw new Error('Terms input must be an array or contain a terms array.');
   for (const [index, term] of terms.entries()) {
     for (const field of ['term_id', 'label', 'start_date', 'end_date']) {
       if (!String(term?.[field] || '').trim()) {
@@ -63,5 +65,7 @@ if (args) {
   const output = path.resolve(args.output);
   fs.mkdirSync(path.dirname(output), { recursive: true });
   fs.writeFileSync(output, JSON.stringify(terms, null, 2) + '\n');
-  console.log(`Wrote ${terms.length} reviewed terms to ${path.relative(ROOT, output)}`);
+  console.log(
+    `Wrote ${terms.length} reviewed terms to ${path.relative(ROOT, output)}`
+  );
 }

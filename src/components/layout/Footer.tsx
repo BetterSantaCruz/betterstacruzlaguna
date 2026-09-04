@@ -121,7 +121,9 @@ export const Footer: FC = () => {
             <span className='hidden w-1 h-1 rounded-full bg-kapwa-border-strong md:block' />
             <p className='text-kapwa-text-inverse text-xs font-bold md:text-sm'>
               Project cost statement:{' '}
-              <span className='text-kapwa-text-inverse'>Not yet documented</span>
+              <span className='text-kapwa-text-inverse'>
+                Not yet documented
+              </span>
             </p>
           </div>
         </div>

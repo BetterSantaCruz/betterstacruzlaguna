@@ -25,7 +25,9 @@ export function DataStatus({
       />
       <div>
         <h3 className='text-kapwa-text-strong font-bold'>{title}</h3>
-        <p className='text-kapwa-text-support mt-1 text-sm leading-relaxed'>{message}</p>
+        <p className='text-kapwa-text-support mt-1 text-sm leading-relaxed'>
+          {message}
+        </p>
         {sourceHref && (
           <Link
             to={sourceHref}

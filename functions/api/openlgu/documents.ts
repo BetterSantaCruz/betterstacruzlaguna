@@ -149,7 +149,9 @@ async function getDocumentsList(context: { request: Request; env: Env }) {
               ORDER BY document_id, person_id
             `;
 
-            const authorsResult = await env.BETTERSANTACRUZ_DB.prepare(authorsSql)
+            const authorsResult = await env.BETTERSANTACRUZ_DB.prepare(
+              authorsSql
+            )
               .bind(...batch)
               .all();
 

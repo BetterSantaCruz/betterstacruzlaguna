@@ -76,7 +76,8 @@ async function getTermsList(context: { request: Request; env: Env }) {
           LEFT JOIN persons pv ON vm.person_id = pv.id
           ORDER BY t.term_number DESC
         `;
-        const termsResult = await env.BETTERSANTACRUZ_DB.prepare(termsSql).all();
+        const termsResult =
+          await env.BETTERSANTACRUZ_DB.prepare(termsSql).all();
 
         if (termsResult.results.length === 0) {
           return { terms: [] };
@@ -108,7 +109,9 @@ async function getTermsList(context: { request: Request; env: Env }) {
           WHERE term_id IN (${placeholders})
           GROUP BY term_id
         `;
-        const docCountsResult = await env.BETTERSANTACRUZ_DB.prepare(docCountsSql)
+        const docCountsResult = await env.BETTERSANTACRUZ_DB.prepare(
+          docCountsSql
+        )
           .bind(...termIds)
           .all<DocCountRow>();
 
@@ -309,7 +312,9 @@ async function getTermDetail(context: { request: Request; env: Env }) {
           GROUP BY c.id, c.name, c.type
           ORDER BY c.name ASC
         `;
-        const committeesResult = await env.BETTERSANTACRUZ_DB.prepare(committeesSql)
+        const committeesResult = await env.BETTERSANTACRUZ_DB.prepare(
+          committeesSql
+        )
           .bind(termId)
           .all<CommitteeResultRow>();
 

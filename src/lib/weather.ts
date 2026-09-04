@@ -33,7 +33,10 @@ export const mapWeatherIconToLucide = (iconCode: string): string => {
  * Fetch weather data for configured LGU and transform to frontend type
  */
 export const fetchWeatherData = async (): Promise<WeatherData[]> => {
-  if (!config.location.weather.enabled || !config.location.weather.defaultCity) {
+  if (
+    !config.location.weather.enabled ||
+    !config.location.weather.defaultCity
+  ) {
     return [];
   }
 

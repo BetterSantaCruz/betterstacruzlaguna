@@ -91,11 +91,7 @@ async function main() {
   );
   const githubUrl = `https://github.com/${githubOrg}/${githubRepo}`;
 
-  const contactEmail = await question(
-    rl,
-    'Contact email',
-    ''
-  );
+  const contactEmail = await question(rl, 'Contact email', '');
 
   // Optional features
   console.log('\n--- Features ---');
@@ -116,11 +112,7 @@ async function main() {
 
   // MeiliSearch
   console.log('\n--- MeiliSearch ---');
-  const msHost = await question(
-    rl,
-    'MeiliSearch host',
-    ''
-  );
+  const msHost = await question(rl, 'MeiliSearch host', '');
   const msPort = await question(rl, 'MeiliSearch port', '443');
   const msKey = await question(rl, 'MeiliSearch search API key');
 

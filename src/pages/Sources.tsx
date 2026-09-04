@@ -68,7 +68,10 @@ export default function SourcesPage() {
         <PageHero
           title='Source ledger'
           description='See where each civic lead came from, when it was checked, and why it is or is not ready for publication.'
-          breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Sources', href: '/sources' }]}
+          breadcrumb={[
+            { label: 'Home', href: '/' },
+            { label: 'Sources', href: '/sources' },
+          ]}
         />
 
         <section
@@ -81,10 +84,17 @@ export default function SourcesPage() {
               aria-hidden='true'
             />
             <div>
-              <h2 className='text-kapwa-text-strong font-bold'>Evidence before publication</h2>
+              <h2 className='text-kapwa-text-strong font-bold'>
+                Evidence before publication
+              </h2>
               <p className='text-kapwa-text-support mt-1 text-sm leading-relaxed'>
-                BetterSantaCruz is independent and not the official website of the Municipality of Santa Cruz, Laguna. A source observation is not automatically a verified civic fact. Read the{' '}
-                <Link className='text-kapwa-text-brand font-semibold underline' to='/about'>
+                BetterSantaCruz is independent and not the official website of
+                the Municipality of Santa Cruz, Laguna. A source observation is
+                not automatically a verified civic fact. Read the{' '}
+                <Link
+                  className='text-kapwa-text-brand font-semibold underline'
+                  to='/about'
+                >
                   project context
                 </Link>{' '}
                 before using these records.
@@ -93,14 +103,21 @@ export default function SourcesPage() {
           </div>
         </section>
 
-        <section className='mx-auto max-w-5xl' aria-labelledby='registry-heading'>
+        <section
+          className='mx-auto max-w-5xl'
+          aria-labelledby='registry-heading'
+        >
           <div className='mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between'>
             <div>
-              <h2 id='registry-heading' className='text-kapwa-text-strong kapwa-heading-lg font-bold'>
+              <h2
+                id='registry-heading'
+                className='text-kapwa-text-strong kapwa-heading-lg font-bold'
+              >
                 Registry entries
               </h2>
               <p className='text-kapwa-text-support mt-1 text-sm'>
-                {filteredSources.length} of {sources.length} source records shown.
+                {filteredSources.length} of {sources.length} source records
+                shown.
               </p>
             </div>
             <div className='flex flex-col gap-3 sm:flex-row'>
@@ -118,7 +135,10 @@ export default function SourcesPage() {
                 <option value='all'>All research context</option>
               </select>
               <label className='relative block'>
-                <Filter className='text-kapwa-text-disabled pointer-events-none absolute left-3 top-3 h-5 w-5' aria-hidden='true' />
+                <Filter
+                  className='text-kapwa-text-disabled pointer-events-none absolute left-3 top-3 h-5 w-5'
+                  aria-hidden='true'
+                />
                 <span className='sr-only'>Search sources</span>
                 <input
                   value={query}
@@ -137,10 +157,17 @@ export default function SourcesPage() {
                   <div className='flex flex-col gap-4 md:flex-row md:items-start md:justify-between'>
                     <div className='min-w-0'>
                       <div className='mb-2 flex flex-wrap items-center gap-2'>
-                        <Badge variant={statusVariant[source.verificationStatus] ?? 'slate'} dot>
+                        <Badge
+                          variant={
+                            statusVariant[source.verificationStatus] ?? 'slate'
+                          }
+                          dot
+                        >
                           {source.verificationStatus}
                         </Badge>
-                        <Badge variant='outline'>{source.municipality}, Laguna</Badge>
+                        <Badge variant='outline'>
+                          {source.municipality}, Laguna
+                        </Badge>
                       </div>
                       <h3 className='text-kapwa-text-strong text-lg font-bold leading-tight'>
                         {source.sourceTitle}
@@ -159,15 +186,22 @@ export default function SourcesPage() {
                       <ExternalLink className='h-4 w-4' aria-hidden='true' />
                     </a>
                   </div>
-                  <p className='text-kapwa-text-support mt-4 text-sm leading-relaxed'>{source.notes}</p>
+                  <p className='text-kapwa-text-support mt-4 text-sm leading-relaxed'>
+                    {source.notes}
+                  </p>
                   <div className='text-kapwa-text-support mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs'>
                     <span>Retrieved {formatDate(source.retrievedAt)}</span>
-                    <span>Last checked {formatDate(source.lastVerifiedAt)}</span>
+                    <span>
+                      Last checked {formatDate(source.lastVerifiedAt)}
+                    </span>
                     <span>Published {formatDate(source.publishedAt)}</span>
                   </div>
                   <div className='mt-3 flex flex-wrap gap-2'>
                     {source.categories.map(category => (
-                      <span key={category} className='text-kapwa-text-support rounded-full bg-kapwa-bg-surface-raised px-2 py-1 text-[11px]'>
+                      <span
+                        key={category}
+                        className='text-kapwa-text-support rounded-full bg-kapwa-bg-surface-raised px-2 py-1 text-[11px]'
+                      >
                         {category}
                       </span>
                     ))}

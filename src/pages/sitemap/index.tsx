@@ -12,31 +12,83 @@ const sitemapSections = [
     title: 'Project pages',
     icon: Home,
     links: [
-      { title: 'Home', url: '/', description: 'Project overview and current scope.' },
-      { title: 'About', url: '/about', description: `How ${config.portal.name} handles evidence.` },
-      { title: 'Contact', url: '/contact', description: 'Published support and collaboration channels.' },
-      { title: 'Accessibility', url: '/accessibility', description: 'Accessibility statement and current checks.' },
-      { title: 'Terms of Service', url: '/terms-of-service', description: 'Use, source, and uncertainty guidance.' },
+      {
+        title: 'Home',
+        url: '/',
+        description: 'Project overview and current scope.',
+      },
+      {
+        title: 'About',
+        url: '/about',
+        description: `How ${config.portal.name} handles evidence.`,
+      },
+      {
+        title: 'Contact',
+        url: '/contact',
+        description: 'Published support and collaboration channels.',
+      },
+      {
+        title: 'Accessibility',
+        url: '/accessibility',
+        description: 'Accessibility statement and current checks.',
+      },
+      {
+        title: 'Terms of Service',
+        url: '/terms-of-service',
+        description: 'Use, source, and uncertainty guidance.',
+      },
     ],
   },
   {
     title: 'Civic information',
     icon: BookOpenCheck,
     links: [
-      { title: 'Services', url: '/services', description: 'Service directory status and reviewed records.' },
-      { title: 'Government status', url: '/government', description: 'Directory status and data gaps.' },
-      { title: 'Source ledger', url: '/sources', description: 'Research sources, states, and last-checked dates.' },
-      { title: 'Contribute', url: '/contribute', description: 'Current contribution workflow status.' },
-      { title: 'Project ideas', url: '/ideas', description: 'Review-gated future ideas.' },
-      { title: 'Join us', url: '/join-us', description: 'Collaboration status.' },
+      {
+        title: 'Services',
+        url: '/services',
+        description: 'Service directory status and reviewed records.',
+      },
+      {
+        title: 'Government status',
+        url: '/government',
+        description: 'Directory status and data gaps.',
+      },
+      {
+        title: 'Source ledger',
+        url: '/sources',
+        description: 'Research sources, states, and last-checked dates.',
+      },
+      {
+        title: 'Contribute',
+        url: '/contribute',
+        description: 'Current contribution workflow status.',
+      },
+      {
+        title: 'Project ideas',
+        url: '/ideas',
+        description: 'Review-gated future ideas.',
+      },
+      {
+        title: 'Join us',
+        url: '/join-us',
+        description: 'Collaboration status.',
+      },
     ],
   },
   {
     title: 'Evidence boundary',
     icon: ShieldCheck,
     links: [
-      { title: 'Research sources', url: '/sources?scope=santa-cruz', description: 'Santa Cruz source inventory.' },
-      { title: 'Pagsanjan context', url: '/sources?scope=pagsanjan', description: 'Separate ecosystem and collaboration context.' },
+      {
+        title: 'Research sources',
+        url: '/sources?scope=santa-cruz',
+        description: 'Santa Cruz source inventory.',
+      },
+      {
+        title: 'Pagsanjan context',
+        url: '/sources?scope=pagsanjan',
+        description: 'Separate ecosystem and collaboration context.',
+      },
     ],
   },
 ];
