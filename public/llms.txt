@@ -4,21 +4,24 @@ BetterSantaCruz is an independent, source-led civic information project for Sant
 
 ## Current publication state
 
-- The public civic dataset is intentionally sparse.
-- The source ledger at `/sources` records upstream sources, retrieval dates, and verification states.
+- The civic dataset is intentionally sparse while sources are being reviewed.
+- The source ledger is available at /sources and records upstream locations, retrieval dates, and verification states.
 - Officials, offices, services, schedules, fees, contacts, budgets, statistics, and barangay records are not published unless they pass the evidence workflow.
-- Transparency, tourism, statistics, weather, forex, and OpenLGU modules are disabled until their inputs are reviewed.
-- No public repository, domain, or contribution channel is established by this local foundation yet.
+- Disabled modules remain omitted from this crawler summary until their data and maintenance policy are reviewed.
+- Public repository: https://github.com/Diannn3/betterstacruzlaguna
+- Contributions and issue reports are handled through the repository: https://github.com/Diannn3/betterstacruzlaguna/issues.
+- A public domain is not configured.
+- No production deployment is claimed.
 
 ## Useful pages
 
-- `/`
-- `/about`
-- `/sources`
-- `/services`
-- `/government`
-- `/contribute`
-- `/accessibility`
-- `/terms-of-service`
+- /
+- /about
+- /sources
+- /services
+- /government
+- /contribute
+- /accessibility
+- /terms-of-service
 
-Do not treat a source observation, search result, blocked page, stale table, or volatile aggregate as a verified municipal fact. Follow the source links and confirm current information with the responsible official institution.
+Do not treat a source observation, search result, blocked page, stale table, or volatile aggregate as a verified municipal fact. Follow source links and confirm current information with the responsible institution.
