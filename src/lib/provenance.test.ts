@@ -113,4 +113,39 @@ describe('validateCivicRegistry', () => {
       /Duplicate sourceId/
     );
   });
+
+  it('rejects a civic fact whose source text identifies another Santa Cruz', () => {
+    const wrongMunicipalitySource = {
+      ...source,
+      sourceTitle: 'Santa Cruz Compliance Audit Report 2024 — Zambales',
+    };
+
+    expect(() =>
+      validateCivicRegistry(
+        {
+          municipality: 'Santa Cruz',
+          province: 'Laguna',
+          region: 'Region IV-A (CALABARZON)',
+          facts: [
+            {
+              id: 'wrong-municipality-source',
+              label: 'Test fact',
+              value: 'value',
+              municipality: 'Santa Cruz',
+              sourceId: wrongMunicipalitySource.sourceId,
+              sourceTitle: wrongMunicipalitySource.sourceTitle,
+              sourceUrl: wrongMunicipalitySource.sourceUrl,
+              sourceOrganization: wrongMunicipalitySource.sourceOrganization,
+              publishedAt: wrongMunicipalitySource.publishedAt,
+              retrievedAt: wrongMunicipalitySource.retrievedAt,
+              lastVerifiedAt: wrongMunicipalitySource.lastVerifiedAt,
+              verificationStatus: wrongMunicipalitySource.verificationStatus,
+            },
+          ],
+        },
+        [wrongMunicipalitySource],
+        '2026-09-04'
+      )
+    ).toThrow(/wrong municipality|Zambales/i);
+  });
 });

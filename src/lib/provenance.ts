@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { assertSantaCruzIdentity } from './municipality-identity';
+
 export const verificationStatuses = [
   'verified',
   'observed',
@@ -84,6 +86,7 @@ export function validateCivicRegistry(
   today = new Date().toISOString().slice(0, 10)
 ): CivicRegistry {
   const registry = civicRegistrySchema.parse(value);
+  assertSantaCruzIdentity(registry);
   const sourceById = new Map(sources.map(source => [source.sourceId, source]));
   const factIds = new Set<string>();
 
