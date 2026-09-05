@@ -1,4 +1,4 @@
-name: Temporary Pass C Policy Fix
+name: Temporary Pass C Policy Repair
 
 on:
   push:
@@ -7,97 +7,294 @@ on:
       - '.github/workflows/apply-pass-c-policy-fix.yml'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  apply:
+  repair:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout feature branch
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           ref: feat/sb-legislation-staging
+          persist-credentials: false
 
-      - name: Apply reviewed collector policy edits
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply reviewed collector policy and test edits
         shell: python
         run: |
           from pathlib import Path
+          import re
 
-          path = Path('scripts/legislation/sbstacruz/collector.ts')
-          text = path.read_text()
+          collector = Path('scripts/legislation/sbstacruz/collector.ts')
+          text = collector.read_text()
 
           replacements = [
               ('const DEFAULT_DELAY_MS = 1_500;', 'const DEFAULT_DELAY_MS = 2_500;'),
               ('const REQUEST_TIMEOUT_MS = 20_000;', 'const REQUEST_TIMEOUT_MS = 30_000;'),
               (
                   '  const delayMs = options.delayMs ?? DEFAULT_DELAY_MS;',
-                  '  const delayMs = Math.max(options.delayMs ?? DEFAULT_DELAY_MS, DEFAULT_DELAY_MS);',
+                  '  const delayMs = Math.max(\n    options.delayMs ?? DEFAULT_DELAY_MS,\n    DEFAULT_DELAY_MS\n  );',
               ),
           ]
           for old, new in replacements:
               if old not in text:
-                  raise SystemExit(f'expected text not found: {old!r}')
+                  raise SystemExit(f'expected collector text not found: {old!r}')
               text = text.replace(old, new, 1)
 
           marker = 'async function fetchWithPolicy(\n'
           helper = '''function retryAfterDelayMs(value: string | null): number | null {
             if (!value) return null;
-            const seconds = Number.parseInt(value, 10);
+            const trimmed = value.trim();
+            const seconds = Number(trimmed);
             if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1_000;
 
-            const retryAt = Date.parse(value);
+            const retryAt = Date.parse(trimmed);
             if (Number.isNaN(retryAt)) return null;
             return Math.max(0, retryAt - Date.now());
           }
 
           '''
-          if helper.strip() not in text:
-              if marker not in text:
-                  raise SystemExit('fetchWithPolicy marker not found')
-              text = text.replace(marker, helper + marker, 1)
+          if marker not in text:
+              raise SystemExit('fetchWithPolicy marker not found')
+          text = text.replace(marker, helper + marker, 1)
 
-          old_429 = '''      if (response.status === 429) {
-                throw new CollectorFailure(
-                  `HTTP 429 from ${url.pathname}; stopping immediately`,
-                  'http_429'
-                );
-              }
-          '''
-          new_429 = '''      if (response.status === 429) {
-                const retryAfterMs = retryAfterDelayMs(
-                  response.headers.get('retry-after')
-                );
-                const isFirstRateLimit = attempt === 0;
-                const boundedRetryAfter = retryAfterMs ?? 2_500;
+          pattern = re.compile(
+              r"      if \(response\.status === 429\) \{\n"
+              r"        throw new CollectorFailure\(\n"
+              r"          `HTTP 429 from \$\{url\.pathname\}; stopping immediately`,\n"
+              r"          'http_429'\n"
+              r"        \);\n"
+              r"      \}\n"
+          )
+          replacement = '''      if (response.status === 429) {
+            const retryAfterMs = retryAfterDelayMs(
+              response.headers.get('retry-after')
+            );
 
-                if (isFirstRateLimit && boundedRetryAfter <= 30_000) {
-                  await sleep(boundedRetryAfter);
-                  continue;
-                }
+            if (attempt === 0 && retryAfterMs !== null && retryAfterMs <= 30_000) {
+              await sleep(retryAfterMs);
+              continue;
+            }
 
-                throw new CollectorFailure(
-                  `HTTP 429 from ${url.pathname}; stopping after respecting the bounded Retry-After policy`,
-                  'http_429'
-                );
-              }
-          '''
-          if old_429 not in text:
-              raise SystemExit('expected 429 block not found')
-          text = text.replace(old_429, new_429, 1)
-          path.write_text(text)
+            throw new CollectorFailure(
+              `HTTP 429 from ${url.pathname}; stopping after bounded Retry-After handling`,
+              'http_429'
+            );
+          }
+'''
+          text, count = pattern.subn(replacement, text, count=1)
+          if count != 1:
+              raise SystemExit(f'expected exactly one 429 block, replaced {count}')
+          collector.write_text(text)
 
-      - name: Format collector
-        run: npx prettier --write scripts/legislation/sbstacruz/collector.ts
+          tests = Path('scripts/legislation/sbstacruz/collector.test.ts')
+          test_text = tests.read_text()
+          old_test = '''  it('stops immediately on HTTP 429 instead of retrying or evading rate limits', async () => {
+            const fetchImpl = vi
+              .fn<typeof fetch>()
+              .mockResolvedValueOnce(sourcePage())
+              .mockResolvedValueOnce(new Response('Too Many Requests', { status: 429 }));
 
-      - name: Commit policy fix
-        shell: bash
-        run: |
-          if git diff --quiet; then
-            echo "No collector changes to commit"
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add scripts/legislation/sbstacruz/collector.ts
-          git commit -m "fix(data): enforce polite SB collection policy"
-          git push origin HEAD:feat/sb-legislation-staging
+            const result = await collectSource({
+              sourceKey: 'resolutions',
+              limit: 20,
+              fetchImpl,
+              sleep: noSleep,
+              delayMs: 0,
+              now: fixedNow,
+            });
+
+            expect(result.manifest.status).toBe('failed');
+            expect(result.manifest.http429).toBe(1);
+            expect(fetchImpl).toHaveBeenCalledTimes(2);
+          });
+'''
+          new_tests = '''  it('honors a bounded Retry-After once and then continues when the source recovers', async () => {
+            const fetchImpl = vi
+              .fn<typeof fetch>()
+              .mockResolvedValueOnce(sourcePage())
+              .mockResolvedValueOnce(
+                new Response('Too Many Requests', {
+                  status: 429,
+                  headers: { 'retry-after': '5' },
+                })
+              )
+              .mockResolvedValueOnce(dataResponse([row(1)]));
+            const sleep = vi.fn(async () => undefined);
+
+            const result = await collectSource({
+              sourceKey: 'resolutions',
+              limit: 1,
+              fetchImpl,
+              sleep,
+              delayMs: 0,
+              now: fixedNow,
+            });
+
+            expect(result.manifest.status).toBe('success');
+            expect(result.manifest.http429).toBe(0);
+            expect(result.manifest.recordsObserved).toBe(1);
+            expect(fetchImpl).toHaveBeenCalledTimes(3);
+            expect(sleep).toHaveBeenCalledWith(2_500);
+            expect(sleep).toHaveBeenCalledWith(5_000);
+          });
+
+          it('stops on a repeated HTTP 429 after honoring the first Retry-After', async () => {
+            const fetchImpl = vi
+              .fn<typeof fetch>()
+              .mockResolvedValueOnce(sourcePage())
+              .mockResolvedValueOnce(
+                new Response('Too Many Requests', {
+                  status: 429,
+                  headers: { 'retry-after': '1' },
+                })
+              )
+              .mockResolvedValueOnce(
+                new Response('Too Many Requests', {
+                  status: 429,
+                  headers: { 'retry-after': '1' },
+                })
+              );
+            const sleep = vi.fn(async () => undefined);
+
+            const result = await collectSource({
+              sourceKey: 'resolutions',
+              limit: 20,
+              fetchImpl,
+              sleep,
+              delayMs: 0,
+              now: fixedNow,
+            });
+
+            expect(result.manifest.status).toBe('failed');
+            expect(result.manifest.http429).toBe(1);
+            expect(fetchImpl).toHaveBeenCalledTimes(3);
+            expect(sleep).toHaveBeenCalledWith(1_000);
+          });
+
+          it('does not invent a retry delay when HTTP 429 has no Retry-After header', async () => {
+            const fetchImpl = vi
+              .fn<typeof fetch>()
+              .mockResolvedValueOnce(sourcePage())
+              .mockResolvedValueOnce(new Response('Too Many Requests', { status: 429 }));
+            const sleep = vi.fn(async () => undefined);
+
+            const result = await collectSource({
+              sourceKey: 'resolutions',
+              limit: 20,
+              fetchImpl,
+              sleep,
+              delayMs: 0,
+              now: fixedNow,
+            });
+
+            expect(result.manifest.status).toBe('failed');
+            expect(result.manifest.http429).toBe(1);
+            expect(fetchImpl).toHaveBeenCalledTimes(2);
+            expect(sleep).not.toHaveBeenCalledWith(expect.any(Number));
+          });
+
+          it('refuses an excessive Retry-After rather than holding the collector open', async () => {
+            const fetchImpl = vi
+              .fn<typeof fetch>()
+              .mockResolvedValueOnce(sourcePage())
+              .mockResolvedValueOnce(
+                new Response('Too Many Requests', {
+                  status: 429,
+                  headers: { 'retry-after': '60' },
+                })
+              );
+
+            const result = await collectSource({
+              sourceKey: 'resolutions',
+              limit: 20,
+              fetchImpl,
+              sleep: noSleep,
+              delayMs: 0,
+              now: fixedNow,
+            });
+
+            expect(result.manifest.status).toBe('failed');
+            expect(result.manifest.http429).toBe(1);
+            expect(fetchImpl).toHaveBeenCalledTimes(2);
+          });
+'''
+          if old_test not in test_text:
+              raise SystemExit('expected legacy 429 test not found')
+          tests.write_text(test_text.replace(old_test, new_tests, 1))
+
+          workflow = Path('.github/workflows/sb-legislation-pilot.yml')
+          workflow_text = workflow.read_text()
+          old_shell = '''      - name: Fail when pilot reported a source failure
+            if: steps.pilot.outputs.exit_code != '0'
+            run: |
+              echo "Pilot exit code: ${{ steps.pilot.outputs.exit_code }}"
+              exit 1
+'''
+          new_shell = '''      - name: Fail when pilot reported a source failure
+            if: steps.pilot.outputs.exit_code != '0'
+            env:
+              PILOT_EXIT_CODE: ${{ steps.pilot.outputs.exit_code }}
+            run: |
+              echo "Pilot exit code: ${PILOT_EXIT_CODE}"
+              exit 1
+'''
+          if old_shell not in workflow_text:
+              raise SystemExit('expected pilot failure shell block not found')
+          workflow.write_text(workflow_text.replace(old_shell, new_shell, 1))
+
+      - name: Format Pass C implementation files
+        run: >-
+          npx prettier --write
+          config/data-sources/sbstacruz-legislation.json
+          scripts/legislation/sbstacruz/characterize-interactions.ts
+          scripts/legislation/sbstacruz/characterize.ts
+          scripts/legislation/sbstacruz/collector.test.ts
+          scripts/legislation/sbstacruz/collector.ts
+          scripts/legislation/sbstacruz/parse.test.ts
+          scripts/legislation/sbstacruz/parse.ts
+          scripts/legislation/sbstacruz/pilot.ts
+          scripts/legislation/sbstacruz/schemas.ts
+          .github/workflows/sb-legislation-pilot.yml
+
+      - name: Run focused Pass C tests
+        run: >-
+          npx vitest run
+          scripts/legislation/sbstacruz/parse.test.ts
+          scripts/legislation/sbstacruz/collector.test.ts
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Verify formatting
+        run: npx prettier --check .
+
+      - name: Upload reviewed repair artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: pass-c-policy-repair
+          path: |
+            config/data-sources/sbstacruz-legislation.json
+            scripts/legislation/sbstacruz/characterize-interactions.ts
+            scripts/legislation/sbstacruz/characterize.ts
+            scripts/legislation/sbstacruz/collector.test.ts
+            scripts/legislation/sbstacruz/collector.ts
+            scripts/legislation/sbstacruz/parse.test.ts
+            scripts/legislation/sbstacruz/parse.ts
+            scripts/legislation/sbstacruz/pilot.ts
+            scripts/legislation/sbstacruz/schemas.ts
+            .github/workflows/sb-legislation-pilot.yml
+          if-no-files-found: error
+          retention-days: 7
