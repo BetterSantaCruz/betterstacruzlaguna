@@ -4,276 +4,271 @@ import {
   validateCivicRegistry,
   validateSourceRecord,
   validateSourceRegistry,
+  type SourceRecord,
 } from './provenance';
 
-describe('validateSourceRecord', () => {
-  it('rejects a source record that omits its required provenance URL', () => {
-    expect(() =>
-      validateSourceRecord({
-        sourceId: 'test-source',
-        sourceTitle: 'Test source',
-        sourceOrganization: 'Test organization',
-        sourceType: 'official',
-        location: 'Santa Cruz, Laguna',
-        publishedAt: null,
-        retrievedAt: '2026-09-04',
-        lastVerifiedAt: '2026-09-04',
-        municipality: 'Santa Cruz',
-        categories: ['identity'],
-        confidence: 'high',
-        verificationStatus: 'verified',
-        localArchiveFilename: null,
-        notes: 'Test record',
-      })
-    ).toThrow(/sourceUrl/);
-  });
-});
-
-describe('validateCivicRegistry', () => {
-  const source = {
+function makeSource(overrides: Partial<SourceRecord> = {}): SourceRecord {
+  return {
     sourceId: 'test-source',
-    sourceTitle: 'Test source',
+    sourceTitle: 'Test Santa Cruz source',
     sourceUrl: 'https://example.com/source',
-    sourceOrganization: 'Test organization',
-    sourceType: 'official',
-    location: 'Santa Cruz, Laguna',
+    sourceOrganization: 'Test government organization',
+    sourceType: 'official-test-source',
+    identity: {
+      municipality: 'Santa Cruz',
+      province: 'Laguna',
+      region: 'Region IV-A',
+      regionName: 'CALABARZON',
+      municipalityPsgc: '0403426000',
+      correspondenceCode: '043426000',
+    },
+    identityResolution: {
+      observedLocation: 'Santa Cruz, Laguna',
+      resolutionMethod: 'explicit-psgc',
+      evidenceSourceIds: [],
+      note: null,
+    },
+    categories: ['identity'],
+    authority: 'primary-official',
+    access: {
+      state: 'reachable',
+      checkedAt: '2026-09-04',
+      httpStatus: 200,
+      note: null,
+    },
+    reviewState: 'reviewed',
+    ledgerState: 'listed',
     publishedAt: null,
     retrievedAt: '2026-09-04',
     lastVerifiedAt: '2026-09-04',
-    municipality: 'Santa Cruz' as const,
-    categories: ['identity'],
-    confidence: 'high' as const,
-    verificationStatus: 'verified' as const,
-    localArchiveFilename: null,
-    notes: 'Test record',
+    archive: { filename: null, sha256: null },
+    notes: 'Test record.',
+    ...overrides,
   };
+}
 
-  it('rejects a fact whose source ID is not in the source registry', () => {
-    expect(() =>
-      validateCivicRegistry(
-        {
-          municipality: 'Santa Cruz',
-          province: 'Laguna',
-          region: 'Region IV-A (CALABARZON)',
-          facts: [
-            {
-              id: 'missing-source-fact',
-              label: 'Test fact',
-              value: 'value',
-              municipality: 'Santa Cruz',
-              sourceId: 'does-not-exist',
-              sourceTitle: 'Test source',
-              sourceUrl: 'https://example.com/source',
-              sourceOrganization: 'Test organization',
-              publishedAt: null,
-              retrievedAt: '2026-09-04',
-              lastVerifiedAt: '2026-09-04',
-              verificationStatus: 'verified',
-            },
-          ],
-        },
-        [source],
-        '2026-09-04'
-      )
-    ).toThrow(/unknown sourceId/);
-  });
+function makeRegistryFact(overrides: Record<string, unknown> = {}) {
+  return {
+    id: 'matched-fact',
+    label: 'Test fact',
+    value: 'value',
+    evidence: {
+      sourceIds: ['test-source'],
+      verification: 'single-source',
+      assertionType: 'direct',
+      note: null,
+    },
+    publication: { state: 'published' },
+    freshness: {
+      lastVerifiedAt: '2026-09-04',
+      reviewCadenceDays: 365,
+      validFrom: null,
+      validUntil: null,
+    },
+    ...overrides,
+  };
+}
 
-  it('accepts a fact whose provenance matches its source record', () => {
-    expect(
-      validateCivicRegistry(
-        {
-          municipality: 'Santa Cruz',
-          province: 'Laguna',
-          region: 'Region IV-A (CALABARZON)',
-          facts: [
-            {
-              id: 'matched-fact',
-              label: 'Test fact',
-              value: 'value',
-              municipality: 'Santa Cruz',
-              sourceId: source.sourceId,
-              sourceTitle: source.sourceTitle,
-              sourceUrl: source.sourceUrl,
-              sourceOrganization: source.sourceOrganization,
-              publishedAt: source.publishedAt,
-              retrievedAt: source.retrievedAt,
-              lastVerifiedAt: source.lastVerifiedAt,
-              verificationStatus: source.verificationStatus,
-            },
-          ],
-        },
-        [source],
-        '2026-09-04'
-      ).facts
-    ).toHaveLength(1);
-  });
+function makeCivicRegistry(facts: unknown[]) {
+  return {
+    schemaVersion: 2,
+    municipality: {
+      name: 'Santa Cruz',
+      province: 'Laguna',
+      psgc10: '0403426000',
+    },
+    facts,
+  };
+}
 
-  it('rejects a civic fact whose verification state differs from its source', () => {
-    expect(() =>
-      validateCivicRegistry(
-        {
-          municipality: 'Santa Cruz',
-          province: 'Laguna',
-          region: 'Region IV-A (CALABARZON)',
-          facts: [
-            {
-              id: 'observed-fact',
-              label: 'Test fact',
-              value: 'value',
-              municipality: 'Santa Cruz',
-              sourceId: source.sourceId,
-              sourceTitle: source.sourceTitle,
-              sourceUrl: source.sourceUrl,
-              sourceOrganization: source.sourceOrganization,
-              publishedAt: source.publishedAt,
-              retrievedAt: source.retrievedAt,
-              lastVerifiedAt: source.lastVerifiedAt,
-              verificationStatus: 'observed',
-            },
-          ],
-        },
-        [source],
-        '2026-09-04'
-      )
-    ).toThrow(/Provenance mismatch.*verificationStatus/i);
-  });
-
-  it('preserves observed civic facts when their source is also observed', () => {
-    const observedSource = {
-      ...source,
-      verificationStatus: 'observed' as const,
-    };
-
-    expect(
-      validateCivicRegistry(
-        {
-          municipality: 'Santa Cruz',
-          province: 'Laguna',
-          region: 'Region IV-A (CALABARZON)',
-          facts: [
-            {
-              id: 'unverified-source-fact',
-              label: 'Test fact',
-              value: 'value',
-              municipality: 'Santa Cruz',
-              sourceId: observedSource.sourceId,
-              sourceTitle: observedSource.sourceTitle,
-              sourceUrl: observedSource.sourceUrl,
-              sourceOrganization: observedSource.sourceOrganization,
-              publishedAt: observedSource.publishedAt,
-              retrievedAt: observedSource.retrievedAt,
-              lastVerifiedAt: observedSource.lastVerifiedAt,
-              verificationStatus: 'observed',
-            },
-          ],
-        },
-        [observedSource],
-        '2026-09-04'
-      ).facts[0]
-    ).toMatchObject({
-      id: 'unverified-source-fact',
-      verificationStatus: 'observed',
-    });
-  });
-
-  it('rejects duplicate source IDs before civic data is validated', () => {
-    expect(() => validateSourceRegistry({ sources: [source, source] })).toThrow(
-      /Duplicate sourceId/
+describe('validateSourceRecord', () => {
+  it('accepts an explicit Santa Cruz PSGC source identity', () => {
+    expect(validateSourceRecord(makeSource()).identity.municipalityPsgc).toBe(
+      '0403426000'
     );
   });
 
-  it('rejects a source whose retrieval date is after the validation cutoff', () => {
+  it('rejects a source record that omits its provenance URL', () => {
+    const source = makeSource() as Record<string, unknown>;
+    delete source.sourceUrl;
+    expect(() => validateSourceRecord(source)).toThrow(/sourceUrl/i);
+  });
+
+  it('rejects wrong Santa Cruz PSGC', () => {
+    expect(() =>
+      validateSourceRecord(
+        makeSource({
+          identity: {
+            ...makeSource().identity,
+            municipalityPsgc: '0403419000' as '0403426000',
+          },
+        })
+      )
+    ).toThrow(/0403426000|municipalityPsgc/i);
+  });
+
+  it('rejects same-name municipality text', () => {
+    expect(() =>
+      validateSourceRecord(
+        makeSource({
+          sourceTitle: 'Santa Cruz audit report — Zambales',
+        })
+      )
+    ).toThrow(/wrong municipality|zambales/i);
+  });
+
+  it('requires an access check date for reachable sources', () => {
+    expect(() =>
+      validateSourceRecord(
+        makeSource({ access: { state: 'reachable', checkedAt: null, httpStatus: null, note: null } })
+      )
+    ).toThrow(/checkedAt/i);
+  });
+
+  it('allows not-checked access without a check date', () => {
+    expect(
+      validateSourceRecord(
+        makeSource({
+          access: {
+            state: 'not-checked',
+            checkedAt: null,
+            httpStatus: null,
+            note: null,
+          },
+        })
+      ).access.state
+    ).toBe('not-checked');
+  });
+});
+
+describe('validateSourceRegistry', () => {
+  it('rejects duplicate source IDs', () => {
+    expect(() =>
+      validateSourceRegistry({ schemaVersion: 2, sources: [makeSource(), makeSource()] })
+    ).toThrow(/Duplicate sourceId/);
+  });
+
+  it('rejects future retrieval dates', () => {
     expect(() =>
       validateSourceRegistry(
         {
-          sources: [{ ...source, retrievedAt: '2026-09-06' }],
+          schemaVersion: 2,
+          sources: [makeSource({ retrievedAt: '2026-09-06', lastVerifiedAt: '2026-09-06' })],
         },
         '2026-09-05'
       )
     ).toThrow(/Future source date/);
   });
 
-  it('rejects a source whose verification predates retrieval', () => {
+  it('rejects verification before retrieval', () => {
     expect(() =>
       validateSourceRegistry({
+        schemaVersion: 2,
         sources: [
-          {
-            ...source,
+          makeSource({
             retrievedAt: '2026-09-05',
             lastVerifiedAt: '2026-09-04',
-          },
+          }),
         ],
       })
     ).toThrow(/verification.*retrieval/i);
   });
 
-  it('rejects a source published after it was retrieved', () => {
+  it('rejects unknown identity evidence source IDs', () => {
     expect(() =>
       validateSourceRegistry({
+        schemaVersion: 2,
         sources: [
-          {
-            ...source,
-            publishedAt: '2026-09-05T00:00:00+08:00',
-            retrievedAt: '2026-09-04',
-          },
+          makeSource({
+            identityResolution: {
+              ...makeSource().identityResolution,
+              evidenceSourceIds: ['missing-source'],
+            },
+          }),
         ],
       })
-    ).toThrow(/publication.*retrieval/i);
+    ).toThrow(/Unknown identity evidence sourceId/i);
+  });
+});
+
+describe('validateCivicRegistry', () => {
+  const source = makeSource();
+
+  it('accepts a published fact backed by one reviewed primary source', () => {
+    expect(
+      validateCivicRegistry(
+        makeCivicRegistry([makeRegistryFact()]),
+        [source],
+        '2026-09-04'
+      ).facts
+    ).toHaveLength(1);
   });
 
-  it('rejects a Santa Cruz source that contains a same-name municipality', () => {
-    expect(() =>
-      validateSourceRegistry({
-        sources: [
-          {
-            ...source,
-            sourceTitle: 'Santa Cruz Compliance Audit Report 2024 — Zambales',
-          },
-        ],
-      })
-    ).toThrow(/wrong municipality|Zambales/i);
-  });
-
-  it('rejects non-web source URLs', () => {
-    expect(() =>
-      validateSourceRegistry({
-        sources: [{ ...source, sourceUrl: 'ftp://example.com/source' }],
-      })
-    ).toThrow(/sourceUrl/);
-  });
-
-  it('rejects a civic fact whose source text identifies another Santa Cruz', () => {
-    const wrongMunicipalitySource = {
-      ...source,
-      sourceTitle: 'Santa Cruz Compliance Audit Report 2024 — Zambales',
-    };
-
+  it('rejects a fact whose source ID is unknown', () => {
     expect(() =>
       validateCivicRegistry(
-        {
-          municipality: 'Santa Cruz',
-          province: 'Laguna',
-          region: 'Region IV-A (CALABARZON)',
-          facts: [
-            {
-              id: 'wrong-municipality-source',
-              label: 'Test fact',
-              value: 'value',
-              municipality: 'Santa Cruz',
-              sourceId: wrongMunicipalitySource.sourceId,
-              sourceTitle: wrongMunicipalitySource.sourceTitle,
-              sourceUrl: wrongMunicipalitySource.sourceUrl,
-              sourceOrganization: wrongMunicipalitySource.sourceOrganization,
-              publishedAt: wrongMunicipalitySource.publishedAt,
-              retrievedAt: wrongMunicipalitySource.retrievedAt,
-              lastVerifiedAt: wrongMunicipalitySource.lastVerifiedAt,
-              verificationStatus: wrongMunicipalitySource.verificationStatus,
+        makeCivicRegistry([
+          makeRegistryFact({
+            evidence: {
+              sourceIds: ['does-not-exist'],
+              verification: 'single-source',
+              assertionType: 'direct',
+              note: null,
             },
-          ],
-        },
-        [wrongMunicipalitySource],
+          }),
+        ]),
+        [source],
         '2026-09-04'
       )
-    ).toThrow(/wrong municipality|Zambales/i);
+    ).toThrow(/unknown sourceId/i);
+  });
+
+  it('allows an unverified staged observation without publishing it', () => {
+    const result = validateCivicRegistry(
+      makeCivicRegistry([
+        makeRegistryFact({
+          evidence: {
+            sourceIds: ['test-source'],
+            verification: 'unverified',
+            assertionType: 'direct',
+            note: null,
+          },
+          publication: { state: 'staged' },
+        }),
+      ]),
+      [source],
+      '2026-09-04'
+    );
+    expect(result.facts[0].publication.state).toBe('staged');
+  });
+
+  it('rejects a disputed fact marked published', () => {
+    expect(() =>
+      validateCivicRegistry(
+        makeCivicRegistry([
+          makeRegistryFact({
+            evidence: {
+              sourceIds: ['test-source'],
+              verification: 'disputed',
+              assertionType: 'direct',
+              note: null,
+            },
+          }),
+        ]),
+        [source],
+        '2026-09-04'
+      )
+    ).toThrow(/not evidence-eligible/i);
+  });
+
+  it('rejects single-source publication from a non-primary source', () => {
+    const secondary = makeSource({ authority: 'secondary-reputable' });
+    expect(() =>
+      validateCivicRegistry(
+        makeCivicRegistry([makeRegistryFact()]),
+        [secondary],
+        '2026-09-04'
+      )
+    ).toThrow(/not evidence-eligible/i);
   });
 });

@@ -62,23 +62,29 @@ describe('Santa Cruz canonical civic data', () => {
     }
   });
 
-  it('contains only the currently supported top executive officials', () => {
+  it('contains only the supported top executives and withholds an unsourced term', () => {
     expect(executiveData).toHaveLength(2);
     expect(executiveData).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           name: 'Joseph Kris Benjamin B. Agarao',
           role: 'Municipal Mayor',
-          term: '2025–2028',
+          term: null,
           sourceId: 'sc-dbm',
-          verificationStatus: 'verified',
+          fieldProvenance: expect.objectContaining({
+            name: expect.objectContaining({ sourceIds: ['sc-dbm'] }),
+            role: expect.objectContaining({ sourceIds: ['sc-dbm'] }),
+          }),
         }),
         expect.objectContaining({
           name: 'Laarni A. Malibiran',
           role: 'Municipal Vice Mayor',
-          term: '2025–2028',
+          term: null,
           sourceId: 'sc-dbm',
-          verificationStatus: 'verified',
+          fieldProvenance: expect.objectContaining({
+            name: expect.objectContaining({ sourceIds: ['sc-dbm'] }),
+            role: expect.objectContaining({ sourceIds: ['sc-dbm'] }),
+          }),
         }),
       ])
     );

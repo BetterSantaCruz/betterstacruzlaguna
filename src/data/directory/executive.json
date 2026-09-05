@@ -5,7 +5,7 @@
     "role": "Municipal Mayor",
     "office": "Office of the Municipal Mayor",
     "isElected": true,
-    "term": "2025–2028",
+    "term": null,
     "sourceId": "sc-dbm",
     "sourceTitle": "2026 Philippine Government Directory of Agencies and Officials",
     "sourceUrl": "https://www.dbm.gov.ph/wp-content/uploads/AboutDBM/2026-Philippine-Government-Directory-of-Agencies-and-Officials.pdf",
@@ -13,6 +13,10 @@
     "retrievedAt": "2026-09-05",
     "lastVerifiedAt": "2026-09-05",
     "verificationStatus": "verified",
+    "fieldProvenance": {
+      "name": {"sourceIds":["sc-dbm"],"assertionType":"direct","note":null},
+      "role": {"sourceIds":["sc-dbm"],"assertionType":"direct","note":null}
+    },
     "address": null,
     "phone": null,
     "email": null,
@@ -24,7 +28,7 @@
     "role": "Municipal Vice Mayor",
     "office": "Office of the Municipal Vice Mayor",
     "isElected": true,
-    "term": "2025–2028",
+    "term": null,
     "sourceId": "sc-dbm",
     "sourceTitle": "2026 Philippine Government Directory of Agencies and Officials",
     "sourceUrl": "https://www.dbm.gov.ph/wp-content/uploads/AboutDBM/2026-Philippine-Government-Directory-of-Agencies-and-Officials.pdf",
@@ -32,6 +36,10 @@
     "retrievedAt": "2026-09-05",
     "lastVerifiedAt": "2026-09-05",
     "verificationStatus": "verified",
+    "fieldProvenance": {
+      "name": {"sourceIds":["sc-dbm"],"assertionType":"direct","note":null},
+      "role": {"sourceIds":["sc-dbm"],"assertionType":"direct","note":null}
+    },
     "address": null,
     "phone": null,
     "email": null,

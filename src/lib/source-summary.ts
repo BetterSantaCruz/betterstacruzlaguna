@@ -1,30 +1,26 @@
 import type { SourceRecord } from './provenance';
 
 export interface SourceStatusSummary {
-  status: SourceRecord['verificationStatus'];
+  status: SourceRecord['reviewState'];
   count: number;
 }
 
-const STATUS_ORDER: SourceRecord['verificationStatus'][] = [
-  'verified',
-  'observed',
-  'pending',
-  'access-restricted',
-  'unreachable',
-  'discovery-only',
-  'secondary',
-  'collaboration',
+const STATUS_ORDER: SourceRecord['reviewState'][] = [
+  'reviewed',
+  'needs-review',
+  'unreviewed',
+  'rejected',
 ];
 
 export function summarizeSourceStatuses(
-  sources: readonly Pick<SourceRecord, 'verificationStatus'>[]
+  sources: readonly Pick<SourceRecord, 'reviewState'>[]
 ): SourceStatusSummary[] {
-  const counts = new Map<SourceRecord['verificationStatus'], number>();
+  const counts = new Map<SourceRecord['reviewState'], number>();
 
   for (const source of sources) {
     counts.set(
-      source.verificationStatus,
-      (counts.get(source.verificationStatus) ?? 0) + 1
+      source.reviewState,
+      (counts.get(source.reviewState) ?? 0) + 1
     );
   }
 

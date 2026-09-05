@@ -1,7 +1,11 @@
 import { z } from 'zod';
 
 import { SANTA_CRUZ_IDENTITY } from './municipality-identity';
-import type { SourceRecord } from './provenance';
+import {
+  fieldProvenanceSchema,
+  type FieldProvenance,
+  type SourceRecord,
+} from './provenance';
 
 const SANTA_CRUZ_BARANGAY_COUNT = 26;
 const SANTA_CRUZ_POPULATION = 126844;
@@ -24,7 +28,6 @@ const canonicalProvenanceSchema = z.object({
   sourceOrganization: z.string().min(1),
   retrievedAt: dateSchema,
   lastVerifiedAt: dateSchema,
-  verificationStatus: z.literal('verified'),
 });
 
 const barangayRecordSchema = canonicalProvenanceSchema.extend({
@@ -48,6 +51,12 @@ const executiveRecordSchema = canonicalProvenanceSchema.extend({
   office: z.string().min(1).nullable(),
   isElected: z.boolean(),
   term: z.string().min(1).nullable(),
+  fieldProvenance: z.object({
+    name: fieldProvenanceSchema,
+    role: fieldProvenanceSchema,
+    office: fieldProvenanceSchema.optional(),
+    term: fieldProvenanceSchema.optional(),
+  }),
   address: z.string().nullable(),
   phone: z.string().nullable(),
   email: z.string().email().nullable(),
@@ -126,11 +135,18 @@ function assertSourceLink(
   if (!source) {
     throw new Error(`unknown sourceId for ${context}: ${record.sourceId}`);
   }
-  if (source.municipality !== 'Santa Cruz') {
+  if (
+    source.identity.municipality !== 'Santa Cruz' ||
+    source.identity.province !== 'Laguna' ||
+    source.identity.municipalityPsgc !== SANTA_CRUZ_IDENTITY.psgc10
+  ) {
     throw new Error(`Municipality mismatch for ${context}`);
   }
-  if (source.verificationStatus !== 'verified') {
-    throw new Error(`${context} requires a verified source`);
+  if (
+    source.reviewState !== 'reviewed' ||
+    source.authority !== 'primary-official'
+  ) {
+    throw new Error(`${context} requires a reviewed primary-official source`);
   }
 
   if (record.sourceUrl !== source.sourceUrl) {
@@ -160,6 +176,25 @@ function assertCanonicalProvenance(
   for (const field of sourceComparableFields) {
     if (record[field] !== source[field]) {
       throw new Error(`Provenance mismatch for ${context}: ${field}`);
+    }
+  }
+}
+
+function assertFieldProvenance(
+  provenance: FieldProvenance,
+  sources: readonly SourceRecord[],
+  context: string
+): void {
+  for (const sourceId of provenance.sourceIds) {
+    const source = sources.find(candidate => candidate.sourceId === sourceId);
+    if (!source) {
+      throw new Error(`unknown field provenance sourceId for ${context}: ${sourceId}`);
+    }
+    if (
+      source.identity.municipalityPsgc !== SANTA_CRUZ_IDENTITY.psgc10 ||
+      source.reviewState !== 'reviewed'
+    ) {
+      throw new Error(`Ineligible field provenance source for ${context}: ${sourceId}`);
     }
   }
 }
@@ -266,6 +301,17 @@ export function validateExecutiveDirectory(
       today,
       `executive ${record.slug}`
     );
+    assertFieldProvenance(record.fieldProvenance.name, sources, `${record.slug}.name`);
+    assertFieldProvenance(record.fieldProvenance.role, sources, `${record.slug}.role`);
+    if (record.fieldProvenance.office) {
+      assertFieldProvenance(record.fieldProvenance.office, sources, `${record.slug}.office`);
+    }
+    if (record.term && !record.fieldProvenance.term) {
+      throw new Error(`Executive term requires field-level provenance: ${record.slug}`);
+    }
+    if (record.fieldProvenance.term) {
+      assertFieldProvenance(record.fieldProvenance.term, sources, `${record.slug}.term`);
+    }
   }
 
   return records;

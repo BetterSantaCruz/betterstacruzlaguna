@@ -13,6 +13,7 @@ import {
   validatePopulationData,
 } from '../src/lib/canonical-data';
 import { findInheritedClaimPaths } from '../src/lib/clean-room';
+import { SANTA_CRUZ_IDENTITY } from '../src/lib/municipality-identity';
 
 const projectRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -102,10 +103,25 @@ function assertNoNegativeAmounts(value: unknown, location = 'data'): void {
   }
 }
 
+function assertSantaCruzSourceBoundary(sources: readonly SourceRecord[]): void {
+  for (const source of sources) {
+    if (
+      source.identity.municipality !== 'Santa Cruz' ||
+      source.identity.province !== 'Laguna' ||
+      source.identity.municipalityPsgc !== SANTA_CRUZ_IDENTITY.psgc10
+    ) {
+      throw new Error(`Non-Santa Cruz production source: ${source.sourceId}`);
+    }
+  }
+}
+
 function main(): void {
   const sources = validateSourceRegistry(
-    readJson('src/data/sources/source-registry.json')
+    readJson('src/data/sources/source-registry.json'),
+    today
   );
+  assertSantaCruzSourceBoundary(sources);
+
   const civicRegistry = validateCivicRegistry(
     readJson('src/data/civic-registry.json'),
     sources,
@@ -150,7 +166,11 @@ function main(): void {
     );
   }
 
-  const requiredSourceIds = ['sc-philgeps-11459794', 'sc-sb-about'];
+  const requiredSourceIds = [
+    'sc-psa-psgc',
+    'sc-philgeps-11459794',
+    'sc-sb-about',
+  ];
   for (const sourceId of requiredSourceIds) {
     if (!sources.some(source => source.sourceId === sourceId)) {
       throw new Error(`Required source is missing: ${sourceId}`);
@@ -212,11 +232,8 @@ function main(): void {
     );
   }
 
-  const santaCruzFacts = civicRegistry.facts.filter(
-    fact => fact.municipality === 'Santa Cruz'
-  );
   console.log(
-    `Civic data validation passed: ${sources.length} sources, ${santaCruzFacts.length} Santa Cruz facts, ${today} cutoff.`
+    `Civic data validation passed: ${sources.length} Santa Cruz sources, ${civicRegistry.facts.length} civic facts, ${today} cutoff.`
   );
 }
 
