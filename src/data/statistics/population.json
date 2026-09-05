@@ -5,14 +5,151 @@
       "province": "Laguna",
       "municipality": "Santa Cruz"
     },
-    "source": "Not yet verified",
-    "notes": "No population series is published until a directly inspectable PSA source is corroborated.",
+    "source": "Philippine Statistics Authority — PSGC, 2024 POPCEN",
+    "sourceId": "sc-psa-psgc",
+    "sourceUrl": "https://psa.gov.ph/classification/psgc/barangays/0403426000",
+    "retrievedAt": "2026-09-05",
+    "lastVerifiedAt": "2026-09-05",
+    "asOf": "2025-07-31",
+    "referenceYear": 2024,
+    "notes": "Municipality population is from the 2024 POPCEN. The barangay classification page lists 26 barangays as of 31 July 2025.",
     "censusDates": {}
   },
   "municipality": {
     "name": "Santa Cruz",
-    "history": [],
+    "history": [{ "year": 2024, "population": 126844 }],
     "growthRates": []
   },
-  "barangays": []
+  "barangays": [
+    {
+      "id": "0403426001",
+      "name": "Alipit",
+      "history": [{ "year": 2024, "population": 382 }]
+    },
+    {
+      "id": "0403426002",
+      "name": "Bagumbayan",
+      "history": [{ "year": 2024, "population": 13615 }]
+    },
+    {
+      "id": "0403426003",
+      "name": "Bubukal",
+      "history": [{ "year": 2024, "population": 7244 }]
+    },
+    {
+      "id": "0403426004",
+      "name": "Calios",
+      "history": [{ "year": 2024, "population": 10472 }]
+    },
+    {
+      "id": "0403426005",
+      "name": "Duhat",
+      "history": [{ "year": 2024, "population": 7555 }]
+    },
+    {
+      "id": "0403426006",
+      "name": "Gatid",
+      "history": [{ "year": 2024, "population": 10656 }]
+    },
+    {
+      "id": "0403426007",
+      "name": "Jasaan",
+      "history": [{ "year": 2024, "population": 938 }]
+    },
+    {
+      "id": "0403426008",
+      "name": "Labuin",
+      "history": [{ "year": 2024, "population": 4748 }]
+    },
+    {
+      "id": "0403426009",
+      "name": "Malinao",
+      "history": [{ "year": 2024, "population": 679 }]
+    },
+    {
+      "id": "0403426010",
+      "name": "Oogong",
+      "history": [{ "year": 2024, "population": 4517 }]
+    },
+    {
+      "id": "0403426011",
+      "name": "Pagsawitan",
+      "history": [{ "year": 2024, "population": 10514 }]
+    },
+    {
+      "id": "0403426012",
+      "name": "Palasan",
+      "history": [{ "year": 2024, "population": 4132 }]
+    },
+    {
+      "id": "0403426013",
+      "name": "Patimbao",
+      "history": [{ "year": 2024, "population": 9542 }]
+    },
+    {
+      "id": "0403426014",
+      "name": "Barangay I",
+      "history": [{ "year": 2024, "population": 1503 }]
+    },
+    {
+      "id": "0403426015",
+      "name": "Barangay II",
+      "history": [{ "year": 2024, "population": 1209 }]
+    },
+    {
+      "id": "0403426016",
+      "name": "Barangay III",
+      "history": [{ "year": 2024, "population": 386 }]
+    },
+    {
+      "id": "0403426017",
+      "name": "Barangay IV",
+      "history": [{ "year": 2024, "population": 1299 }]
+    },
+    {
+      "id": "0403426018",
+      "name": "Barangay V",
+      "history": [{ "year": 2024, "population": 715 }]
+    },
+    {
+      "id": "0403426019",
+      "name": "San Jose",
+      "history": [{ "year": 2024, "population": 3012 }]
+    },
+    {
+      "id": "0403426020",
+      "name": "San Juan",
+      "history": [{ "year": 2024, "population": 4149 }]
+    },
+    {
+      "id": "0403426021",
+      "name": "San Pablo Norte",
+      "history": [{ "year": 2024, "population": 2710 }]
+    },
+    {
+      "id": "0403426022",
+      "name": "San Pablo Sur",
+      "history": [{ "year": 2024, "population": 3237 }]
+    },
+    {
+      "id": "0403426023",
+      "name": "Santisima Cruz",
+      "history": [{ "year": 2024, "population": 9751 }]
+    },
+    {
+      "id": "0403426024",
+      "name": "Santo Angel Central",
+      "history": [{ "year": 2024, "population": 4551 }]
+    },
+    {
+      "id": "0403426025",
+      "name": "Santo Angel Norte",
+      "history": [{ "year": 2024, "population": 5412 }]
+    },
+    {
+      "id": "0403426026",
+      "name": "Santo Angel Sur",
+      "history": [{ "year": 2024, "population": 3916 }]
+    }
+  ]
 }
