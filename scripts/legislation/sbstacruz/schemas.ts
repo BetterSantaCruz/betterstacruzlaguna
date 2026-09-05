@@ -55,9 +55,7 @@ export const collectionObservationSchema = z.object({
   }),
 });
 
-export type CollectionObservation = z.infer<
-  typeof collectionObservationSchema
->;
+export type CollectionObservation = z.infer<typeof collectionObservationSchema>;
 
 export const stagedPersonNameSchema = z.object({
   rawName: z.string().min(1),
@@ -136,6 +134,4 @@ export const collectionRunManifestSchema = z.object({
   error: z.string().nullable(),
 });
 
-export type CollectionRunManifest = z.infer<
-  typeof collectionRunManifestSchema
->;
+export type CollectionRunManifest = z.infer<typeof collectionRunManifestSchema>;

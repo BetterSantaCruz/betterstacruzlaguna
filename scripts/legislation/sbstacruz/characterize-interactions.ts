@@ -75,7 +75,11 @@ function parseArgs(argv: string[]) {
 function sanitizeUrl(rawUrl: string): string {
   const url = new URL(rawUrl);
   for (const key of [...url.searchParams.keys()]) {
-    if (/^(?:_token|token|csrf|authorization|session|signature|secret)$/i.test(key)) {
+    if (
+      /^(?:_token|token|csrf|authorization|session|signature|secret)$/i.test(
+        key
+      )
+    ) {
       url.searchParams.set(key, '<redacted>');
     }
   }
@@ -101,7 +105,9 @@ async function summarizeDataTablesResponse(
     const object = body as Record<string, unknown>;
     const rows = Array.isArray(object.data) ? object.data : null;
 
-    const sampleRows = (rows ?? []).slice(0, 5).filter(Array.isArray) as unknown[][];
+    const sampleRows = (rows ?? [])
+      .slice(0, 5)
+      .filter(Array.isArray) as unknown[][];
     return {
       recordsTotal:
         typeof object.recordsTotal === 'number' ? object.recordsTotal : null,
@@ -147,7 +153,11 @@ async function resetFilters(page: Page) {
     const locator = control(page, 'select', id);
     if ((await locator.count()) > 0) {
       const firstValue =
-        (await locator.first().locator('option').first().getAttribute('value')) ?? '';
+        (await locator
+          .first()
+          .locator('option')
+          .first()
+          .getAttribute('value')) ?? '';
       await locator.first().selectOption(firstValue);
       await locator.first().dispatchEvent('change');
     }
@@ -270,7 +280,8 @@ async function characterize(page: Page, target: (typeof TARGETS)[number]) {
       async () => {
         const from = control(page, 'input', 'from_date');
         const to = control(page, 'input', 'to_date');
-        if ((await from.count()) === 0 || (await to.count()) === 0) return false;
+        if ((await from.count()) === 0 || (await to.count()) === 0)
+          return false;
         await from.first().fill('2024-01-01');
         await from.first().dispatchEvent('input');
         await from.first().dispatchEvent('change');

@@ -39,7 +39,8 @@ export type StagingAnomaly = {
 };
 
 const FILIPINO_LEGAL_PREFIX = /\b(kapasiyahan|kautusang\s+bayan|blg\.)\b/i;
-const ENGLISH_LEGAL_PREFIX = /\b(resolution|municipal\s+ordinance|ordinance|no\.)\b/i;
+const ENGLISH_LEGAL_PREFIX =
+  /\b(resolution|municipal\s+ordinance|ordinance|no\.)\b/i;
 const COLLECTIVE_AUTHOR = /\b(sangguniang\s+bayan|all\s+sb\s+members)\b/i;
 
 export function normalizeText(value: unknown): string {
@@ -278,9 +279,11 @@ export function logicalRecordKey(input: {
 
 function anomalySeverity(code: AnomalyCode): AnomalySeverity {
   if (
-    ['source_identity_mismatch', 'duplicate_logical_key', 'empty_record'].includes(
-      code
-    )
+    [
+      'source_identity_mismatch',
+      'duplicate_logical_key',
+      'empty_record',
+    ].includes(code)
   ) {
     return 'blocking';
   }
@@ -307,7 +310,10 @@ function anomalySeverity(code: AnomalyCode): AnomalySeverity {
   return 'info';
 }
 
-function anomaly(code: AnomalyCode, note: string | null = null): StagingAnomaly {
+function anomaly(
+  code: AnomalyCode,
+  note: string | null = null
+): StagingAnomaly {
   return {
     code,
     severity: anomalySeverity(code),
@@ -330,7 +336,10 @@ function detectAnomalies(input: {
   if (!input.parsed.seriesYear) anomalies.push(anomaly('missing_series_year'));
   if (input.parsed.seriesCode && !/^[A-Z]$/.test(input.parsed.seriesCode)) {
     anomalies.push(
-      anomaly('unknown_series_code', `Observed code: ${input.parsed.seriesCode}`)
+      anomaly(
+        'unknown_series_code',
+        `Observed code: ${input.parsed.seriesCode}`
+      )
     );
   }
 
@@ -361,7 +370,8 @@ function detectAnomalies(input: {
   const duplicateAcrossRoles = input.coAuthors.some(item =>
     authorNames.has(normalizeText(item.rawName).toLowerCase())
   );
-  if (duplicateAcrossRoles) anomalies.push(anomaly('author_coauthor_duplicate'));
+  if (duplicateAcrossRoles)
+    anomalies.push(anomaly('author_coauthor_duplicate'));
 
   if (
     input.authors.some(item => COLLECTIVE_AUTHOR.test(item.rawName)) ||

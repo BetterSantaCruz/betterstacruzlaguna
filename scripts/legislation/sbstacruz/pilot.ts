@@ -1,7 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { collectSource, type CollectionResult, type SourceKey } from './collector';
+import {
+  collectSource,
+  type CollectionResult,
+  type SourceKey,
+} from './collector';
 
 const PILOT_LIMIT_PER_SOURCE = 20;
 const DEFAULT_OUTPUT = 'pipeline/openlgu/sbstacruz-legislation/pilot';
@@ -70,7 +74,8 @@ function summarize(result: CollectionResult) {
       seriesYear: result.staged.filter(record => !record.seriesYear).length,
       title: result.staged.filter(record => !record.titleRaw).length,
       dateEnacted: result.staged.filter(record => !record.dateEnacted).length,
-      authors: result.staged.filter(record => record.authors.length === 0).length,
+      authors: result.staged.filter(record => record.authors.length === 0)
+        .length,
       tags: result.staged.filter(record => record.tagsRaw.length === 0).length,
     },
     warningCounts: countBy(result.warnings.map(warning => warning.code)),
@@ -90,7 +95,10 @@ function writeSourceOutput(
 ) {
   const sourceDirectory = path.join(outputRoot, key);
   writeJson(path.join(sourceDirectory, 'manifest.json'), result.manifest);
-  writeJson(path.join(sourceDirectory, 'observations.json'), result.observations);
+  writeJson(
+    path.join(sourceDirectory, 'observations.json'),
+    result.observations
+  );
   writeJson(path.join(sourceDirectory, 'staged.json'), result.staged);
   writeJson(path.join(sourceDirectory, 'warnings.json'), result.warnings);
   writeJson(path.join(sourceDirectory, 'summary.json'), summarize(result));
@@ -116,7 +124,9 @@ async function main() {
     }
   }
 
-  const summaries = sourceOrder.map(sourceKey => summarize(results[sourceKey]!));
+  const summaries = sourceOrder.map(sourceKey =>
+    summarize(results[sourceKey]!)
+  );
   const reviewSummary = {
     schemaVersion: 1,
     purpose: 'Data Pass C bounded SB legislation staging pilot',

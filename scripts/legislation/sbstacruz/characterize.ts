@@ -1,7 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { chromium, type Locator, type Page, type Response } from '@playwright/test';
+import {
+  chromium,
+  type Locator,
+  type Page,
+  type Response,
+} from '@playwright/test';
 
 const DEFAULT_OUTPUT =
   'pipeline/openlgu/sbstacruz-legislation/characterization/characterization.json';
@@ -240,7 +245,9 @@ async function inspectDom(page: Page): Promise<DomObservation> {
   ].filter(marker => bodyText.toLowerCase().includes(marker.toLowerCase()));
 
   const tableHeaders = (
-    await page.locator('table thead th, table tr:first-child th').allTextContents()
+    await page
+      .locator('table thead th, table tr:first-child th')
+      .allTextContents()
   )
     .map(clean)
     .filter(Boolean)

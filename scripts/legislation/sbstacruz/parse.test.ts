@@ -23,9 +23,7 @@ function observation(
   return toCollectionObservation({
     documentType,
     sourceId:
-      documentType === 'ordinance'
-        ? 'sc-sb-ordinances'
-        : 'sc-sb-resolutions',
+      documentType === 'ordinance' ? 'sc-sb-ordinances' : 'sc-sb-resolutions',
     sourceKey:
       documentType === 'ordinance'
         ? 'sbstacruz-ordinances'
