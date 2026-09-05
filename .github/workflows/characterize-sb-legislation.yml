@@ -6,7 +6,6 @@ on:
     branches: [feat/sb-legislation-staging]
     paths:
       - '.github/workflows/characterize-sb-legislation.yml'
-      - 'scripts/legislation/sbstacruz/characterize.ts'
       - 'scripts/legislation/sbstacruz/characterize-interactions.ts'
 
 permissions:
@@ -16,6 +15,7 @@ jobs:
   characterize:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout branch
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
@@ -35,12 +35,6 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Characterize public SB initial transport
-        run: >-
-          npx tsx scripts/legislation/sbstacruz/characterize.ts
-          --output pipeline/openlgu/sbstacruz-legislation/characterization/characterization.json
-          --wait-ms 8000
-
       - name: Characterize public pagination and filters
         run: >-
           npx tsx scripts/legislation/sbstacruz/characterize-interactions.ts
@@ -49,7 +43,7 @@ jobs:
       - name: Upload characterization artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: sb-legislation-characterization
-          path: pipeline/openlgu/sbstacruz-legislation/characterization
+          name: sb-legislation-interactions
+          path: pipeline/openlgu/sbstacruz-legislation/characterization/interactions.json
           if-no-files-found: error
           retention-days: 7
