@@ -125,6 +125,34 @@ describe('validateCivicRegistry', () => {
     ).toThrow(/Future source date/);
   });
 
+  it('rejects a source whose verification predates retrieval', () => {
+    expect(() =>
+      validateSourceRegistry({
+        sources: [
+          {
+            ...source,
+            retrievedAt: '2026-09-05',
+            lastVerifiedAt: '2026-09-04',
+          },
+        ],
+      })
+    ).toThrow(/verification.*retrieval/i);
+  });
+
+  it('rejects a source published after it was retrieved', () => {
+    expect(() =>
+      validateSourceRegistry({
+        sources: [
+          {
+            ...source,
+            publishedAt: '2026-09-05T00:00:00+08:00',
+            retrievedAt: '2026-09-04',
+          },
+        ],
+      })
+    ).toThrow(/publication.*retrieval/i);
+  });
+
   it('rejects a Santa Cruz source that contains a same-name municipality', () => {
     expect(() =>
       validateSourceRegistry({

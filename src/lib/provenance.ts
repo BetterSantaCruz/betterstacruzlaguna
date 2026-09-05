@@ -88,6 +88,19 @@ export function validateSourceRegistry(
     if (source.publishedAt && source.publishedAt.slice(0, 10) > today) {
       throw new Error(`Future source date: ${source.sourceId}`);
     }
+    if (source.lastVerifiedAt < source.retrievedAt) {
+      throw new Error(
+        `Source verification date precedes retrieval: ${source.sourceId}`
+      );
+    }
+    if (
+      source.publishedAt &&
+      source.publishedAt.slice(0, 10) > source.retrievedAt
+    ) {
+      throw new Error(
+        `Source publication date follows retrieval: ${source.sourceId}`
+      );
+    }
 
     if (source.municipality === 'Santa Cruz') {
       assertSantaCruzIdentity({

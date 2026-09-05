@@ -85,3 +85,10 @@
 - Decision: extend the civic validator to scan publishable page and component source for inherited BetterLB/Los Baños claims, while leaving research and reference documentation retained.
 - Rationale: feature-gated routes can still become public later; dormant inherited copy is a clean-room risk even when the current feature flag prevents rendering it.
 - Revisit when: the repository adopts a generated content boundary or a more precise static-analysis rule for runtime surfaces.
+
+## D-012 — Reject impossible source chronology
+
+- Date: 2026-09-05
+- Decision: require a source's publication date to be no later than retrieval, and its last-verified date to be no earlier than retrieval.
+- Rationale: a source ledger is evidence metadata; impossible ordering can make a stale or future observation appear current and should fail before promotion.
+- Revisit when: source records gain an explicit observation interval or versioned snapshot timestamps.

@@ -11,13 +11,14 @@ As of 2026-09-05, BetterSantaCruz is a public foundation under active implementa
 - Santa Cruz and Pagsanjan source inventories and collaboration draft.
 - Current BetterLGU PR #244 recorded; no duplicate registration PR is part of this workstream.
 - Public repository published at https://github.com/Diannn3/betterstacruzlaguna; `main` is the current implementation branch and no production deployment is claimed.
-- Civic-data validation, 395 unit tests, lint, TypeScript, Prettier, the production build, and the 11-test browser smoke suite are green for the current feature slice.
+- Civic-data validation, 397 unit tests, lint, TypeScript, Prettier, the production build, and the 11-test browser smoke suite are green for the current feature slice.
 - The first controlled civic baseline is now published in the repository: PSA/PSGC identity, correspondence code, 2024 POPCEN population, all 26 barangays with classification/population, and the mayor/vice mayor records listed in the 2026 DBM directory.
 - Government and home surfaces now distinguish the published PSA/DBM baseline from gated council, department, contact, and barangay-official records; inherited Santa Cruz copy no longer says the published barangay baseline is absent.
 - The generated `public/llms.txt` crawler note mirrors the same verified baseline and gated-dataset boundary.
 - The statistics module exposes the verified population snapshot and explicitly gates CMCI and municipal-income routes when their datasets are unavailable.
 - The repository includes and tests the Vercel SPA rewrite needed for direct BrowserRouter deep links; no Vercel project or deployment is configured.
 - The civic validator now scans publishable pages and components for inherited BetterLB/Los Baños runtime claims while preserving research/reference documentation.
+- Source records now reject impossible publication, retrieval, and verification ordering before civic facts can be promoted.
 
 ## In progress
 
