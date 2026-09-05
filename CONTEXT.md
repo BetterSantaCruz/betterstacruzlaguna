@@ -4,7 +4,7 @@ Future AI agents: read this file before making any implementation decision. Do n
 
 ## Mission and current state — 2026-09-05
 
-Build BetterSantaCruz as a trustworthy, source-led public-information portal for Santa Cruz, Laguna while preserving the reusable BetterLB/OpenLGU architecture. The site must make uncertainty visible, keep source observations separate from canonical public data, and avoid inventing officials, contacts, budgets, procurement facts, services, schedules, fees, addresses, statistics, barangay records, or outcomes.
+Build BetterSantaCruz as a trustworthy, source-led public-information portal for Santa Cruz, Laguna while preserving the reusable BetterLB/OpenLGU architecture. The site must make uncertainty visible, keep source observations separate from canonical public data, and avoid inventing officials, contacts, budgets, procurement facts, services, schedules, fees, addresses, unsupported statistics, barangay records, or outcomes.
 
 - Project path: `C:\Users\Dian\Documents\Vaults\Fensalir\businesses\betterstacruzlaguna`.
 - The full BetterLB-derived repository architecture has been restored and is being sanitized in place. Do not prune directories or delete reusable pipeline, function, test, documentation, or schema structure merely because Santa Cruz data is not ready.
@@ -59,7 +59,7 @@ The architecture is intentionally retained while gated modules remain empty. The
 - `src/data/sources/source-registry.json` is the source ledger; `src/data/civic-registry.json` contains only facts that have passed the current evidence gate.
 - `raw_data/README.md` documents selective source retention. Do not restore BetterLB/Los Baños raw exports into this repository.
 - The config must not invent Santa Cruz coordinates, a BetterSantaCruz domain, social links, contact email, service records, office contacts, or municipal branding. The published official records are limited to the PSA barangay baseline and the two DBM-listed top executives, with their provenance attached in the data files.
-- Weather, tourism, statistics, transparency aggregates, directories, and services stay disabled or explicitly empty until their source and publication gates are met.
+- The population statistics route is enabled for the verified 2024 snapshot only. Weather, tourism, transparency aggregates, full directories, and services stay disabled or explicitly empty until their source and publication gates are met; CMCI and municipal-income statistics render gated states.
 - If a source is blocked or unreachable, record the state and next verification action; do not substitute secondary snippets as canonical data.
 
 ## Next gates

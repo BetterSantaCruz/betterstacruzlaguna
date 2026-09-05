@@ -28,7 +28,7 @@ export default function StatisticsSidebar() {
   ];
 
   return (
-    <SidebarContainer title='City Statistics'>
+    <SidebarContainer title='Municipal Statistics'>
       <ul className='space-y-1'>
         {sections.map(section => (
           <SidebarItem key={section.path} {...section} />

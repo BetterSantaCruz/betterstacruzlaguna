@@ -38,7 +38,7 @@ export default function GovernmentRootLayout() {
       title: t('government.barangaysTitle', 'Barangays'),
       description: t(
         'government.barangaysDescription',
-        `The local barangay list for ${lguLabels.name} is not yet verified.`
+        `PSA-verified barangay codes, classifications, and 2024 population for ${lguLabels.name}.`
       ),
       icon: HomeIcon,
       path: '/government/barangays',
@@ -52,7 +52,7 @@ export default function GovernmentRootLayout() {
       <PageHeader
         variant='centered'
         title='Government'
-        description={`Access information on elected leaders and ${lguLabels.adjective.toLowerCase()} departments. Current Santa Cruz records are being verified before publication.`}
+        description={`Access Santa Cruz leadership, departments, and barangay records. The PSA baseline and two DBM-listed top executives are published; remaining records are still being verified.`}
       />
 
       <SectionBlock className='pb-kapwa-xs md:pb-kapwa-sm'>

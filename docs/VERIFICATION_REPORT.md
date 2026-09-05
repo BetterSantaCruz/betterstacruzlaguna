@@ -12,6 +12,7 @@ Research and repository audit date: 2026-09-05
 - PSA's direct Santa Cruz municipality page identifies PSGC `0403426000`, correspondence code `043426000`, population `126844` from the 2024 POPCEN, and 26 barangays as of 31 July 2025. These records are promoted with source metadata.
 - The 2026 DBM directory lists Joseph Kris Benjamin B. Agarao as mayor and Laarni A. Malibiran as vice mayor. These two records are promoted; the full council and department roster remains unverified.
 - DPWH provides a Santa Cruz municipal-hall rehabilitation planning document with a preliminary ABC of PHP 20,000,000 and 240-day duration. It is retained as planning evidence, not project-status proof.
+- The population route renders the PSA-backed 2024 snapshot and leaves growth, CMCI, and municipal-income values unavailable where comparable or authoritative data is not present.
 - The BetterGov exact-organization route exists as a public index surface; changing counts are not treated as facts.
 - Pagsanjan's official portal and BetterPagsanjan public repository were located; existing maintainer ownership is preserved.
 

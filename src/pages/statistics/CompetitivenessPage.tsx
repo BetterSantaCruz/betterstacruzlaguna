@@ -14,6 +14,7 @@ import {
 
 import { StatCard } from '@/components/ui/StatCard';
 import { Badge } from '@/components/ui/Badge';
+import { DataStatus } from '@/components/ui/DataStatus';
 import {
   ChartTooltip,
   ResponsiveChart,
@@ -44,7 +45,7 @@ interface TrendPoint {
 export default function CompetitivenessPage() {
   const [activeTab, setActiveTab] = useState<'trends' | 'pillars'>('trends');
   const [selectedPillar, setSelectedPillar] = useState(
-    cmciData.pillars[0].name
+    cmciData.pillars[0]?.name ?? ''
   );
 
   const latestIdx = cmciData.meta.years.length - 1;
@@ -71,6 +72,22 @@ export default function CompetitivenessPage() {
     () => cmciData.pillars.find(p => p.name === selectedPillar),
     [selectedPillar]
   );
+
+  if (cmciData.meta.years.length === 0 || cmciData.pillars.length === 0) {
+    return (
+      <>
+        <PageHero
+          title='Competitiveness'
+          description='The DTI CMCI profile is not currently available for verified Santa Cruz publication.'
+        />
+        <DataStatus
+          title='Competitiveness data not yet published'
+          message='The official CMCI profile remains access-restricted in the current research record. Rankings, scores, and pillar values are not inferred from snippets or another municipality.'
+          sourceHref='/sources'
+        />
+      </>
+    );
+  }
 
   return (
     <>

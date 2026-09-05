@@ -56,7 +56,7 @@
     "openLGU": false,
     "transparency": false,
     "tourism": false,
-    "statistics": false,
+    "statistics": true,
     "weather": false,
     "forex": false
   }

@@ -6,6 +6,7 @@ import { StatGrid } from '@/components/ui/StatCard';
 import { Badge } from '@/components/ui/Badge';
 import { DetailSection } from '@/components/layout/PageLayouts';
 import { PageHero } from '@/components/layout/PageLayouts';
+import { DataStatus } from '@/components/ui/DataStatus';
 
 import FinancialPieChart from '@/pages/transparency/components/FinancialPieChart';
 
@@ -23,8 +24,10 @@ const COLORS = {
 export default function MunicipalIncomePage() {
   const data = ariData[0];
 
-  const drillDownIncomeData = useMemo(
-    () => [
+  const drillDownIncomeData = useMemo(() => {
+    if (!data) return [];
+
+    return [
       {
         name: 'National Tax Allotment',
         value: data.other_income_sources.national_tax_allotment,
@@ -58,9 +61,24 @@ export default function MunicipalIncomePage() {
         value: data.other_income_sources.interest_income,
         color: COLORS.other,
       },
-    ],
-    [data]
-  );
+    ];
+  }, [data]);
+
+  if (!data) {
+    return (
+      <>
+        <PageHero
+          title='Municipal Income'
+          description='Municipal revenue records are not yet supported by a verified Santa Cruz source.'
+        />
+        <DataStatus
+          title='Municipal income not yet published'
+          message='No current Santa Cruz income dataset has passed the project’s source, identity, and freshness review. Do not infer revenue totals from another municipality or a volatile dashboard.'
+          sourceHref='/sources'
+        />
+      </>
+    );
+  }
 
   return (
     <>

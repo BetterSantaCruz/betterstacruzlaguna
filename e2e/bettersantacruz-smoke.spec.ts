@@ -82,6 +82,23 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
     );
   });
 
+  test('the verified population snapshot is visible while unsupported statistics stay gated', async ({
+    page,
+  }) => {
+    await page.goto('/statistics');
+    await expect(
+      page.getByRole('heading', { name: 'Population Profile' })
+    ).toBeVisible();
+    await expect(page.getByText('126,844')).toBeVisible();
+    await expect(page.getByText('Growth rate not available')).toBeVisible();
+    await expect(
+      page.getByRole('note', { name: 'Source attribution' })
+    ).toBeVisible();
+
+    await page.goto('/statistics/municipal-income');
+    await expect(page.getByRole('status')).toContainText(/municipal income/i);
+  });
+
   test('home does not request disabled live feeds', async ({ page }) => {
     const externalRequests: string[] = [];
     page.on('request', request => {

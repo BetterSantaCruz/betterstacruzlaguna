@@ -14,17 +14,21 @@ import {
 
 import { StatCard } from '@/components/ui/StatCard';
 import { Badge } from '@/components/ui/Badge';
+import { DataStatus } from '@/components/ui/DataStatus';
 import {
   ChartTooltip,
   ResponsiveChart,
 } from '@/components/data-display/ChartContainer';
 import { DetailSection } from '@/components/layout/PageLayouts';
 import { PageHero } from '@/components/layout/PageLayouts';
+import { SourceAttribution } from '@/components/ui/SourceAttribution';
 
 import { cn } from '@/lib/utils';
+import { getGrowthRate, getLatestPopulation } from '@/lib/population';
 
 // Data Import
 import populationData from '@/data/statistics/population.json';
+import sourceRegistry from '@/data/sources/source-registry.json';
 
 // 14 Highly Distinct Colors (Top 3 mapped to Brand Primaries)
 const BRGY_COLORS = [
@@ -56,21 +60,27 @@ export default function PopulationPage() {
   );
   const { municipality, barangays, meta } = populationData;
 
-  const latestMuni = municipality.history[municipality.history.length - 1];
-  const growth = municipality.growthRates.find(
-    r => r.period === '2020-2024'
-  )?.rate;
+  const latestMuni = getLatestPopulation(municipality.history);
+  const growth = getGrowthRate(municipality.growthRates, '2020-2024');
+  const populationSource = sourceRegistry.sources.find(
+    source => source.sourceId === meta.sourceId
+  );
+
   const sortedBarangaysForLine = useMemo(() => {
     return [...populationData.barangays].sort((a, b) => {
-      const latestA = a.history[a.history.length - 1].population;
-      const latestB = b.history[b.history.length - 1].population;
+      const latestA = getLatestPopulation(a.history)?.population ?? 0;
+      const latestB = getLatestPopulation(b.history)?.population ?? 0;
       return latestB - latestA;
     });
   }, []);
 
   // 1. PIVOT DATA: Combine all barangay histories into one array for the Multi-line chart
   const comparativeData = useMemo<BarangayPopulationPoint[]>(() => {
-    const years = [2010, 2015, 2020, 2024];
+    const years = [
+      ...new Set(
+        barangays.flatMap(barangay => barangay.history.map(h => h.year))
+      ),
+    ].sort((a, b) => a - b);
     return years.map(year => {
       // Initialize with year, then type-safely add barangay counts
       const point: BarangayPopulationPoint = { year };
@@ -82,12 +92,22 @@ export default function PopulationPage() {
     });
   }, [barangays]);
 
+  if (!latestMuni || !populationSource) {
+    return (
+      <DataStatus
+        title='Population data not yet publishable'
+        message='A complete population record and its source attribution are required before this page can display a snapshot.'
+        sourceHref='/sources'
+      />
+    );
+  }
+
   return (
     <>
       {/* PageHero - documented pattern for layout headers */}
       <PageHero
         title='Population Profile'
-        description='Detailed demographic analysis tracking growth from the municipal level down to individual barangays.'
+        description='A source-backed 2024 POPCEN snapshot of the municipality and its barangays. Growth comparisons appear only when comparable census points are available.'
       >
         <div className='flex flex-wrap gap-2 justify-center'>
           <Badge variant='primary' dot>
@@ -102,14 +122,17 @@ export default function PopulationPage() {
         <StatCard
           label='Total Population'
           value={latestMuni.population.toLocaleString()}
-          subtext='Actual Resident Count'
+          subtext='2024 POPCEN resident count'
           variant='primary'
-          trend={{ value: growth || 0, positive: true }}
         />
         <StatCard
           label='Growth Rate'
-          value={`${growth}%`}
-          subtext='Annual (2020-2024)'
+          value={growth === null ? 'Not available' : `${growth}%`}
+          subtext={
+            growth === null
+              ? 'Growth rate not available from one census point'
+              : 'Annual (2020-2024)'
+          }
           variant='secondary'
         />
         <StatCard
@@ -241,12 +264,16 @@ export default function PopulationPage() {
         </ResponsiveChart>
       </DetailSection>
 
+      <SourceAttribution source={populationSource} />
+
       {/* Info box using DetailSection for consistency */}
       <DetailSection title='How to read this data' icon={Info}>
         <p className='text-xs italic leading-relaxed text-kapwa-text-disabled'>
           {activeTab === 'municipality'
-            ? 'The municipal growth chart tracks long-term population expansion from 1960 to current estimates.'
-            : 'The comparison chart allows you to track which barangays are experiencing the fastest urban growth relative to their 2010 baseline.'}
+            ? growth === null
+              ? 'Only the 2024 POPCEN snapshot is currently published. A growth rate will be shown after a comparable earlier census point is verified.'
+              : 'The municipal chart compares verified population points across available census years.'
+            : 'The comparison chart shows verified barangay population points for the available census years; it does not infer growth from missing years.'}
         </p>
       </DetailSection>
 

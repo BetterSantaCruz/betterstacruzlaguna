@@ -101,8 +101,8 @@ const AboutPage: FC = () => {
 
             <div className='mt-10'>
               <DataStatus
-                title='The Santa Cruz dataset is still being established'
-                message='Officials, offices, services, schedules, fees, contacts, budgets, statistics, and barangay records remain unpublished until they pass the project’s source and verification checks.'
+                title='Additional Santa Cruz datasets remain gated'
+                message='The verified baseline includes PSA identity, population, and barangay records plus two DBM-listed top executives. Full officials, offices, services, schedules, fees, contacts, budgets, legislation, and other statistics remain unpublished until they pass the project’s source and verification checks.'
                 sourceHref='/sources'
               />
             </div>
