@@ -1,6 +1,6 @@
 # BetterLGU registration state
 
-Last checked: 2026-09-04
+Last checked: 2026-09-05
 
 ## Santa Cruz, Laguna
 
@@ -10,7 +10,7 @@ Registration is being handled separately by `@Diannn3` through Antigravity. The 
 - State: **OPEN**
 - Maintainer: `@Diannn3`
 - Directory status: `🔵 Planned`
-- Repository/domain in directory: not yet established by this project
+- Repository in directory: currently `-` while PR #244 remains open; the project repository is publicly available at https://github.com/Diannn3/betterstacruzlaguna, but the directory row must be amended only through the user’s separate Antigravity workflow
 
 This repository must not create, submit, or update a duplicate registration PR. When the user provides the merged/current directory state, update this document and `CONTEXT.md` with that state.
 

@@ -5,6 +5,7 @@ Research and repository audit date: 2026-09-05
 ## Verified in this pass
 
 - Authenticated GitHub identity: `Diannn3` (local `gh` auth check).
+- Public repository: [Diannn3/betterstacruzlaguna](https://github.com/Diannn3/betterstacruzlaguna), default branch `main`, current verified local commit `3d433a0`.
 - BetterLGU PR #244 is open, titled `Add Santa Cruz, Laguna to directory`, and names `@Diannn3`; directory status is `🔵 Planned`.
 - BetterLB is a suitable architectural base; its full checkout structure is present locally.
 - PhilGEPS notice 11459794 visibly uses the exact procuring-entity name `MUNICIPALITY OF SANTA CRUZ, LAGUNA`.
@@ -21,10 +22,9 @@ Research and repository audit date: 2026-09-05
 ## Restricted/unreachable
 
 - DTI CMCI Santa Cruz and Pagsanjan profile pages.
-- PSA PSGC pages.
 - Exact DILG FDP Santa Cruz filtering.
 - Santa Cruz portal `santacruzkayanatin.ph`.
 
 ## Repository verification status
 
-Civic-data validation, 358 unit tests, lint, TypeScript, Prettier, and the production build pass. The current Chrome browser smoke suite passes all 9 tests, including axe checks, source-ledger rendering, empty-state coverage, and disabled-feed assertions. The broader inherited E2E files remain retained architecture/reference coverage and are not claimed as a full passing suite. No public repository or external deployment is claimed by this report.
+Civic-data validation, 358 unit tests, lint, TypeScript, Prettier, and the production build pass. The current Chrome browser smoke suite passes all 9 tests, including axe checks, source-ledger rendering, empty-state coverage, and disabled-feed assertions. The broader inherited E2E files remain retained architecture/reference coverage and are not claimed as a full passing suite. The public repository is verified; no production deployment is claimed by this report.

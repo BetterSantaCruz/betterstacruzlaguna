@@ -1,6 +1,6 @@
 # Project status
 
-As of 2026-09-05, BetterSantaCruz is a local foundation under active implementation.
+As of 2026-09-05, BetterSantaCruz is a public foundation under active implementation.
 
 ## Completed
 
@@ -10,6 +10,7 @@ As of 2026-09-05, BetterSantaCruz is a local foundation under active implementat
 - Initial provenance schema and failing-then-green unit test.
 - Santa Cruz and Pagsanjan source inventories and collaboration draft.
 - Current BetterLGU PR #244 recorded; no duplicate registration PR is part of this workstream.
+- Public repository published at https://github.com/Diannn3/betterstacruzlaguna; `main` is the current implementation branch and no production deployment is claimed.
 - Civic-data validation, 358 unit tests, lint, TypeScript, Prettier, production build, and the current 9-test Chrome smoke/axe suite are green.
 
 ## In progress
@@ -17,11 +18,11 @@ As of 2026-09-05, BetterSantaCruz is a local foundation under active implementat
 - Continue Santa Cruz source verification and corroboration before promoting civic data.
 - Maintain machine-readable source/civic registries and build-time data checks.
 - Keep source-ledger UI and honest empty states aligned with the evidence boundary.
-- Continue the clean-room audit and source corroboration before any publication or repository push.
+- Continue the clean-room audit and source corroboration before production deployment or broader civic-data publication.
 
 ## Not yet claimed
 
-- Public GitHub repository, domain, deployment, official partnership, municipal endorsement, or active directory status.
+- Public domain, deployment, official partnership, municipal endorsement, or active directory status.
 - Complete Santa Cruz civic datasets.
 - Pagsanjan ownership, co-maintainership, or sent collaboration.
 
