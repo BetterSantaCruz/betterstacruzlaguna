@@ -8,10 +8,10 @@ Build BetterSantaCruz as a trustworthy, source-led public-information portal for
 
 - Project path: `C:\Users\Dian\Documents\Vaults\Fensalir\businesses\betterstacruzlaguna`.
 - The full BetterLB-derived repository architecture has been restored and is being sanitized in place. Do not prune directories or delete reusable pipeline, function, test, documentation, or schema structure merely because Santa Cruz data is not ready.
-- BetterLGU registration is handled separately by the maintainer through Antigravity. Upstream PR [#244](https://github.com/jmacj/better-lgu-directory/pull/244), `Add Santa Cruz, Laguna to directory`, is currently **OPEN** and records `@Diannn3` as maintainer with status `🔵 Planned`.
-- This workstream must not create, submit, or update another BetterLGU directory registration PR. Re-check PR #244 only when the user supplies a merged/current directory state or asks for a refresh.
+- BetterLGU registration is handled separately through upstream PR [#244](https://github.com/jmacj/better-lgu-directory/pull/244), `Add Santa Cruz, Laguna to directory`. It is currently **OPEN**, **not merged**, records `@Diannn3` as maintainer, links `https://github.com/Diannn3/betterstacruzlaguna`, and proposes status `🟡 Work in Progress`.
+- This workstream must not create or submit another BetterLGU directory registration PR. Re-check PR #244 before making any claim about its current state; do not call the entry merged/live until upstream actually merges it.
 - The implementation is checkpointed on `main` in focused commits for project foundation, evidence/docs, civic data states, review-gated pipelines, frontend surfaces, browser QA, and formatting. The public repository is [Diannn3/betterstacruzlaguna](https://github.com/Diannn3/betterstacruzlaguna); the domain remains unset and no production deployment is claimed.
-- Current local QA is green for civic-data validation, 401 unit tests, lint, TypeScript, Prettier, the production build, and the 11-test Santa Cruz browser smoke boundary. Re-run these gates after each feature slice; the broader inherited E2E files remain retained architecture/reference coverage.
+- Evidence Model v2 implementation was verified green on commit `f56d3eb0c6ff7129b0af88ebc90393bc2c3059d9`: Quality Check, Quality Gate, Validate JSON Schema, zizmor, and BetterSantaCruz E2E all passed. The civic validator reports 18 Santa Cruz production sources and 8 civic facts; the unit suite contains 415 tests and the evidence-gated browser smoke boundary contains 15 tests. Later documentation-only commits must be rechecked before being described as green.
 - Pagsanjan remains a separate BetterLGU directory entry with status `🔵 Planned` and maintainer `@rswlljms`; its existing public project is `https://github.com/rswlljms/betterpagsanjan`. Do not create a competing Pagsanjan app or impersonate that maintainer.
 - The public BetterSantaCruz repository is established and currently tracks the local implementation. A public domain, deployment, official partnership, or municipal endorsement must not be inferred until each is intentionally configured and verified.
 
@@ -19,8 +19,8 @@ Build BetterSantaCruz as a trustworthy, source-led public-information portal for
 
 - `Unknown / not yet verified` is a valid result. Empty states are preferable to plausible-looking civic data.
 - A source record describes what was observed at an upstream location; it does not by itself make a value canonical or verified.
-- Every published local fact needs a source ID, source title, source URL, source organization, retrieval date, last-verified date, and an explicit verification state.
-- Keep `verified`, `observed`, `pending`, `access-restricted`, `unreachable`, `discovery-only`, `secondary`, and `collaboration` distinct. Do not turn a search snippet, blocked page, stale table, or source lead into a verified claim.
+- Every published local fact must reference registered source IDs. Source title, URL, organization, access history, and source review metadata live in the source registry; the fact itself carries evidence references, fact verification/assertion metadata, publication state, and freshness metadata as applicable.
+- Evidence Model v2 keeps source authority, source access state, source review state, source-ledger visibility, fact verification, assertion type, publication state, and freshness as separate dimensions. Do not collapse them back into one legacy `verificationStatus`, and do not turn a search snippet, blocked page, stale table, or source lead into a published fact.
 - Do not publish private contact details, authentication material, cookies, tokens, session IDs, or headers. Public institutional contact details remain source-reported until corroborated and freshness-checked.
 - Do not claim official partnership, municipal ownership, directory approval beyond the current PR state, current office holders, active services, or production readiness without direct evidence.
 - A BetterGov search index or aggregate is a volatile discovery surface, not a static statistic. Do not hard-code its changing counts or amounts into the site.
@@ -31,12 +31,12 @@ Build BetterSantaCruz as a trustworthy, source-led public-information portal for
 Santa Cruz has a small set of usable leads but not enough corroborated municipal data for a populated civic directory:
 
 - PhilGEPS notice `11459794` provides a high-confidence exact procuring-entity string: `MUNICIPALITY OF SANTA CRUZ, LAGUNA`.
-- The Sangguniang Bayan website is useful for source discovery and reports local details, but its branding contains a `Lumban Logo` anomaly; treat its geography, contact, emergency, ordinance, and resolution pages as observed/source-reported until corroborated.
+- The Sangguniang Bayan website is a primary-official source candidate for local legislative records, but remains `needs-review` because its branding contains a `Lumban Logo` anomaly and because the ordinance/resolution tables are only partially rendered in static retrieval. Keep the anomaly visible, do not globally reject the domain, and characterize the normal public browser transport before collecting legislation.
 - The PSA PSGC municipality page is directly available and identifies Santa Cruz, Laguna as PSGC `0403426000`, correspondence code `043426000`, with 26 barangays and 2024 POPCEN population `126844`. Those identity, population, and barangay records are now promoted with field-level source metadata. The DTI CMCI profile remains access-restricted.
 - The reported official portal `https://santacruzkayanatin.ph` was unreachable during research. It may be a future source lead, not a verified live source.
 - The 2026 DBM directory supports publication of the mayor and vice mayor records only; it does not establish the full Sangguniang Bayan or department roster. DILG FDP exact filtering was unavailable; the COA archive did not yield an exact Laguna report in this pass; and DPWH yielded a Santa Cruz planning document that is not evidence of project completion.
 
-Pagsanjan research is context and collaboration work only. The official portal was reachable, the BetterPagsanjan repository is public, and the existing maintainer should be approached through a human-reviewed draft. No automated outreach has been sent.
+Pagsanjan research is context and collaboration work only. It has been separated from the production Santa Cruz source registry and must not appear in BetterSantaCruz's public source scope or factual search corpus. Retained research remains for collaboration/handoff; BetterPagsanjan is a separate public project under its existing maintainer.
 
 ## Architecture boundary
 
@@ -55,13 +55,13 @@ The architecture is intentionally retained while gated modules remain empty. The
 
 ## Implementation notes
 
-- `src/lib/provenance.ts` and its tests define the first source-record validation boundary, including HTTP(S) URLs, date cutoffs, municipality identity, unique source IDs, coherent publication/retrieval/verification chronology, and matching source/fact verification states. Canonical validators enforce the verified-only publication boundary.
+- `src/lib/evidence/*` implements Evidence Model v2: independent source authority/access/review/ledger state, fact verification, assertion type, publication state, freshness metadata, positive Santa Cruz identity, migration helpers, and publication policy. `src/lib/provenance.ts` remains the compatibility/public validation boundary.
 - `src/lib/canonical-data.ts` and `scripts/validate-civic-data.ts` enforce the published PSA/DBM/population data shape, source parity, Santa Cruz code family, and population reconciliation before a build.
 - `src/lib/clean-room.ts` and `scripts/validate-civic-data.ts` scan publishable page/component code for inherited BetterLB/Los Baños claims; retained research and reference documentation is intentionally outside that runtime scan.
 - `scripts/generate-llms-txt.js` regenerates the crawler-facing publication boundary during `npm run build`; keep it aligned with the same verified/gated scope as the UI and docs.
 - `vercel.json` contains the static SPA rewrite required for BrowserRouter deep links if a future Vercel deployment is intentionally configured. It does not imply that a deployment or domain exists.
 - `src/data/sources/source-registry.json` is the source ledger; `src/data/civic-registry.json` contains only facts that have passed the current evidence gate.
-- `src/lib/source-filter.ts` keeps source-ledger municipality, evidence-status, and text filtering pure and testable; filtering changes what is shown, not the underlying evidence state.
+- `src/lib/source-filter.ts` keeps source-ledger review-state, authority, access-state, and text filtering pure and testable. The production source registry is Santa Cruz-only; filtering changes what is shown, not the underlying evidence state.
 - `raw_data/README.md` documents selective source retention. Do not restore BetterLB/Los Baños raw exports into this repository.
 - The config must not invent Santa Cruz coordinates, a BetterSantaCruz domain, social links, contact email, service records, office contacts, or municipal branding. The published official records are limited to the PSA barangay baseline and the two DBM-listed top executives, with their provenance attached in the data files.
 - The population statistics route is enabled for the verified 2024 snapshot only. Weather, tourism, transparency aggregates, full directories, and services stay disabled or explicitly empty until their source and publication gates are met; CMCI and municipal-income statistics render gated states.
@@ -70,10 +70,11 @@ The architecture is intentionally retained while gated modules remain empty. The
 
 ## Next gates
 
-1. Continue source freshness and corroboration work; promote only evidence-backed Santa Cruz records.
-2. Keep services, the full officials/department directory, legislation, tourism, transparency, weather, and contact channels empty or disabled until their source and publication gates are met.
-3. Inspect each future diff for leaked BetterLB/Los Baños claims before any subsequent public push or external mutation.
-4. Refresh this file if the user supplies the merged/current BetterLGU directory state; until then, PR #244 remains the authoritative current registration state.
+1. Finish Pass B by rechecking the final PR #7 commit, merging it only after all required checks are green, and then verifying the merged `main` state.
+2. Start Pass C with browser/network characterization of the public Santa Cruz SB ordinance and resolution delivery mechanism before writing or selecting a scraper transport.
+3. Stage only the deterministic 20-ordinance + 20-resolution pilot after the source transport and schemas are characterized; publish zero legislation records automatically.
+4. Keep services, the full officials/department directory, tourism, transparency aggregates, weather, and contact channels empty or disabled until their own source and publication gates are met.
+5. Inspect each future diff for leaked BetterLB/Los Baños claims and re-check BetterLGU PR #244 before repeating its external status.
 
 The upstream OpenLGU terminology reference below is retained as architecture documentation. It is not a claim that the BetterLB factual dataset is valid for Santa Cruz.
 
