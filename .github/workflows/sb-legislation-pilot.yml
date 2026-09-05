@@ -59,6 +59,8 @@ jobs:
 
       - name: Fail when pilot reported a source failure
         if: steps.pilot.outputs.exit_code != '0'
+        env:
+          PILOT_EXIT_CODE: ${{ steps.pilot.outputs.exit_code }}
         run: |
-          echo "Pilot exit code: ${{ steps.pilot.outputs.exit_code }}"
+          echo "Pilot exit code: ${PILOT_EXIT_CODE}"
           exit 1
