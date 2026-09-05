@@ -8,7 +8,7 @@ BetterSantaCruz is an independent, community-run civic technology project for Sa
 
 The project is under local development. Santa Cruz is represented in the BetterLGU ecosystem by upstream [PR #244](https://github.com/jmacj/better-lgu-directory/pull/244), currently **OPEN**, with the maintainer @Diannn3 and status **Planned**. Registration is handled separately; this repository must not create a duplicate directory PR.
 
-The first release is source-led and intentionally incomplete. Empty or “not yet verified” states are safer than copied or guessed civic records.
+The first release is source-led and intentionally incomplete. It now publishes a verified PSA baseline for municipal identity, 2024 population, and the 26 barangays, plus the mayor and vice mayor listed in the 2026 DBM directory. Empty or “not yet verified” states remain the correct outcome for unsupported datasets.
 
 ## What is here
 
@@ -20,7 +20,7 @@ The first release is source-led and intentionally incomplete. Empty or “not ye
 
 ## What is not claimed
 
-This checkout does not claim current officials, a complete barangay list, municipal office contacts, services, emergency numbers, population, PSGC code, budgets, procurement aggregates, infrastructure status, a municipal address, a domain, a live deployment, or official partnership. Those datasets remain gated until direct, date-appropriate sources are available and reviewed.
+This checkout does not claim a complete current officials roster, municipal office contacts, services, emergency numbers, budgets, procurement aggregates, infrastructure status, a municipal address, a domain, a live deployment, or official partnership. Published baseline facts are limited to the PSA/PSGC records and the two DBM directory records named in the source ledger; all other datasets remain gated until direct, date-appropriate sources are available and reviewed.
 
 ## Development
 

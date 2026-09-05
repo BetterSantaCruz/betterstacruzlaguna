@@ -11,11 +11,12 @@ As of 2026-09-05, BetterSantaCruz is a public foundation under active implementa
 - Santa Cruz and Pagsanjan source inventories and collaboration draft.
 - Current BetterLGU PR #244 recorded; no duplicate registration PR is part of this workstream.
 - Public repository published at https://github.com/Diannn3/betterstacruzlaguna; `main` is the current implementation branch and no production deployment is claimed.
-- Civic-data validation, 358 unit tests, lint, TypeScript, Prettier, production build, and the current 9-test Chrome smoke/axe suite are green.
+- Civic-data validation, the focused civic-data tests, lint, TypeScript, and Prettier are green after the verified-baseline promotion. Full unit/build/browser verification is rerun per feature slice.
+- The first controlled civic baseline is now published in the repository: PSA/PSGC identity, correspondence code, 2024 POPCEN population, all 26 barangays with classification/population, and the mayor/vice mayor records listed in the 2026 DBM directory.
 
 ## In progress
 
-- Continue Santa Cruz source verification and corroboration before promoting civic data.
+- Continue Santa Cruz source verification and corroboration before promoting additional civic data.
 - Maintain machine-readable source/civic registries and build-time data checks.
 - Keep source-ledger UI and honest empty states aligned with the evidence boundary.
 - Continue the clean-room audit and source corroboration before production deployment or broader civic-data publication.
@@ -23,9 +24,9 @@ As of 2026-09-05, BetterSantaCruz is a public foundation under active implementa
 ## Not yet claimed
 
 - Public domain, deployment, official partnership, municipal endorsement, or active directory status.
-- Complete Santa Cruz civic datasets.
+- Complete current officials, department, office-contact, service, legislative, emergency, finance, transparency, tourism, and infrastructure datasets.
 - Pagsanjan ownership, co-maintainership, or sent collaboration.
 
 ## Current blockers
 
-Evidence gaps, not engineering failures: primary data pages are restricted or unavailable, and no current municipal data can safely be promoted without corroboration.
+Evidence gaps, not engineering failures: primary sources for the remaining datasets are restricted, unavailable, or require corroboration and review before promotion.

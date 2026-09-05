@@ -39,3 +39,11 @@
 - Date: 2026-09-04
 - Decision: no domain purchase, external deployment, D1 write, admin activation, or automated outreach in the foundation pass.
 - Reason: these actions create external or irreversible commitments not needed to prove the local foundation.
+
+## D-006 — Promote the PSA/DBM civic baseline with explicit scope
+
+- Date: 2026-09-05
+- Context: the direct PSA municipality page and 2026 DBM directory were inspectable and identity-matched to Santa Cruz, Laguna.
+- Decision: publish the PSA municipality identity, 2024 POPCEN population, 26 barangays, and the DBM-listed mayor and vice mayor; keep all unsupported fields empty or disabled.
+- Reason: these records have direct, date-stamped provenance, while a complete officials roster, office directory, services, legislation, finance, and contacts still lack sufficient evidence.
+- Revisit when: a newer primary source changes the baseline or a separate corroboration closes one of the remaining data gaps.

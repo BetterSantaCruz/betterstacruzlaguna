@@ -11,7 +11,7 @@ Build BetterSantaCruz as a trustworthy, source-led public-information portal for
 - BetterLGU registration is handled separately by the maintainer through Antigravity. Upstream PR [#244](https://github.com/jmacj/better-lgu-directory/pull/244), `Add Santa Cruz, Laguna to directory`, is currently **OPEN** and records `@Diannn3` as maintainer with status `🔵 Planned`.
 - This workstream must not create, submit, or update another BetterLGU directory registration PR. Re-check PR #244 only when the user supplies a merged/current directory state or asks for a refresh.
 - The implementation is checkpointed on `main` in focused commits for project foundation, evidence/docs, civic data states, review-gated pipelines, frontend surfaces, browser QA, and formatting. The public repository is [Diannn3/betterstacruzlaguna](https://github.com/Diannn3/betterstacruzlaguna); the domain remains unset and no production deployment is claimed.
-- Current local QA is green for civic-data validation, 358 unit tests, lint, TypeScript, Prettier, production build, and the 9-test Chrome smoke/axe suite. The broader inherited E2E files remain retained architecture/reference coverage; the active CI workflow runs the current Santa Cruz smoke boundary.
+- Current local QA is green for civic-data validation, the focused civic-data tests, lint, TypeScript, and Prettier. Full unit/build/browser verification must be rerun after each feature slice; the broader inherited E2E files remain retained architecture/reference coverage and the active CI workflow runs the current Santa Cruz smoke boundary.
 - Pagsanjan remains a separate BetterLGU directory entry with status `🔵 Planned` and maintainer `@rswlljms`; its existing public project is `https://github.com/rswlljms/betterpagsanjan`. Do not create a competing Pagsanjan app or impersonate that maintainer.
 - The public BetterSantaCruz repository is established and currently tracks the local implementation. A public domain, deployment, official partnership, or municipal endorsement must not be inferred until each is intentionally configured and verified.
 
@@ -32,9 +32,9 @@ Santa Cruz has a small set of usable leads but not enough corroborated municipal
 
 - PhilGEPS notice `11459794` provides a high-confidence exact procuring-entity string: `MUNICIPALITY OF SANTA CRUZ, LAGUNA`.
 - The Sangguniang Bayan website is useful for source discovery and reports local details, but its branding contains a `Lumban Logo` anomaly; treat its geography, contact, emergency, ordinance, and resolution pages as observed/source-reported until corroborated.
-- The PSA PSGC municipality page is directly available and identifies Santa Cruz, Laguna as PSGC `0403426000`, with 26 barangays and 2024 POPCEN population `126844`; these facts are ready for a controlled data promotion pass. The DTI CMCI profile remains access-restricted.
+- The PSA PSGC municipality page is directly available and identifies Santa Cruz, Laguna as PSGC `0403426000`, correspondence code `043426000`, with 26 barangays and 2024 POPCEN population `126844`. Those identity, population, and barangay records are now promoted with field-level source metadata. The DTI CMCI profile remains access-restricted.
 - The reported official portal `https://santacruzkayanatin.ph` was unreachable during research. It may be a future source lead, not a verified live source.
-- DILG FDP exact filtering was unavailable; the COA archive did not yield an exact Laguna report in this pass; the 2026 DBM directory supports the current mayor and vice mayor; and DPWH yielded a Santa Cruz planning document that is not evidence of project completion.
+- The 2026 DBM directory supports publication of the mayor and vice mayor records only; it does not establish the full Sangguniang Bayan or department roster. DILG FDP exact filtering was unavailable; the COA archive did not yield an exact Laguna report in this pass; and DPWH yielded a Santa Cruz planning document that is not evidence of project completion.
 
 Pagsanjan research is context and collaboration work only. The official portal was reachable, the BetterPagsanjan repository is public, and the existing maintainer should be approached through a human-reviewed draft. No automated outreach has been sent.
 
@@ -49,23 +49,23 @@ Preserve the BetterLB/OpenLGU separation:
 - canonical public records remain separate from source records and review decisions;
 - the Citizens Charter/service pipeline remains separate from the legislative pipeline;
 - initial reconciliation runs locally before any routine Worker sync;
-- no Cloudflare/D1 write, admin activation, external deployment, domain purchase, or public data publication is implied by local implementation.
+- no Cloudflare/D1 write, admin activation, external deployment, domain purchase, or official publication is implied by local implementation; local commits remain the reviewable source of truth until a deliberate release is authorized.
 
-The architecture is intentionally retained even while civic payloads are empty. Empty Santa Cruz datasets, schemas, provenance checks, source-ledger UI, and explicit data-gap states are the safe v1 foundation.
+The architecture is intentionally retained while gated modules remain empty. The published Santa Cruz baseline is limited to directly inspectable PSA/DBM records; schemas, provenance checks, source-ledger UI, and explicit data-gap states remain the safe v1 foundation for everything else.
 
 ## Implementation notes
 
 - `src/lib/provenance.ts` and its tests define the first source-record validation boundary.
 - `src/data/sources/source-registry.json` is the source ledger; `src/data/civic-registry.json` contains only facts that have passed the current evidence gate.
 - `raw_data/README.md` documents selective source retention. Do not restore BetterLB/Los Baños raw exports into this repository.
-- The config must not invent Santa Cruz coordinates, a BetterSantaCruz domain, social links, contact email, service records, officials, statistics, or municipal branding.
+- The config must not invent Santa Cruz coordinates, a BetterSantaCruz domain, social links, contact email, service records, office contacts, or municipal branding. The published official records are limited to the PSA barangay baseline and the two DBM-listed top executives, with their provenance attached in the data files.
 - Weather, tourism, statistics, transparency aggregates, directories, and services stay disabled or explicitly empty until their source and publication gates are met.
 - If a source is blocked or unreachable, record the state and next verification action; do not substitute secondary snippets as canonical data.
 
 ## Next gates
 
 1. Continue source freshness and corroboration work; promote only evidence-backed Santa Cruz records.
-2. Keep services, directories, officials, statistics, tourism, transparency, weather, and contact channels empty or disabled until their source and publication gates are met.
+2. Keep services, the full officials/department directory, legislation, tourism, transparency, weather, and contact channels empty or disabled until their source and publication gates are met.
 3. Inspect each future diff for leaked BetterLB/Los Baños claims before any subsequent public push or external mutation.
 4. Refresh this file if the user supplies the merged/current BetterLGU directory state; until then, PR #244 remains the authoritative current registration state.
 

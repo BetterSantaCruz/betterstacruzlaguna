@@ -1,11 +1,16 @@
 # Data gaps
 
-Last reviewed: 2026-09-04
+Last reviewed: 2026-09-05
+
+## Published baseline
+
+- PSA/PSGC identifies the municipality as Santa Cruz, Laguna with 10-digit code `0403426000` and correspondence code `043426000`.
+- PSA reports a 2024 POPCEN population of `126844` and 26 barangays as of 31 July 2025; the repository includes each barangay's code, classification, and population with source metadata.
+- The 2026 DBM government directory lists Joseph Kris Benjamin B. Agarao as mayor and Laarni A. Malibiran as vice mayor; these are not a complete current officials roster.
 
 ## Not publishable yet
 
-- PSA/PSGC code, official barangay list, and population series.
-- Current mayor, vice mayor, Sangguniang Bayan roster, department heads, and municipal office directory.
+- Complete current officials roster, Sangguniang Bayan roster, department heads, and municipal office directory.
 - Current official municipal portal and durable public contact details.
 - Citizens' Charter services, requirements, fees, processing times, and responsible offices.
 - Ordinances, resolutions, executive orders, authors, dates, and downloadable-document metadata.
@@ -15,7 +20,7 @@ Last reviewed: 2026-09-04
 
 ## Why the gaps remain
 
-Authoritative pages were access-restricted, an asserted portal was unreachable, the accessible legislative site showed a branding anomaly, and local contacts/emergency values lacked freshness evidence. Search snippets and volatile BetterGov indexes are insufficient substitutes.
+The remaining authoritative pages are access-restricted or unavailable, the asserted portal was unreachable, the accessible legislative site showed a branding anomaly, and local contacts/emergency values lack freshness evidence. Search snippets and volatile BetterGov indexes are insufficient substitutes.
 
 ## Evidence needed to close a gap
 
