@@ -16,6 +16,7 @@ Research and repository audit date: 2026-09-05
 - Canonical-data validation now checks the published directory/statistics relationship, source metadata parity, Santa Cruz PSGC family, and population reconciliation before builds.
 - The source ledger exposes evidence-state counts for the currently filtered records, making the distinction between verified and observed leads visible without changing the underlying source registry.
 - Government navigation and the home summary now describe the PSA barangay baseline and two DBM top executives as published while retaining explicit gates for the incomplete roster and office datasets.
+- The generated crawler note now describes the verified PSA/DBM baseline and does not present the entire civic dataset as unpublished.
 - A bounded read-only freshness pass found no new promotable facts: the PSA HTTP fetch encountered a Cloudflare challenge, the DBM PDF was not text-readable through the plain fetch path, the Sangguniang Bayan page retained its Lumban-logo anomaly, and the DILG FDP interface redirected to login. Existing browser-backed PSA/DBM verification remains the published baseline.
 - The BetterGov exact-organization route exists as a public index surface; changing counts are not treated as facts.
 - Pagsanjan's official portal and BetterPagsanjan public repository were located; existing maintainer ownership is preserved.
@@ -35,4 +36,4 @@ Research and repository audit date: 2026-09-05
 
 ## Repository verification status
 
-Civic-data validation, 391 unit tests, lint, TypeScript, Prettier, the production build, and the 11-test browser smoke suite pass for the current local implementation. The broader inherited E2E files remain retained architecture/reference coverage and are not claimed as a full passing suite. The public repository is verified; no production deployment is claimed by this report.
+Civic-data validation, 392 unit tests, lint, TypeScript, Prettier, the production build, and the 11-test browser smoke suite pass for the current local implementation. The broader inherited E2E files remain retained architecture/reference coverage and are not claimed as a full passing suite. The public repository is verified; no production deployment is claimed by this report.

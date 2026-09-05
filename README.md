@@ -35,7 +35,7 @@ npm run lint
 npm run build
 ~~~
 
-The inherited OpenLGU and Citizens' Charter scripts are available for future source-backed work, but do not run collection against public sources aggressively and do not promote unreviewed output.
+The build regenerates `public/llms.txt` from the current project boundary. The inherited OpenLGU and Citizens' Charter scripts are available for future source-backed work, but do not run collection against public sources aggressively and do not promote unreviewed output.
 
 ## Repository map
 

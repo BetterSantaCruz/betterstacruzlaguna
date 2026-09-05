@@ -31,4 +31,21 @@ describe('buildCrawlerNote', () => {
     expect(output).toContain('- No public repository is configured.');
     expect(output).not.toContain('- Public repository:');
   });
+
+  it('describes the verified baseline without implying a complete civic dataset', () => {
+    const output = buildCrawlerNote({
+      portal: { name: 'BetterSantaCruz' },
+      lgu: { name: 'Santa Cruz', province: 'Laguna' },
+    });
+
+    expect(output).toContain(
+      '- Verified baseline: PSA identity, 2024 POPCEN population, 26 barangays, and two DBM-listed top executives.'
+    );
+    expect(output).toContain(
+      '- Full officials, offices, services, contacts, budgets, legislation, and unsupported statistics remain gated.'
+    );
+    expect(output).not.toContain(
+      'statistics, and barangay records are not published'
+    );
+  });
 });

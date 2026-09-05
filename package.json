@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "npm run validate:data && tsc && npm run merge:services && vite build",
+    "build": "npm run validate:data && tsc && npm run generate:llms && npm run merge:services && vite build",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",
     "test": "vitest",
@@ -33,6 +33,7 @@
     "wrangler": "wrangler",
     "functions:dev": "npx wrangler pages dev --proxy 5173",
     "generate:sitemap": "node ./scripts/generate-sitemap.js",
+    "generate:llms": "node scripts/generate-llms-txt.js",
     "db:migrate": "./scripts/migrate.sh local",
     "db:migrate:remote": "./scripts/migrate.sh remote",
     "db:migrate:status": "./scripts/migrate.sh status",

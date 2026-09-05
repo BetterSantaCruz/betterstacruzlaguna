@@ -6,7 +6,8 @@ BetterSantaCruz is an independent, source-led civic information project for Sant
 
 - The civic dataset is intentionally sparse while sources are being reviewed.
 - The source ledger is available at /sources and records upstream locations, retrieval dates, and verification states.
-- Officials, offices, services, schedules, fees, contacts, budgets, statistics, and barangay records are not published unless they pass the evidence workflow.
+- Verified baseline: PSA identity, 2024 POPCEN population, 26 barangays, and two DBM-listed top executives.
+- Full officials, offices, services, contacts, budgets, legislation, and unsupported statistics remain gated.
 - Disabled modules remain omitted from this crawler summary until their data and maintenance policy are reviewed.
 - Public repository: https://github.com/Diannn3/betterstacruzlaguna
 - Contributions and issue reports are handled through the repository: https://github.com/Diannn3/betterstacruzlaguna/issues.
