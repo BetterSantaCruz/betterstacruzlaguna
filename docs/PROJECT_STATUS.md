@@ -13,6 +13,7 @@ As of 2026-09-05, BetterSantaCruz is a public foundation under active implementa
 - Public repository published at https://github.com/Diannn3/betterstacruzlaguna; `main` is the current implementation branch and no production deployment is claimed.
 - Civic-data validation, 391 unit tests, lint, TypeScript, Prettier, the production build, and the 11-test browser smoke suite are green for the current feature slice.
 - The first controlled civic baseline is now published in the repository: PSA/PSGC identity, correspondence code, 2024 POPCEN population, all 26 barangays with classification/population, and the mayor/vice mayor records listed in the 2026 DBM directory.
+- Government and home surfaces now distinguish the published PSA/DBM baseline from gated council, department, contact, and barangay-official records; inherited Santa Cruz copy no longer says the published barangay baseline is absent.
 - The statistics module exposes the verified population snapshot and explicitly gates CMCI and municipal-income routes when their datasets are unavailable.
 
 ## In progress

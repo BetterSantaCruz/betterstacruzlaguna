@@ -27,10 +27,10 @@ export default function BarangaysIndex() {
       <>
         <PageHero
           title='Local barangays'
-          description='The official Santa Cruz barangay list is not yet published here.'
+          description='No Santa Cruz barangays match this search.'
         />
         <DataStatus
-          message='Names, boundaries, officials, and contacts require direct PSA or other first-party corroboration.'
+          message='Try a different barangay name. Published records cover PSA codes, classifications, and 2024 population; officials and contacts remain gated.'
           sourceHref='/sources'
         />
       </>
@@ -46,7 +46,7 @@ export default function BarangaysIndex() {
         <SearchInput
           value={search}
           onChangeValue={setSearchTerm => setSearch(setSearchTerm)}
-          placeholder='Search by name (e.g. Mayondon)...'
+          placeholder='Search by name (e.g. Alipit)...'
           className='md:w-72'
         />
       </PageHero>

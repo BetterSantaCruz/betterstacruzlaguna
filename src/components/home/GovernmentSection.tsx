@@ -40,7 +40,7 @@ const GovernmentSection: FC = () => {
             </p>
           </div>
           <DataStatus
-            message='The current officials, departments, and barangay directory are not published until first-party sources and freshness are reviewed.'
+            message='Current leadership and department records are not published until first-party sources and freshness are reviewed. The verified barangay baseline appears when available.'
             sourceHref='/sources'
           />
         </div>
@@ -93,7 +93,9 @@ const GovernmentSection: FC = () => {
         {/* Quick stats using documented Badge component */}
         <div className='flex flex-wrap justify-center gap-4 mb-8'>
           <Badge variant='primary' className='px-4 py-2 text-sm'>
-            {barangayCount} Barangays
+            {barangayCount > 0
+              ? `${barangayCount} PSA-verified Barangays`
+              : 'Barangays not yet published'}
           </Badge>
           <Badge
             variant={departmentCount > 0 ? 'secondary' : 'slate'}

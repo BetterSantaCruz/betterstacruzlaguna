@@ -16,9 +16,9 @@
     "legislation": "Lehislasyon",
     "legislationDesc": "Hindi pa tapos ang pagsusuri",
     "government": "Pamahalaan",
-    "governmentDesc": "Hindi pa beripikado ang direktoryo",
+    "governmentDesc": "Nailathala ang PSA barangay at DBM top executive records",
     "statistics": "Istatistika",
-    "statisticsDesc": "Nakabinbin ang access sa PSA source"
+    "statisticsDesc": "Nailathala ang 2024 POPCEN snapshot"
   },
   "services": {
     "title": "Mga serbisyo",
@@ -90,17 +90,17 @@
   },
   "government": {
     "title": "Impormasyon tungkol sa pamahalaan",
-    "description": "Bineberipika ang direktoryo ng pamahalaan ng Santa Cruz. Wala pang opisyal o contact ng tanggapan na inilalathala.",
+    "description": "Nailathala ang mga tala ng barangay mula sa PSA at ang dalawang nangungunang opisyal na nakalista sa DBM. Patuloy na sinusuri ang mga kagawaran, konseho, at contact ng mga tanggapan.",
     "executiveTitle": "Sangay na tagapagpaganap",
-    "executiveDescription": "Hindi pa beripikado ang kasalukuyang officeholder data.",
+    "executiveDescription": "Nailathala ang mga tala ng alkalde at bise alkalde mula sa napapanahong direktoryo ng pamahalaan; sinusuri pa ang kumpletong roster.",
     "legislativeTitle": "Sangay na tagapagbatas",
     "legislativeDescription": "Nakatala ang source ng Sangguniang Bayan; hindi pa inilalathala ang canonical records.",
     "barangaysTitle": "Mga barangay",
-    "barangaysDescription": "Nakabinbin ang direktang corroboration ng opisyal na listahan mula sa PSA.",
+    "barangaysDescription": "Nailathala mula sa PSA ang mga beripikadong code, klasipikasyon, at populasyon ng barangay noong 2024.",
     "departmentsTitle": "Mga kagawaran ng munisipyo",
     "departmentsDescription": "Lilitaw ang records pagkatapos ng pagsusuri ng source at freshness.",
     "electedofficialsTitle": "Mga nahalal na opisyal",
-    "electedofficialsDescription": "Hindi pa beripikado para sa publikasyon ang kasalukuyang officials.",
+    "electedofficialsDescription": "Nailathala ang tala ng alkalde at bise alkalde; hindi pa bukas ang tala ng konseho at mga kagawaran.",
     "learnMore": "Tingnan ang status",
     "directoryTitle": "Direktoryo",
     "directoryDescription": "Tingnan lamang ang mga rekord na pumasa sa evidence gate.",

@@ -32,7 +32,7 @@ import sourceRegistry from '@/data/sources/source-registry.json';
 
 // 14 Highly Distinct Colors (Top 3 mapped to Brand Primaries)
 const BRGY_COLORS = [
-  '#0066eb', // 1. Municipal Blue (Mayondon)
+  '#0066eb', // 1. Municipal Blue (Alipit)
   '#cc3e00', // 2. Brand Orange (San Antonio)
   '#059669', // 3. Emerald Green (Batong Malake)
   '#7c3aed', // 4. Vivid Purple

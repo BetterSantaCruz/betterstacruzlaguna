@@ -61,6 +61,7 @@ The architecture is intentionally retained while gated modules remain empty. The
 - `raw_data/README.md` documents selective source retention. Do not restore BetterLB/Los Baños raw exports into this repository.
 - The config must not invent Santa Cruz coordinates, a BetterSantaCruz domain, social links, contact email, service records, office contacts, or municipal branding. The published official records are limited to the PSA barangay baseline and the two DBM-listed top executives, with their provenance attached in the data files.
 - The population statistics route is enabled for the verified 2024 snapshot only. Weather, tourism, transparency aggregates, full directories, and services stay disabled or explicitly empty until their source and publication gates are met; CMCI and municipal-income statistics render gated states.
+- Government copy must distinguish the published PSA barangay baseline and two DBM-listed top executives from the still-gated council, department, official, contact, service, and emergency datasets.
 - If a source is blocked or unreachable, record the state and next verification action; do not substitute secondary snippets as canonical data.
 
 ## Next gates

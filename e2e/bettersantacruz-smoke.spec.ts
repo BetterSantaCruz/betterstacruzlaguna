@@ -15,6 +15,7 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
     await expect(
       page.getByText(/Independent community project/i)
     ).toBeVisible();
+    await expect(page.getByText('26 PSA-verified Barangays')).toBeVisible();
     await expect(
       page.getByRole('link', { name: 'Source ledger' }).first()
     ).toHaveAttribute('href', '/sources');
@@ -72,6 +73,11 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
     ).toBeVisible();
     await expect(page.getByText('PSGC 0403426002')).toBeVisible();
     await expect(page.getByText('13,615')).toBeVisible();
+
+    await page.goto('/government');
+    await expect(
+      page.getByText(/PSA-verified barangay codes, classifications/i)
+    ).toBeVisible();
 
     await page.goto('/government/elected-officials');
     await expect(

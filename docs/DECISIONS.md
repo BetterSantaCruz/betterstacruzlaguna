@@ -63,3 +63,11 @@
 - Decision: reject those conditions in `validateSourceRegistry` before facts or canonical domain records are evaluated.
 - Reason: downstream provenance checks should receive a source ledger that is temporally bounded, web-addressable, and identity-safe.
 - Revisit when: the registry adds a reviewed non-web evidence type or a versioned source snapshot contract.
+
+## D-009 — Keep published-baseline language separate from gated datasets
+
+- Date: 2026-09-05
+- Context: inherited navigation and fallback copy continued to describe all government records as unpublished after the PSA/DBM baseline was promoted.
+- Decision: label the verified barangay baseline and two top executives as published, while naming the incomplete council, department, contact, and official datasets as gated.
+- Reason: accurate status language is part of the evidence boundary; stale “not published” copy can hide usable records or confuse contributors about what is actually supported.
+- Revisit when: a reviewed roster or office dataset changes the public scope.
