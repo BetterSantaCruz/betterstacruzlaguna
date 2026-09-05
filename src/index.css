@@ -11,18 +11,6 @@
     BlinkMacSystemFont, sans-serif;
   --font-kapwa-mono:
     'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-
-  /*
-   * Tailwind's `text-kapwa-text-disabled` utility resolves through the
-   * `--color-kapwa-text-disabled` theme token. The Carbon-inspired visual
-   * pass uses that token for ordinary explanatory copy, so Kapwa's intentionally
-   * faint disabled gray is not appropriate here. Use a Carbon Gray 60-like
-   * value that remains readable on the application's light surfaces.
-   */
-  --color-kapwa-text-disabled: #6f6f6f;
-
-  /* Keep orange semantic labels above the 4.5:1 normal-text threshold. */
-  --color-kapwa-text-accent-orange: #a84000;
 }
 
 @layer base {
@@ -42,6 +30,21 @@
   * {
     border-radius: 0 !important;
   }
+}
+
+/*
+ * The Carbon-inspired visual pass uses two Kapwa semantic text utilities in
+ * ordinary public copy. Kapwa's package values for these states are intended
+ * for visually de-emphasized UI and fall below the WCAG AA contrast threshold
+ * at the normal text sizes used by BetterSantaCruz. Override the utilities at
+ * the application boundary instead of mutating the upstream design system.
+ */
+.text-kapwa-text-disabled {
+  color: #6f6f6f !important;
+}
+
+.text-kapwa-text-accent-orange {
+  color: #a84000 !important;
 }
 
 /* --- LEAFLET MAP OVERRIDES --- */
@@ -68,7 +71,7 @@
 }
 
 .leaflet-popup-close-button {
-  color: var(--color-kapwa-text-disabled) !important;
+  color: #6f6f6f !important;
   padding: 8px !important;
 }
 
