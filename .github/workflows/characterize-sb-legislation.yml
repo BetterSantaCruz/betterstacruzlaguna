@@ -1,5 +1,6 @@
 name: Temporary SB Legislation Characterization
 
+# One-shot Pass C research workflow. Remove before the pass is merged.
 on:
   push:
     branches: [feat/sb-legislation-staging]
