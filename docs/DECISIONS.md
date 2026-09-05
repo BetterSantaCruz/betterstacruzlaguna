@@ -92,3 +92,10 @@
 - Decision: require a source's publication date to be no later than retrieval, and its last-verified date to be no earlier than retrieval.
 - Rationale: a source ledger is evidence metadata; impossible ordering can make a stale or future observation appear current and should fail before promotion.
 - Revisit when: source records gain an explicit observation interval or versioned snapshot timestamps.
+
+## D-013 — Keep civic fact and source states aligned
+
+- Date: 2026-09-05
+- Decision: a civic fact's verification state must match the linked source record. Observed facts may remain in the evidence registry, while canonical directory and population records require a verified source.
+- Rationale: source observations and restricted leads must remain distinct from canonical public facts without discarding traceable research observations.
+- Revisit when: the project introduces an explicit reviewer decision model that separates evidence status from promotion status.

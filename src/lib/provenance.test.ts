@@ -108,6 +108,74 @@ describe('validateCivicRegistry', () => {
     ).toHaveLength(1);
   });
 
+  it('rejects a civic fact whose verification state differs from its source', () => {
+    expect(() =>
+      validateCivicRegistry(
+        {
+          municipality: 'Santa Cruz',
+          province: 'Laguna',
+          region: 'Region IV-A (CALABARZON)',
+          facts: [
+            {
+              id: 'observed-fact',
+              label: 'Test fact',
+              value: 'value',
+              municipality: 'Santa Cruz',
+              sourceId: source.sourceId,
+              sourceTitle: source.sourceTitle,
+              sourceUrl: source.sourceUrl,
+              sourceOrganization: source.sourceOrganization,
+              publishedAt: source.publishedAt,
+              retrievedAt: source.retrievedAt,
+              lastVerifiedAt: source.lastVerifiedAt,
+              verificationStatus: 'observed',
+            },
+          ],
+        },
+        [source],
+        '2026-09-04'
+      )
+    ).toThrow(/Provenance mismatch.*verificationStatus/i);
+  });
+
+  it('preserves observed civic facts when their source is also observed', () => {
+    const observedSource = {
+      ...source,
+      verificationStatus: 'observed' as const,
+    };
+
+    expect(
+      validateCivicRegistry(
+        {
+          municipality: 'Santa Cruz',
+          province: 'Laguna',
+          region: 'Region IV-A (CALABARZON)',
+          facts: [
+            {
+              id: 'unverified-source-fact',
+              label: 'Test fact',
+              value: 'value',
+              municipality: 'Santa Cruz',
+              sourceId: observedSource.sourceId,
+              sourceTitle: observedSource.sourceTitle,
+              sourceUrl: observedSource.sourceUrl,
+              sourceOrganization: observedSource.sourceOrganization,
+              publishedAt: observedSource.publishedAt,
+              retrievedAt: observedSource.retrievedAt,
+              lastVerifiedAt: observedSource.lastVerifiedAt,
+              verificationStatus: 'observed',
+            },
+          ],
+        },
+        [observedSource],
+        '2026-09-04'
+      ).facts[0]
+    ).toMatchObject({
+      id: 'unverified-source-fact',
+      verificationStatus: 'observed',
+    });
+  });
+
   it('rejects duplicate source IDs before civic data is validated', () => {
     expect(() => validateSourceRegistry({ sources: [source, source] })).toThrow(
       /Duplicate sourceId/

@@ -149,7 +149,6 @@ export function validateCivicRegistry(
         `Municipality mismatch for ${fact.id}: ${fact.municipality} versus ${source.municipality}`
       );
     }
-
     for (const field of [
       'sourceTitle',
       'sourceUrl',
@@ -157,6 +156,7 @@ export function validateCivicRegistry(
       'publishedAt',
       'retrievedAt',
       'lastVerifiedAt',
+      'verificationStatus',
     ] as const) {
       if (fact[field] !== source[field]) {
         throw new Error(`Provenance mismatch for ${fact.id}: ${field}`);
