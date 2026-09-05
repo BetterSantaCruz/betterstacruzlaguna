@@ -112,7 +112,9 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
     await page.goto('/statistics/population');
     await expect(page.locator('h1').first()).toBeVisible();
     await expect(page.getByText('126,844')).toBeVisible();
-    await expect(page.getByText('2024 POPCEN')).toBeVisible();
+    await expect(
+      page.getByText('2024 POPCEN resident count', { exact: true })
+    ).toBeVisible();
     await expect(page.getByText(/Historical trend unavailable/i)).toBeVisible();
   });
 
@@ -150,23 +152,27 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
     }
   });
 
-  test('crawler note does not leak unavailable civic datasets', async ({
+  test('crawler note describes the verified baseline without claiming gated datasets', async ({
     request,
   }) => {
     const response = await request.get('/llms.txt');
     expect(response.ok()).toBeTruthy();
     const text = await response.text();
-    expect(text).toContain('126,844');
-    expect(text).toContain('26');
+    expect(text).toContain('2024 POPCEN population');
+    expect(text).toContain('26 barangays');
     expect(text).not.toMatch(/complete current council/i);
     expect(text).not.toMatch(/verified emergency/i);
   });
 
-  test('direct deep links are covered by the Vercel SPA rewrite contract', async ({
-    request,
+  test('direct SPA deep links resolve the BetterSantaCruz application', async ({
+    page,
   }) => {
-    const configResponse = await request.get('/vercel.json');
-    expect(configResponse.status()).toBe(404);
+    const response = await page.goto('/government/barangays');
+    expect(response?.ok()).toBeTruthy();
+    await expect(
+      page.getByRole('heading', { name: 'Local Barangays' })
+    ).toBeVisible();
+    await expect(page.locator('body')).not.toContainText(/Los Baños|BetterLB/i);
   });
 
   test('404 handling does not reuse inherited BetterLB claims', async ({
