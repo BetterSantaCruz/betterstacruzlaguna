@@ -17,8 +17,18 @@ type ProbeName =
   | 'initial-load'
   | 'next-page'
   | 'date-filter-2024'
+  | 'number-filter-2024'
   | 'title-filter'
   | 'tag-filter';
+
+type ResponseSummary = {
+  recordsTotal: number | null;
+  recordsFiltered: number | null;
+  rowCount: number | null;
+  sampleSourceNativeIds: string[];
+  sampleDetailsText: string[];
+  error: string | null;
+};
 
 type NetworkObservation = {
   probe: ProbeName;
@@ -26,6 +36,7 @@ type NetworkObservation = {
   method: string;
   status: number;
   contentType: string | null;
+  response: ResponseSummary | null;
 };
 
 type ProbeResult = {
@@ -68,31 +79,77 @@ function sanitizeUrl(rawUrl: string): string {
       url.searchParams.set(key, '<redacted>');
     }
   }
-  // DataTables adds a cache-buster that is irrelevant to transport semantics.
   url.searchParams.delete('_');
   return url.toString();
 }
 
+function compactHtmlText(value: unknown): string {
+  return String(value ?? '')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&(?:nbsp|#0*160);/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 220);
+}
+
+async function summarizeDataTablesResponse(
+  response: Response
+): Promise<ResponseSummary | null> {
+  try {
+    const body = (await response.json()) as unknown;
+    if (!body || typeof body !== 'object' || Array.isArray(body)) return null;
+    const object = body as Record<string, unknown>;
+    const rows = Array.isArray(object.data) ? object.data : null;
+
+    const sampleRows = (rows ?? []).slice(0, 5).filter(Array.isArray) as unknown[][];
+    return {
+      recordsTotal:
+        typeof object.recordsTotal === 'number' ? object.recordsTotal : null,
+      recordsFiltered:
+        typeof object.recordsFiltered === 'number'
+          ? object.recordsFiltered
+          : null,
+      rowCount: rows?.length ?? null,
+      sampleSourceNativeIds: sampleRows.map(row => String(row[0] ?? '')),
+      sampleDetailsText: sampleRows.map(row => compactHtmlText(row[1])),
+      error: null,
+    };
+  } catch (error) {
+    return {
+      recordsTotal: null,
+      recordsFiltered: null,
+      rowCount: null,
+      sampleSourceNativeIds: [],
+      sampleDetailsText: [],
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
+function control(page: Page, kind: 'input' | 'select', id: string) {
+  return page.locator(`${kind}[name="${id}"], ${kind}#${id}`);
+}
+
+async function clearInput(page: Page, id: string) {
+  const locator = control(page, 'input', id);
+  if ((await locator.count()) === 0) return;
+  await locator.first().fill('');
+  await locator.first().dispatchEvent('input');
+  await locator.first().dispatchEvent('change');
+}
+
 async function resetFilters(page: Page) {
-  for (const selector of [
-    'input[name="numberFilter"]',
-    'input[name="titleFilter"]',
-    'input[name="from_date"]',
-    'input[name="to_date"]',
-  ]) {
-    const locator = page.locator(selector);
-    if ((await locator.count()) > 0) await locator.first().fill('');
+  for (const id of ['numberFilter', 'titleFilter', 'from_date', 'to_date']) {
+    await clearInput(page, id);
   }
 
-  for (const selector of [
-    'select[name="tagFilter"]',
-    'select[name="authorFilter"]',
-    'select[name="coauthorFilter"]',
-  ]) {
-    const locator = page.locator(selector);
+  for (const id of ['tagFilter', 'authorFilter', 'coauthorFilter']) {
+    const locator = control(page, 'select', id);
     if ((await locator.count()) > 0) {
-      const firstValue = await locator.first().locator('option').first().getAttribute('value');
-      await locator.first().selectOption(firstValue ?? '');
+      const firstValue =
+        (await locator.first().locator('option').first().getAttribute('value')) ?? '';
+      await locator.first().selectOption(firstValue);
+      await locator.first().dispatchEvent('change');
     }
   }
 
@@ -104,12 +161,14 @@ async function runProbe(
   probe: ProbeName,
   interaction: string,
   action: () => Promise<boolean>,
-  observations: NetworkObservation[]
+  observations: NetworkObservation[],
+  pendingResponseReads: Promise<void>[]
 ): Promise<ProbeResult> {
   const startIndex = observations.length;
   try {
     const attempted = await action();
     await page.waitForTimeout(WAIT_MS);
+    await Promise.allSettled(pendingResponseReads);
     return {
       probe,
       attempted,
@@ -118,6 +177,7 @@ async function runProbe(
       xhr: observations.slice(startIndex).filter(item => item.probe === probe),
     };
   } catch (error) {
+    await Promise.allSettled(pendingResponseReads);
     return {
       probe,
       attempted: true,
@@ -131,6 +191,7 @@ async function runProbe(
 async function characterize(page: Page, target: (typeof TARGETS)[number]) {
   let activeProbe: ProbeName = 'initial-load';
   const observations: NetworkObservation[] = [];
+  const pendingResponseReads: Promise<void>[] = [];
 
   const onResponse = (response: Response) => {
     const request = response.request();
@@ -142,15 +203,22 @@ async function characterize(page: Page, target: (typeof TARGETS)[number]) {
     } catch {
       return;
     }
-    if (url.hostname !== ALLOWED_HOST) return;
+    if (url.hostname !== ALLOWED_HOST || !/Data$/.test(url.pathname)) return;
 
-    observations.push({
+    const observation: NetworkObservation = {
       probe: activeProbe,
       url: sanitizeUrl(response.url()),
       method: request.method(),
       status: response.status(),
       contentType: response.headers()['content-type'] ?? null,
-    });
+      response: null,
+    };
+    observations.push(observation);
+    pendingResponseReads.push(
+      summarizeDataTablesResponse(response).then(summary => {
+        observation.response = summary;
+      })
+    );
   };
 
   page.on('response', onResponse);
@@ -159,6 +227,7 @@ async function characterize(page: Page, target: (typeof TARGETS)[number]) {
     timeout: 30_000,
   });
   await page.waitForTimeout(WAIT_MS);
+  await Promise.allSettled(pendingResponseReads);
 
   const probes: ProbeResult[] = [
     {
@@ -184,28 +253,54 @@ async function characterize(page: Page, target: (typeof TARGETS)[number]) {
         await next.first().click();
         return true;
       },
-      observations
+      observations,
+      pendingResponseReads
     )
   );
 
   await page.reload({ waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(WAIT_MS);
+
   activeProbe = 'date-filter-2024';
   probes.push(
     await runProbe(
       page,
       activeProbe,
-      'set the public from_date/to_date controls to 2024-01-01 / 2024-12-31 and dispatch change',
+      'set the public from_date/to_date controls to 2024-01-01 / 2024-12-31 and dispatch input/change',
       async () => {
-        const from = page.locator('input[name="from_date"]');
-        const to = page.locator('input[name="to_date"]');
+        const from = control(page, 'input', 'from_date');
+        const to = control(page, 'input', 'to_date');
         if ((await from.count()) === 0 || (await to.count()) === 0) return false;
         await from.first().fill('2024-01-01');
+        await from.first().dispatchEvent('input');
+        await from.first().dispatchEvent('change');
         await to.first().fill('2024-12-31');
+        await to.first().dispatchEvent('input');
         await to.first().dispatchEvent('change');
         return true;
       },
-      observations
+      observations,
+      pendingResponseReads
+    )
+  );
+
+  await resetFilters(page);
+  activeProbe = 'number-filter-2024';
+  probes.push(
+    await runProbe(
+      page,
+      activeProbe,
+      'enter 2024 in the public numberFilter control and dispatch input/change',
+      async () => {
+        const number = control(page, 'input', 'numberFilter');
+        if ((await number.count()) === 0) return false;
+        await number.first().fill('2024');
+        await number.first().dispatchEvent('input');
+        await number.first().dispatchEvent('change');
+        return true;
+      },
+      observations,
+      pendingResponseReads
     )
   );
 
@@ -217,14 +312,15 @@ async function characterize(page: Page, target: (typeof TARGETS)[number]) {
       activeProbe,
       'enter SANTA CRUZ in the public titleFilter control and dispatch input/change',
       async () => {
-        const title = page.locator('input[name="titleFilter"]');
+        const title = control(page, 'input', 'titleFilter');
         if ((await title.count()) === 0) return false;
         await title.first().fill('SANTA CRUZ');
         await title.first().dispatchEvent('input');
         await title.first().dispatchEvent('change');
         return true;
       },
-      observations
+      observations,
+      pendingResponseReads
     )
   );
 
@@ -236,7 +332,7 @@ async function characterize(page: Page, target: (typeof TARGETS)[number]) {
       activeProbe,
       'select the first non-empty public tagFilter option and dispatch change',
       async () => {
-        const tag = page.locator('select[name="tagFilter"]');
+        const tag = control(page, 'select', 'tagFilter');
         if ((await tag.count()) === 0) return false;
         const options = tag.first().locator('option');
         const count = await options.count();
@@ -249,16 +345,25 @@ async function characterize(page: Page, target: (typeof TARGETS)[number]) {
         }
         return false;
       },
-      observations
+      observations,
+      pendingResponseReads
     )
   );
 
+  await Promise.allSettled(pendingResponseReads);
   page.off('response', onResponse);
   return {
     key: target.key,
     pageUrl: target.url,
     navigationStatus: navigation?.status() ?? null,
     finalUrl: page.url(),
+    controlsObserved: {
+      numberFilter: await control(page, 'input', 'numberFilter').count(),
+      titleFilter: await control(page, 'input', 'titleFilter').count(),
+      fromDate: await control(page, 'input', 'from_date').count(),
+      toDate: await control(page, 'input', 'to_date').count(),
+      tagFilter: await control(page, 'select', 'tagFilter').count(),
+    },
     probes,
   };
 }
@@ -282,7 +387,7 @@ async function main() {
   }
 
   const output = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     characterizedAt: new Date().toISOString(),
     method: 'normal-unauthenticated-playwright-public-interaction-probe',
     authenticationUsed: false,
