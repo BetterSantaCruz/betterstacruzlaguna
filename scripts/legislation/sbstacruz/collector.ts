@@ -18,9 +18,9 @@ import {
 const BASE_URL = 'https://www.sbstacruz.com';
 const HARD_MAX_RECORDS = 200;
 const DEFAULT_PAGE_SIZE = 20;
-const DEFAULT_DELAY_MS = 1_500;
+const DEFAULT_DELAY_MS = 2_500;
 const MAX_RETRIES = 2;
-const REQUEST_TIMEOUT_MS = 20_000;
+const REQUEST_TIMEOUT_MS = 30_000;
 
 export type SourceKey = 'ordinances' | 'resolutions';
 
@@ -229,10 +229,7 @@ export function parseDetailsCell(value: unknown): ParsedDetailsCell {
   };
 }
 
-function namesUnderHeading(
-  value: unknown,
-  headingPattern: RegExp
-): string[] {
+function namesUnderHeading(value: unknown, headingPattern: RegExp): string[] {
   const $ = load(`<body>${String(value ?? '')}</body>`);
   const names: string[] = [];
 
@@ -328,6 +325,17 @@ export function rowToRawPayload(row: unknown[]): RawLegislationPayload {
   };
 }
 
+function retryAfterDelayMs(value: string | null): number | null {
+  if (!value) return null;
+  const trimmed = value.trim();
+  const seconds = Number(trimmed);
+  if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1_000;
+
+  const retryAt = Date.parse(trimmed);
+  if (Number.isNaN(retryAt)) return null;
+  return Math.max(0, retryAt - Date.now());
+}
+
 async function fetchWithPolicy(
   rawUrl: string,
   source: SourceDefinition,
@@ -357,8 +365,21 @@ async function fetchWithPolicy(
         );
       }
       if (response.status === 429) {
+        const retryAfterMs = retryAfterDelayMs(
+          response.headers.get('retry-after')
+        );
+
+        if (
+          attempt === 0 &&
+          retryAfterMs !== null &&
+          retryAfterMs <= REQUEST_TIMEOUT_MS
+        ) {
+          await sleep(retryAfterMs);
+          continue;
+        }
+
         throw new CollectorFailure(
-          `HTTP 429 from ${url.pathname}; stopping immediately`,
+          `HTTP 429 from ${url.pathname}; stopping after bounded Retry-After handling`,
           'http_429'
         );
       }
@@ -468,7 +489,10 @@ export async function collectSource(options: {
   const source = SOURCES[options.sourceKey];
   const fetchImpl = options.fetchImpl ?? fetch;
   const sleep = options.sleep ?? defaultSleep;
-  const delayMs = options.delayMs ?? DEFAULT_DELAY_MS;
+  const delayMs = Math.max(
+    options.delayMs ?? DEFAULT_DELAY_MS,
+    DEFAULT_DELAY_MS
+  );
   const now = options.now ?? (() => new Date());
 
   if (!Number.isInteger(options.limit) || options.limit < 1) {
@@ -543,10 +567,7 @@ export async function collectSource(options: {
           runId,
           collectedAt,
         });
-        const stagedRecord = toStagedLegislation(
-          observed,
-          source.documentType
-        );
+        const stagedRecord = toStagedLegislation(observed, source.documentType);
 
         const sourceDocumentType = cleanText(rawPayload.sourceDocumentType);
         if (
@@ -562,10 +583,7 @@ export async function collectSource(options: {
           });
         }
 
-        if (
-          observed.sourceNativeId &&
-          sourceIds.has(observed.sourceNativeId)
-        ) {
+        if (observed.sourceNativeId && sourceIds.has(observed.sourceNativeId)) {
           warnings.push({
             code: 'duplicate_source_native_id',
             message: `Duplicate source-native id ${observed.sourceNativeId}`,

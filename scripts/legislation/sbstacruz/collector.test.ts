@@ -104,9 +104,7 @@ describe('Santa Cruz SB characterized row parsing', () => {
   });
 
   it('preserves tags and the exact upstream approved-date text for later validation', () => {
-    const payload = rowToRawPayload(
-      row(9, { approved: 'December 22, 2026' })
-    );
+    const payload = rowToRawPayload(row(9, { approved: 'December 22, 2026' }));
 
     expect(payload.tags).toEqual(['Budget, Expenditures']);
     expect(payload.approvedDate).toBe('December 22, 2026');
@@ -133,9 +131,9 @@ describe('Santa Cruz SB bounded collector', () => {
     expect(result.manifest.recordsObserved).toBe(2);
     expect(result.manifest.recordsStaged).toBe(2);
     expect(result.observations).toHaveLength(2);
-    expect(result.staged.every(item => item.publication.state === 'staged')).toBe(
-      true
-    );
+    expect(
+      result.staged.every(item => item.publication.state === 'staged')
+    ).toBe(true);
     expect(fetchImpl).toHaveBeenCalledTimes(2);
   });
 
@@ -143,7 +141,9 @@ describe('Santa Cruz SB bounded collector', () => {
     const fetchImpl = vi
       .fn<typeof fetch>()
       .mockResolvedValueOnce(sourcePage())
-      .mockResolvedValueOnce(dataResponse([row(1, { sourceType: 'Ordinance' })]));
+      .mockResolvedValueOnce(
+        dataResponse([row(1, { sourceType: 'Ordinance' })])
+      );
 
     const result = await collectSource({
       sourceKey: 'resolutions',
@@ -192,10 +192,7 @@ describe('Santa Cruz SB bounded collector', () => {
       )
     ).toThrow('non-whitelisted host');
     expect(() =>
-      assertAllowedUrl(
-        'https://www.sbstacruz.com/admin',
-        SOURCES.resolutions
-      )
+      assertAllowedUrl('https://www.sbstacruz.com/admin', SOURCES.resolutions)
     ).toThrow('non-whitelisted path');
     expect(
       assertAllowedUrl(
@@ -226,17 +223,83 @@ describe('Santa Cruz SB bounded collector', () => {
     expect(fetchImpl).toHaveBeenCalledTimes(2);
   });
 
-  it('stops immediately on HTTP 429 instead of retrying or evading rate limits', async () => {
+  it('honors one bounded Retry-After and continues when the source recovers', async () => {
     const fetchImpl = vi
       .fn<typeof fetch>()
       .mockResolvedValueOnce(sourcePage())
-      .mockResolvedValueOnce(new Response('Too Many Requests', { status: 429 }));
+      .mockResolvedValueOnce(
+        new Response('Too Many Requests', {
+          status: 429,
+          headers: { 'retry-after': '5' },
+        })
+      )
+      .mockResolvedValueOnce(dataResponse([row(1)]));
+    const sleep = vi.fn(async () => undefined);
+
+    const result = await collectSource({
+      sourceKey: 'resolutions',
+      limit: 1,
+      fetchImpl,
+      sleep,
+      delayMs: 0,
+      now: fixedNow,
+    });
+
+    expect(result.manifest.status).toBe('success');
+    expect(result.manifest.http429).toBe(0);
+    expect(result.manifest.recordsObserved).toBe(1);
+    expect(fetchImpl).toHaveBeenCalledTimes(3);
+    expect(sleep).toHaveBeenCalledWith(2_500);
+    expect(sleep).toHaveBeenCalledWith(5_000);
+  });
+
+  it('stops on a repeated HTTP 429 after honoring the first Retry-After', async () => {
+    const fetchImpl = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(sourcePage())
+      .mockResolvedValueOnce(
+        new Response('Too Many Requests', {
+          status: 429,
+          headers: { 'retry-after': '1' },
+        })
+      )
+      .mockResolvedValueOnce(
+        new Response('Too Many Requests', {
+          status: 429,
+          headers: { 'retry-after': '1' },
+        })
+      );
+    const sleep = vi.fn(async () => undefined);
 
     const result = await collectSource({
       sourceKey: 'resolutions',
       limit: 20,
       fetchImpl,
-      sleep: noSleep,
+      sleep,
+      delayMs: 0,
+      now: fixedNow,
+    });
+
+    expect(result.manifest.status).toBe('failed');
+    expect(result.manifest.http429).toBe(1);
+    expect(fetchImpl).toHaveBeenCalledTimes(3);
+    expect(sleep).toHaveBeenCalledWith(1_000);
+  });
+
+  it('does not invent a retry delay when HTTP 429 omits Retry-After', async () => {
+    const fetchImpl = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(sourcePage())
+      .mockResolvedValueOnce(
+        new Response('Too Many Requests', { status: 429 })
+      );
+    const sleep = vi.fn(async () => undefined);
+
+    const result = await collectSource({
+      sourceKey: 'resolutions',
+      limit: 20,
+      fetchImpl,
+      sleep,
       delayMs: 0,
       now: fixedNow,
     });
@@ -244,6 +307,36 @@ describe('Santa Cruz SB bounded collector', () => {
     expect(result.manifest.status).toBe('failed');
     expect(result.manifest.http429).toBe(1);
     expect(fetchImpl).toHaveBeenCalledTimes(2);
+    expect(sleep).toHaveBeenCalledTimes(1);
+    expect(sleep).toHaveBeenCalledWith(2_500);
+  });
+
+  it('refuses an excessive Retry-After instead of holding the collector open', async () => {
+    const fetchImpl = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(sourcePage())
+      .mockResolvedValueOnce(
+        new Response('Too Many Requests', {
+          status: 429,
+          headers: { 'retry-after': '60' },
+        })
+      );
+    const sleep = vi.fn(async () => undefined);
+
+    const result = await collectSource({
+      sourceKey: 'resolutions',
+      limit: 20,
+      fetchImpl,
+      sleep,
+      delayMs: 0,
+      now: fixedNow,
+    });
+
+    expect(result.manifest.status).toBe('failed');
+    expect(result.manifest.http429).toBe(1);
+    expect(fetchImpl).toHaveBeenCalledTimes(2);
+    expect(sleep).toHaveBeenCalledTimes(1);
+    expect(sleep).toHaveBeenCalledWith(2_500);
   });
 
   it('retries transient 5xx responses only within the bounded retry budget', async () => {
