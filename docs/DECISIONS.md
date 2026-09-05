@@ -99,3 +99,10 @@
 - Decision: a civic fact's verification state must match the linked source record. Observed facts may remain in the evidence registry, while canonical directory and population records require a verified source.
 - Rationale: source observations and restricted leads must remain distinct from canonical public facts without discarding traceable research observations.
 - Revisit when: the project introduces an explicit reviewer decision model that separates evidence status from promotion status.
+
+## D-014 — Make source-ledger filtering view-only
+
+- Date: 2026-09-05
+- Decision: expose municipality, evidence-status, and text filters through a pure source-record helper; filters must not alter registry records or their verification states.
+- Rationale: contributors need to isolate evidence classes during research, but the source ledger remains the immutable local description of what was observed.
+- Revisit when: the ledger gains server-side pagination or URL-persisted filter state.

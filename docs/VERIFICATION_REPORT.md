@@ -37,6 +37,8 @@ Research and repository audit date: 2026-09-05
 
 ## Repository verification status
 
-Civic-data validation, 399 unit tests, lint, TypeScript, Prettier, the production build, and the 11-test browser smoke suite pass for the current local implementation. The broader inherited E2E files remain retained architecture/reference coverage and are not claimed as a full passing suite. The public repository is verified; no production deployment is claimed by this report.
+Civic-data validation, 401 unit tests, lint, TypeScript, Prettier, the production build, and the 11-test browser smoke suite pass for the current local implementation. The broader inherited E2E files remain retained architecture/reference coverage and are not claimed as a full passing suite. The public repository is verified; no production deployment is claimed by this report.
 
 The civic registry validator now fails closed when a fact's verification state differs from its linked source, while preserving explicitly observed research facts. Canonical directory and population validators remain the boundary that requires verified provenance for public baseline records.
+
+The source ledger's municipality, evidence-status, and text filters are covered by pure unit tests and the browser smoke path; the filters only change the view over the ledger.

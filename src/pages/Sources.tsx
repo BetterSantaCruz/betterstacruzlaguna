@@ -9,9 +9,14 @@ import { Badge } from '@/components/ui/Badge';
 import { Card, CardContent } from '@/components/ui/Card';
 import { SEO } from '@/components/layout/SEO';
 import type { SourceRecord } from '@/lib/provenance';
+import { verificationStatuses } from '@/lib/provenance';
+import {
+  filterSourceRecords,
+  type SourceScope,
+  type SourceStatusFilter,
+} from '@/lib/source-filter';
 import { summarizeSourceStatuses } from '@/lib/source-summary';
 
-type Scope = 'all' | 'Santa Cruz' | 'Pagsanjan';
 type BadgeVariant = 'success' | 'warning' | 'error' | 'slate' | 'primary';
 
 const sources = (sourceRegistry as { sources: SourceRecord[] }).sources;
@@ -36,27 +41,13 @@ function formatDate(value: string | null): string {
 }
 
 export default function SourcesPage() {
-  const [scope, setScope] = useState<Scope>('Santa Cruz');
+  const [scope, setScope] = useState<SourceScope>('Santa Cruz');
+  const [status, setStatus] = useState<SourceStatusFilter>('all');
   const [query, setQuery] = useState('');
 
   const filteredSources = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
-    return sources.filter(source => {
-      if (scope !== 'all' && source.municipality !== scope) return false;
-      if (!normalizedQuery) return true;
-      return [
-        source.sourceTitle,
-        source.sourceOrganization,
-        source.sourceType,
-        source.verificationStatus,
-        source.categories.join(' '),
-        source.notes,
-      ]
-        .join(' ')
-        .toLowerCase()
-        .includes(normalizedQuery);
-    });
-  }, [query, scope]);
+    return filterSourceRecords(sources, { scope, status, query });
+  }, [query, scope, status]);
 
   const statusSummary = useMemo(
     () => summarizeSourceStatuses(filteredSources),
@@ -133,12 +124,30 @@ export default function SourcesPage() {
               <select
                 id='source-scope'
                 value={scope}
-                onChange={event => setScope(event.target.value as Scope)}
+                onChange={event => setScope(event.target.value as SourceScope)}
                 className='border-kapwa-border-weak bg-kapwa-bg-surface text-kapwa-text-strong min-h-11 rounded-xl border px-3 text-sm'
               >
                 <option value='Santa Cruz'>Santa Cruz, Laguna</option>
                 <option value='Pagsanjan'>Pagsanjan, Laguna</option>
                 <option value='all'>All research context</option>
+              </select>
+              <label className='sr-only' htmlFor='source-status'>
+                Filter by evidence status
+              </label>
+              <select
+                id='source-status'
+                value={status}
+                onChange={event =>
+                  setStatus(event.target.value as SourceStatusFilter)
+                }
+                className='border-kapwa-border-weak bg-kapwa-bg-surface text-kapwa-text-strong min-h-11 rounded-xl border px-3 text-sm'
+              >
+                <option value='all'>All evidence states</option>
+                {verificationStatuses.map(option => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
               </select>
               <label className='relative block'>
                 <Filter

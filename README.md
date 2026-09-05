@@ -14,7 +14,7 @@ The first release is source-led and intentionally incomplete. It now publishes a
 
 - Config-driven React/Vite foundation based on the BetterLB architecture.
 - Kapwa semantic design tokens, responsive UI, and English/Filipino i18n seams.
-- Machine-readable source registry and provenance validation.
+- Machine-readable source registry and provenance validation, with municipality, evidence-status, and text filters in the source ledger.
 - A verified population snapshot route with explicit unavailable states for unsupported statistical datasets.
 - A committed Vercel SPA fallback for BrowserRouter deep links; no deployment is configured by this repository.
 - Separate seams for civic data, Citizens' Charter services, OpenLGU legislation, transparency, and future review/promotion workflows.

@@ -40,6 +40,13 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
       page.getByRole('region', { name: 'Source status summary' })
     ).toContainText('8 observed');
 
+    await page.selectOption('#source-status', 'verified');
+    await expect(page.getByText(/source records shown/i)).toContainText('5');
+    await expect(
+      page.getByRole('region', { name: 'Source status summary' })
+    ).toContainText('5 verified');
+
+    await page.selectOption('#source-status', 'all');
     await page.selectOption('#source-scope', 'Pagsanjan');
     await expect(page.getByText(/source records shown/i)).toContainText('7');
     await expect(page.locator('body')).not.toContainText(/Los Baños|BetterLB/i);
