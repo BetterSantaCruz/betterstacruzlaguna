@@ -2,12 +2,13 @@ import { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
-import { ArrowRight, MapPinIcon, Phone, User2 } from 'lucide-react';
+import { ArrowRight, MapPinIcon, Phone } from 'lucide-react';
 
 import { PageHero } from '@/components/layout/PageLayouts';
 import { Card, CardContent } from '@/components/ui/Card';
 import { DataStatus } from '@/components/ui/DataStatus';
 import SearchInput from '@/components/ui/SearchInput';
+import { SourceAttribution } from '@/components/ui/SourceAttribution';
 
 import { toTitleCase } from '@/lib/stringUtils';
 import { lguLabels } from '@/lib/lguLabels';
@@ -50,12 +51,10 @@ export default function BarangaysIndex() {
         />
       </PageHero>
 
+      <SourceAttribution source={barangaysData[0]} className='mb-6' />
+
       <div className='grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3'>
         {filtered.map(brgy => {
-          const punong = brgy.officials?.find(o =>
-            o.role.includes('Punong Barangay')
-          );
-
           return (
             <Link
               key={brgy.slug}
@@ -81,25 +80,30 @@ export default function BarangaysIndex() {
                         )}
                       </h3>
                       <p className='text-kapwa-text-disabled mt-0.5 text-[10px] font-bold tracking-widest uppercase'>
-                        Official Barangay Profile
+                        PSA administrative baseline
                       </p>
                     </div>
                     <ArrowRight className='group-hover:text-kapwa-text-link text-kapwa-text-support mt-1 h-4 w-4 transition-all' />
                   </div>
 
-                  {/* Middle Row: Punong Barangay (Standardized Highlight Box) */}
-                  <div className='border-kapwa-border-weak bg-kapwa-bg-surface-raised/50 flex items-center gap-2 rounded-xl border px-3 py-2'>
-                    <div className='border-kapwa-border-weak bg-kapwa-bg-surface text-kapwa-text-disabled shrink-0 rounded-full border p-1 shadow-sm'>
-                      <User2 className='h-3.5 w-3.5' />
+                  {/* Middle Row: Verified administrative facts */}
+                  <div className='border-kapwa-border-weak bg-kapwa-bg-surface-raised/50 rounded-xl border px-3 py-2'>
+                    <div className='flex items-center justify-between gap-3'>
+                      <div>
+                        <p className='text-kapwa-text-disabled mb-0.5 text-[9px] leading-none font-bold tracking-tighter uppercase'>
+                          2024 POPCEN population
+                        </p>
+                        <p className='text-kapwa-text-support text-sm leading-tight font-bold'>
+                          {brgy.population?.toLocaleString() ?? 'Not published'}
+                        </p>
+                      </div>
+                      <span className='text-kapwa-text-brand text-[10px] font-black tracking-widest uppercase'>
+                        {brgy.classification}
+                      </span>
                     </div>
-                    <div className='min-w-0'>
-                      <p className='text-kapwa-text-disabled mb-0.5 text-[9px] leading-none font-bold tracking-tighter uppercase'>
-                        Punong Barangay
-                      </p>
-                      <p className='text-kapwa-text-support truncate text-xs leading-tight font-bold'>
-                        {punong ? toTitleCase(punong.name) : 'Awaiting Data'}
-                      </p>
-                    </div>
+                    <p className='text-kapwa-text-disabled mt-2 text-[10px] font-medium'>
+                      PSGC {brgy.psgc10}
+                    </p>
                   </div>
 
                   {/* Bottom Row: Trunkline & Action */}
@@ -111,7 +115,7 @@ export default function BarangaysIndex() {
                       </div>
                     ) : (
                       <div className='text-kapwa-text-support text-[10px] italic'>
-                        No contact listed
+                        No public contact published
                       </div>
                     )}
 

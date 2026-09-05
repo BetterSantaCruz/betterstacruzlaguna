@@ -30,7 +30,7 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
     await expect(
       page.getByRole('heading', { name: 'Source ledger' })
     ).toBeVisible();
-    await expect(page.getByText(/source records shown/i)).toContainText('15');
+    await expect(page.getByText(/source records shown/i)).toContainText('18');
     await expect(page.getByText(/Evidence before publication/i)).toBeVisible();
 
     await page.selectOption('#source-scope', 'Pagsanjan');
@@ -41,12 +41,7 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
   test('unverified civic datasets are explicit empty states', async ({
     page,
   }) => {
-    for (const route of [
-      '/services',
-      '/government/departments',
-      '/government/barangays',
-      '/government/elected-officials',
-    ]) {
+    for (const route of ['/services', '/government/departments']) {
       await page.goto(route);
       await expect(page.locator('h1').first()).toBeVisible();
       await expect(page.getByRole('status').first()).toBeVisible();
@@ -54,6 +49,37 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
         /not yet|not published|published yet|not available|being verified/i
       );
     }
+  });
+
+  test('verified baseline records are visible with provenance', async ({
+    page,
+  }) => {
+    await page.goto('/government/barangays');
+    await expect(
+      page.getByRole('heading', { name: 'Local Barangays' })
+    ).toBeVisible();
+    await expect(page.getByText('26 component barangays')).toBeVisible();
+    await expect(
+      page.getByText(
+        'Municipality of Santa Cruz — Philippine Standard Geographic Code barangays'
+      )
+    ).toBeVisible();
+    await expect(page.getByText('PSGC 0403426002')).toBeVisible();
+    await expect(page.getByText('13,615')).toBeVisible();
+
+    await page.goto('/government/elected-officials');
+    await expect(
+      page.getByText('Joseph Kris Benjamin B. Agarao')
+    ).toBeVisible();
+    await expect(page.getByText('Laarni A. Malibiran')).toBeVisible();
+    await expect(
+      page.getByText(
+        '2026 Philippine Government Directory of Agencies and Officials'
+      )
+    ).toBeVisible();
+    await expect(page.getByRole('status')).toContainText(
+      /Sangguniang Bayan roster/i
+    );
   });
 
   test('home does not request disabled live feeds', async ({ page }) => {

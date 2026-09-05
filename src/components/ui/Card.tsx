@@ -476,7 +476,6 @@ export const CardGrid = ({
         cols[columns as keyof typeof cols],
         className
       )}
-      role='list'
     >
       {children}
     </div>
@@ -497,11 +496,7 @@ export const CardList = ({
   children: ReactNode;
   /** Additional CSS classes */
   className?: string;
-}) => (
-  <div className={cn('space-y-4', className)} role='list'>
-    {children}
-  </div>
-);
+}) => <div className={cn('space-y-4', className)}>{children}</div>;
 
 /**
  * CardDivider - Visual Separator

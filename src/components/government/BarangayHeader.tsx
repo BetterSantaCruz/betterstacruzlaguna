@@ -8,6 +8,10 @@ import { lguLabels } from '@/lib/lguLabels';
 interface BarangayHeaderProps {
   barangay: {
     barangay_name: string;
+    classification?: string;
+    population?: number;
+    psgc10?: string;
+    correspondenceCode?: string;
     address?: string;
     trunkline?: string[];
     website?: string;
@@ -37,10 +41,30 @@ export function BarangayHeader({ barangay }: BarangayHeaderProps) {
             {toTitleCase(barangay.barangay_name.replace('BARANGAY', ''))}
           </h1>
         </div>
-        <Badge variant='secondary' dot>
-          Official Profile
+        <Badge variant='success' dot>
+          PSA baseline
         </Badge>
       </div>
+
+      {(barangay.classification || barangay.population !== undefined) && (
+        <p className='text-kapwa-text-support mb-3 text-sm'>
+          {barangay.classification && `${barangay.classification} barangay`}
+          {barangay.classification &&
+            barangay.population !== undefined &&
+            ' · '}
+          {barangay.population !== undefined &&
+            `${barangay.population.toLocaleString()} residents (2024 POPCEN)`}
+        </p>
+      )}
+
+      {(barangay.psgc10 || barangay.correspondenceCode) && (
+        <div className='text-kapwa-text-disabled mb-4 flex flex-wrap gap-x-5 gap-y-1 font-mono text-xs'>
+          {barangay.psgc10 && <span>PSGC {barangay.psgc10}</span>}
+          {barangay.correspondenceCode && (
+            <span>Correspondence {barangay.correspondenceCode}</span>
+          )}
+        </div>
+      )}
 
       {/* Middle: Address */}
       {barangay.address && (

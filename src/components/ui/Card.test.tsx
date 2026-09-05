@@ -306,14 +306,13 @@ describe('Card Component', () => {
       expect(screen.getByText('Card 2')).toBeInTheDocument();
     });
 
-    it('has list role', () => {
-      render(
+    it('does not apply invalid list semantics to heterogeneous card children', () => {
+      const { container } = render(
         <CardGrid>
           <Card>Card</Card>
         </CardGrid>
       );
-      const grid = screen.getByRole('list');
-      expect(grid).toBeInTheDocument();
+      expect(container.firstElementChild).not.toHaveAttribute('role', 'list');
     });
   });
 
@@ -329,14 +328,13 @@ describe('Card Component', () => {
       expect(screen.getByText('Card 2')).toBeInTheDocument();
     });
 
-    it('has list role', () => {
+    it('does not apply invalid list semantics to a generic card stack', () => {
       const { container } = render(
         <CardList>
           <Card>Card</Card>
         </CardList>
       );
-      const list = container.querySelector('[role="list"]');
-      expect(list).toBeInTheDocument();
+      expect(container.firstElementChild).not.toHaveAttribute('role', 'list');
     });
   });
 

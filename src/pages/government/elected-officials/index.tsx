@@ -25,7 +25,9 @@ import { DetailSection, PageHero } from '@/components/layout/PageLayouts';
 import { Badge } from '@/components/ui/Badge';
 import { Card, CardContent } from '@/components/ui/Card';
 import { DataStatus } from '@/components/ui/DataStatus';
+import { SourceAttribution } from '@/components/ui/SourceAttribution';
 
+import { isMunicipalMayor } from '@/lib/officials';
 import { toTitleCase } from '@/lib/stringUtils';
 
 import executiveData from '@/data/directory/executive.json';
@@ -43,6 +45,14 @@ interface ExecutiveOfficial {
   website?: string;
   isElected: boolean;
   personId?: string;
+  term?: string;
+  sourceId: string;
+  sourceTitle: string;
+  sourceUrl: string;
+  sourceOrganization: string;
+  retrievedAt: string;
+  lastVerifiedAt: string;
+  verificationStatus: string;
 }
 
 interface Committee {
@@ -61,8 +71,7 @@ interface CouncilMember {
 // --- Sub-components ---
 
 function ElectedLeaderCard({ leader }: { leader: ExecutiveOfficial }) {
-  const isMayor =
-    leader.slug.includes('mayor') && !leader.slug.includes('vice');
+  const isMayor = isMunicipalMayor(leader.role);
   const Icon = isMayor ? Landmark : Gavel;
 
   const card = (
@@ -90,11 +99,16 @@ function ElectedLeaderCard({ leader }: { leader: ExecutiveOfficial }) {
             {leader.office || 'Elected Official'}
           </p>
           <h2 className='text-kapwa-text-strong text-2xl leading-tight font-black'>
-            Hon. {toTitleCase(leader.name)}
+            Hon. {leader.name}
           </h2>
           <Badge variant={isMayor ? 'primary' : 'secondary'} className='mt-2'>
             {leader.role}
           </Badge>
+          {leader.term && (
+            <p className='text-kapwa-text-support mt-2 text-xs font-semibold'>
+              Term: {leader.term}
+            </p>
+          )}
         </div>
 
         {(leader.email || leader.phone) && (
@@ -286,12 +300,14 @@ export default function ElectedOfficialsPage() {
     <div className='space-y-8'>
       <PageHero
         title='Elected Officials'
-        description='The elected leaders and legislative body of the Municipal Government.'
+        description='The top executive records currently supported by a dated government directory. The legislative roster remains a separate, unverified dataset.'
         breadcrumb={[
           { label: 'Government', href: '/government' },
           { label: 'Elected Officials', href: '/government/elected-officials' },
         ]}
       />
+
+      {electedLeaders[0] && <SourceAttribution source={electedLeaders[0]} />}
 
       {/* ── SECTION 1: EXECUTIVE BRANCH ── */}
       <DetailSection
@@ -406,6 +422,14 @@ export default function ElectedOfficialsPage() {
             </Link>
           </div>
         </DetailSection>
+      )}
+
+      {!sbData && (
+        <DataStatus
+          title='Sangguniang Bayan roster not yet published'
+          message='The current source set supports the mayor and vice mayor records only. Council members, committees, and legislative contacts require a complete, current, identity-matched roster before publication.'
+          sourceHref='/sources'
+        />
       )}
 
       {/* ── SECTION 4: DEPARTMENTS BRIDGE ── */}
