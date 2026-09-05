@@ -1,0 +1,103 @@
+name: Temporary Pass C Policy Fix
+
+on:
+  push:
+    branches: [feat/sb-legislation-staging]
+    paths:
+      - '.github/workflows/apply-pass-c-policy-fix.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          ref: feat/sb-legislation-staging
+
+      - name: Apply reviewed collector policy edits
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path('scripts/legislation/sbstacruz/collector.ts')
+          text = path.read_text()
+
+          replacements = [
+              ('const DEFAULT_DELAY_MS = 1_500;', 'const DEFAULT_DELAY_MS = 2_500;'),
+              ('const REQUEST_TIMEOUT_MS = 20_000;', 'const REQUEST_TIMEOUT_MS = 30_000;'),
+              (
+                  '  const delayMs = options.delayMs ?? DEFAULT_DELAY_MS;',
+                  '  const delayMs = Math.max(options.delayMs ?? DEFAULT_DELAY_MS, DEFAULT_DELAY_MS);',
+              ),
+          ]
+          for old, new in replacements:
+              if old not in text:
+                  raise SystemExit(f'expected text not found: {old!r}')
+              text = text.replace(old, new, 1)
+
+          marker = 'async function fetchWithPolicy(\n'
+          helper = '''function retryAfterDelayMs(value: string | null): number | null {
+            if (!value) return null;
+            const seconds = Number.parseInt(value, 10);
+            if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1_000;
+
+            const retryAt = Date.parse(value);
+            if (Number.isNaN(retryAt)) return null;
+            return Math.max(0, retryAt - Date.now());
+          }
+
+          '''
+          if helper.strip() not in text:
+              if marker not in text:
+                  raise SystemExit('fetchWithPolicy marker not found')
+              text = text.replace(marker, helper + marker, 1)
+
+          old_429 = '''      if (response.status === 429) {
+                throw new CollectorFailure(
+                  `HTTP 429 from ${url.pathname}; stopping immediately`,
+                  'http_429'
+                );
+              }
+          '''
+          new_429 = '''      if (response.status === 429) {
+                const retryAfterMs = retryAfterDelayMs(
+                  response.headers.get('retry-after')
+                );
+                const isFirstRateLimit = attempt === 0;
+                const boundedRetryAfter = retryAfterMs ?? 2_500;
+
+                if (isFirstRateLimit && boundedRetryAfter <= 30_000) {
+                  await sleep(boundedRetryAfter);
+                  continue;
+                }
+
+                throw new CollectorFailure(
+                  `HTTP 429 from ${url.pathname}; stopping after respecting the bounded Retry-After policy`,
+                  'http_429'
+                );
+              }
+          '''
+          if old_429 not in text:
+              raise SystemExit('expected 429 block not found')
+          text = text.replace(old_429, new_429, 1)
+          path.write_text(text)
+
+      - name: Format collector
+        run: npx prettier --write scripts/legislation/sbstacruz/collector.ts
+
+      - name: Commit policy fix
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "No collector changes to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/legislation/sbstacruz/collector.ts
+          git commit -m "fix(data): enforce polite SB collection policy"
+          git push origin HEAD:feat/sb-legislation-staging
