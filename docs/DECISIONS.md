@@ -78,3 +78,10 @@
 - Decision: commit the Vercel SPA rewrite for the existing `BrowserRouter` application, but keep deployment and domain configuration outside this repository until explicitly authorized.
 - Rationale: Vercel's Vite guidance requires a root `vercel.json` rewrite for SPA deep links. The config prevents direct civic routes from falling through to a host-level 404 without asserting that the site is deployed.
 - Revisit when: the deployment target changes, the router becomes multi-page/SSR, or a deliberate production release is approved.
+
+## D-011 — Scan runtime surfaces for inherited local claims
+
+- Date: 2026-09-05
+- Decision: extend the civic validator to scan publishable page and component source for inherited BetterLB/Los Baños claims, while leaving research and reference documentation retained.
+- Rationale: feature-gated routes can still become public later; dormant inherited copy is a clean-room risk even when the current feature flag prevents rendering it.
+- Revisit when: the repository adopts a generated content boundary or a more precise static-analysis rule for runtime surfaces.

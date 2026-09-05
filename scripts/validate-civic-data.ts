@@ -12,6 +12,7 @@ import {
   validateExecutiveDirectory,
   validatePopulationData,
 } from '../src/lib/canonical-data';
+import { findInheritedClaimPaths } from '../src/lib/clean-room';
 
 const projectRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -43,15 +44,15 @@ function walkFiles(relativeDirectory: string): string[] {
 }
 
 function assertNoInheritedClaims(relativePaths: string[]): void {
-  const forbidden = /Los Baños|Los Banos|BetterLB|betterlb|Better Los Baños/i;
-  const hits: string[] = [];
-
-  for (const relativePath of relativePaths) {
-    const absolutePath = path.join(projectRoot, relativePath);
-    if (!statSync(absolutePath).isFile()) continue;
-    const contents = readFileSync(absolutePath, 'utf8');
-    if (forbidden.test(contents)) hits.push(relativePath);
-  }
+  const hits = findInheritedClaimPaths(
+    relativePaths.flatMap(relativePath => {
+      const absolutePath = path.join(projectRoot, relativePath);
+      if (!statSync(absolutePath).isFile()) return [];
+      return [
+        { path: relativePath, contents: readFileSync(absolutePath, 'utf8') },
+      ];
+    })
+  );
 
   if (hits.length > 0) {
     throw new Error(
@@ -178,13 +179,19 @@ function main(): void {
     ...walkFiles('src/data/services/categories'),
     ...walkFiles('public/locales'),
   ];
+  const publishableUiFiles = [
+    'src/App.tsx',
+    'src/main.tsx',
+    ...walkFiles('src/pages'),
+    ...walkFiles('src/components'),
+  ];
 
   for (const relativePath of jsonDataFiles) {
     const value = readJson(relativePath);
     assertUniqueRecords(value, relativePath);
     assertNoNegativeAmounts(value, relativePath);
   }
-  assertNoInheritedClaims(allDataFiles);
+  assertNoInheritedClaims([...allDataFiles, ...publishableUiFiles]);
 
   const rawFiles = walkFiles('raw_data').filter(
     relativePath => !relativePath.endsWith('README.md')

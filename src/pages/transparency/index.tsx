@@ -61,10 +61,10 @@ export default function TransparencyIndex() {
               Independent Grassroots Initiative
             </h3>
             <p className='text-sm leading-relaxed text-kapwa-orange-600'>
-              Better LB is <strong>not an official government portal</strong>.
-              We are a volunteer movement mirroring public records to empower
-              citizens with the information they need to engage in local
-              governance.
+              {config.portal.name} is{' '}
+              <strong>not an official government portal</strong>. We are a
+              volunteer community project documenting public evidence to help
+              citizens engage in local governance.
             </p>
           </div>
         </div>

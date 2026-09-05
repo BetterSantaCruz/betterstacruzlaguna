@@ -248,9 +248,8 @@ export default function DepartmentDetail() {
               <p className='text-kapwa-text-support text-sm leading-relaxed'>
                 The {toTitleCase(dept.office_name)} is a frontline office of the
                 {lguLabels.fullName}. It is responsible for executing
-                administrative mandates and technical functions to ensure the
-                delivery of high-quality public services within the Science and
-                Nature City.
+                administrative mandates and technical functions to support the
+                delivery of public services within {lguLabels.location}.
               </p>
             </CardContent>
           </Card>
