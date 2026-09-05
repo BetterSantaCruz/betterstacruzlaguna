@@ -1,0 +1,64 @@
+name: Temporary SB Legislation Pilot
+
+on:
+  push:
+    branches: [feat/sb-legislation-staging]
+    paths:
+      - '.github/workflows/sb-legislation-pilot.yml'
+      - 'scripts/legislation/sbstacruz/collector.ts'
+      - 'scripts/legislation/sbstacruz/collector.test.ts'
+      - 'scripts/legislation/sbstacruz/parse.ts'
+      - 'scripts/legislation/sbstacruz/parse.test.ts'
+      - 'scripts/legislation/sbstacruz/pilot.ts'
+      - 'scripts/legislation/sbstacruz/schemas.ts'
+
+permissions:
+  contents: read
+
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          ref: feat/sb-legislation-staging
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run SB staging unit tests
+        run: npx vitest run scripts/legislation/sbstacruz/parse.test.ts scripts/legislation/sbstacruz/collector.test.ts
+
+      - name: Run bounded 20 plus 20 staging pilot
+        id: pilot
+        shell: bash
+        run: |
+          set +e
+          npx tsx scripts/legislation/sbstacruz/pilot.ts \
+            --output pipeline/openlgu/sbstacruz-legislation/pilot
+          exit_code=$?
+          echo "exit_code=${exit_code}" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload pilot review artifact
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: sb-legislation-pilot
+          path: pipeline/openlgu/sbstacruz-legislation/pilot
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Fail when pilot reported a source failure
+        if: steps.pilot.outputs.exit_code != '0'
+        run: |
+          echo "Pilot exit code: ${{ steps.pilot.outputs.exit_code }}"
+          exit 1
