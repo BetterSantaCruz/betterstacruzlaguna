@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "municipality": {
+    "name": "Santa Cruz",
+    "province": "Laguna",
+    "psgc10": "0403426000"
+  },
+  "characterizedAt": "2026-09-05T11:30:20.632Z",
+  "collectionMode": "public-json",
+  "allowedHost": "www.sbstacruz.com",
+  "policy": {
+    "concurrency": 1,
+    "minimumDelayMs": 2500,
+    "maximumRetries": 2,
+    "requestTimeoutMs": 30000,
+    "pilotMaxRecordsPerSource": 20,
+    "stopOn403": true,
+    "honorRetryAfterOn429": true,
+    "noAuthentication": true,
+    "noCanonicalWrites": true
+  },
+  "transport": {
+    "method": "GET",
+    "responseContentType": "application/json",
+    "responseKeys": [
+      "draw",
+      "recordsTotal",
+      "recordsFiltered",
+      "data"
+    ],
+    "rowColumnCount": 7,
+    "initialPageSizeObserved": 10,
+    "initialOrder": {
+      "column": 3,
+      "direction": "desc"
+    },
+    "filterParameterNamesObserved": [
+      "titleFilter",
+      "authorFilter",
+      "coauthorFilter",
+      "tagFilter",
+      "from_date",
+      "to_date"
+    ]
+  },
+  "sources": [
+    {
+      "key": "sbstacruz-ordinances",
+      "sourceId": "sc-sb-ordinances",
+      "documentType": "ordinance",
+      "pageUrl": "https://www.sbstacruz.com/ordinances",
+      "endpointUrl": "https://www.sbstacruz.com/ordinancesData",
+      "sourceReportedTotalAtCharacterization": 600,
+      "pilotMaxRecords": 20
+    },
+    {
+      "key": "sbstacruz-resolutions",
+      "sourceId": "sc-sb-resolutions",
+      "documentType": "resolution",
+      "pageUrl": "https://www.sbstacruz.com/resolutions",
+      "endpointUrl": "https://www.sbstacruz.com/resolutionsData",
+      "sourceReportedTotalAtCharacterization": 10100,
+      "pilotMaxRecords": 20
+    }
+  ],
+  "notes": [
+    "Configuration records only transport facts observed from a normal unauthenticated browser characterization.",
+    "Source-reported totals are a timestamped source snapshot, not a claim of complete or current municipal legislation counts.",
+    "The source page contains a known Lumban Logo branding anomaly; municipality identity is independently gated to Santa Cruz, Laguna / PSGC 0403426000.",
+    "Observed S/T series codes are preserved literally without assigning semantics."
+  ]
+}
