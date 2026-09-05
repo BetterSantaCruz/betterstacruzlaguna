@@ -117,7 +117,9 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
     await expect(
       page.getByText('2024 POPCEN resident count', { exact: true })
     ).toBeVisible();
-    await expect(page.getByText(/Historical trend unavailable/i)).toBeVisible();
+    await expect(
+      page.getByText(/Only the 2024 POPCEN snapshot is currently published/i)
+    ).toBeVisible();
   });
 
   test('gated statistics routes are explicit rather than fabricated', async ({
