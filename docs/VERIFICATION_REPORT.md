@@ -14,6 +14,7 @@ Research and repository audit date: 2026-09-05
 - DPWH provides a Santa Cruz municipal-hall rehabilitation planning document with a preliminary ABC of PHP 20,000,000 and 240-day duration. It is retained as planning evidence, not project-status proof.
 - The population route renders the PSA-backed 2024 snapshot and leaves growth, CMCI, and municipal-income values unavailable where comparable or authoritative data is not present.
 - Canonical-data validation now checks the published directory/statistics relationship, source metadata parity, Santa Cruz PSGC family, and population reconciliation before builds.
+- A bounded read-only freshness pass found no new promotable facts: the PSA HTTP fetch encountered a Cloudflare challenge, the DBM PDF was not text-readable through the plain fetch path, the Sangguniang Bayan page retained its Lumban-logo anomaly, and the DILG FDP interface redirected to login. Existing browser-backed PSA/DBM verification remains the published baseline.
 - The BetterGov exact-organization route exists as a public index surface; changing counts are not treated as facts.
 - Pagsanjan's official portal and BetterPagsanjan public repository were located; existing maintainer ownership is preserved.
 
@@ -32,4 +33,4 @@ Research and repository audit date: 2026-09-05
 
 ## Repository verification status
 
-Civic-data validation, 386 unit tests, lint, TypeScript, Prettier, the production build, and the 11-test browser smoke suite pass for the current local implementation. The broader inherited E2E files remain retained architecture/reference coverage and are not claimed as a full passing suite. The public repository is verified; no production deployment is claimed by this report.
+Civic-data validation, 389 unit tests, lint, TypeScript, Prettier, the production build, and the 11-test browser smoke suite pass for the current local implementation. The broader inherited E2E files remain retained architecture/reference coverage and are not claimed as a full passing suite. The public repository is verified; no production deployment is claimed by this report.

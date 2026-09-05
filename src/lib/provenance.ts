@@ -18,7 +18,10 @@ export const confidenceLevels = ['high', 'medium', 'low', 'unknown'] as const;
 export const sourceRecordSchema = z.object({
   sourceId: z.string().min(1),
   sourceTitle: z.string().min(1),
-  sourceUrl: z.string().url(),
+  sourceUrl: z
+    .string()
+    .url()
+    .refine(url => /^https?:\/\//i.test(url), 'sourceUrl must use HTTP(S)'),
   sourceOrganization: z.string().min(1),
   sourceType: z.string().min(1),
   location: z.string().min(1),
@@ -64,7 +67,10 @@ export function validateSourceRecord(value: unknown): SourceRecord {
   return sourceRecordSchema.parse(value);
 }
 
-export function validateSourceRegistry(value: unknown): SourceRecord[] {
+export function validateSourceRegistry(
+  value: unknown,
+  today = new Date().toISOString().slice(0, 10)
+): SourceRecord[] {
   const registry = z
     .object({ sources: z.array(sourceRecordSchema) })
     .parse(value);
@@ -75,6 +81,31 @@ export function validateSourceRegistry(value: unknown): SourceRecord[] {
       throw new Error(`Duplicate sourceId: ${source.sourceId}`);
     }
     ids.add(source.sourceId);
+
+    if (source.retrievedAt > today || source.lastVerifiedAt > today) {
+      throw new Error(`Future source date: ${source.sourceId}`);
+    }
+    if (source.publishedAt && source.publishedAt.slice(0, 10) > today) {
+      throw new Error(`Future source date: ${source.sourceId}`);
+    }
+
+    if (source.municipality === 'Santa Cruz') {
+      assertSantaCruzIdentity({
+        municipality: source.municipality,
+        province: 'Laguna',
+        sourceTitle: source.sourceTitle,
+        sourceOrganization: source.sourceOrganization,
+        location: source.location,
+        notes: source.notes,
+      });
+    } else if (
+      !source.location.toLowerCase().includes('pagsanjan') ||
+      !source.location.toLowerCase().includes('laguna')
+    ) {
+      throw new Error(
+        `Source location does not match ${source.municipality}: ${source.sourceId}`
+      );
+    }
   }
 
   return registry.sources;

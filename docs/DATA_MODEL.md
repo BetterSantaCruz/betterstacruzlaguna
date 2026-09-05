@@ -24,7 +24,7 @@ type SourceRecord = {
 }
 ```
 
-`source-registry.json` wraps these records in `{ "sources": [] }` and must have unique source IDs.
+`source-registry.json` wraps these records in `{ "sources": [] }` and must have unique source IDs. `validateSourceRegistry` also rejects future-dated records, non-HTTP(S) URLs, and source text that conflicts with the recorded municipality identity.
 
 ## Civic fact
 

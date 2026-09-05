@@ -7,6 +7,8 @@ These leads are intentionally not public civic facts. Each must be independently
 - `https://sbstacruz.com/contact` displays institutional contact details without a durable freshness marker.
 - `https://sbstacruz.com/citizens-charter` displays emergency numbers without an update stamp and had no populated service table.
 - The DTI CMCI URL is authoritative but was access-restricted during the research pass; the PSA PSGC municipality page is directly inspectable and now supplies the published baseline.
+- A 2026-09-05 plain HTTP refresh encountered a PSA Cloudflare challenge and could not text-extract the DBM PDF; neither result changed the existing browser-backed baseline or justified promotion of additional records.
+- The DILG FDP interface still redirected the exact-filter attempt to login during the 2026-09-05 refresh.
 - DILG FDP exact Santa Cruz filtering was unavailable; guessed identifiers must not be reused.
 - BetterGov index totals are volatile and should never be copied into a static dashboard without a dated, reproducible retrieval contract.
 - `https://stacruz.gov.ph` is a false-match lead for Santa Cruz, Davao del Sur and is excluded from the Santa Cruz, Laguna corpus.

@@ -11,7 +11,7 @@ Build BetterSantaCruz as a trustworthy, source-led public-information portal for
 - BetterLGU registration is handled separately by the maintainer through Antigravity. Upstream PR [#244](https://github.com/jmacj/better-lgu-directory/pull/244), `Add Santa Cruz, Laguna to directory`, is currently **OPEN** and records `@Diannn3` as maintainer with status `🔵 Planned`.
 - This workstream must not create, submit, or update another BetterLGU directory registration PR. Re-check PR #244 only when the user supplies a merged/current directory state or asks for a refresh.
 - The implementation is checkpointed on `main` in focused commits for project foundation, evidence/docs, civic data states, review-gated pipelines, frontend surfaces, browser QA, and formatting. The public repository is [Diannn3/betterstacruzlaguna](https://github.com/Diannn3/betterstacruzlaguna); the domain remains unset and no production deployment is claimed.
-- Current local QA is green for civic-data validation, 386 unit tests, lint, TypeScript, Prettier, the production build, and the 11-test Santa Cruz browser smoke boundary. Re-run these gates after each feature slice; the broader inherited E2E files remain retained architecture/reference coverage.
+- Current local QA is green for civic-data validation, 389 unit tests, lint, TypeScript, Prettier, the production build, and the 11-test Santa Cruz browser smoke boundary. Re-run these gates after each feature slice; the broader inherited E2E files remain retained architecture/reference coverage.
 - Pagsanjan remains a separate BetterLGU directory entry with status `🔵 Planned` and maintainer `@rswlljms`; its existing public project is `https://github.com/rswlljms/betterpagsanjan`. Do not create a competing Pagsanjan app or impersonate that maintainer.
 - The public BetterSantaCruz repository is established and currently tracks the local implementation. A public domain, deployment, official partnership, or municipal endorsement must not be inferred until each is intentionally configured and verified.
 
@@ -55,7 +55,7 @@ The architecture is intentionally retained while gated modules remain empty. The
 
 ## Implementation notes
 
-- `src/lib/provenance.ts` and its tests define the first source-record validation boundary.
+- `src/lib/provenance.ts` and its tests define the first source-record validation boundary, including HTTP(S) URLs, date cutoffs, municipality identity, and unique source IDs.
 - `src/lib/canonical-data.ts` and `scripts/validate-civic-data.ts` enforce the published PSA/DBM/population data shape, source parity, Santa Cruz code family, and population reconciliation before a build.
 - `src/data/sources/source-registry.json` is the source ledger; `src/data/civic-registry.json` contains only facts that have passed the current evidence gate.
 - `raw_data/README.md` documents selective source retention. Do not restore BetterLB/Los Baños raw exports into this repository.

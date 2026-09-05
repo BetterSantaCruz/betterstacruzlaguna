@@ -55,3 +55,11 @@
 - Decision: run canonical-data shape, provenance, identity, and reconciliation checks from `validate:data` before every production build.
 - Reason: a valid individual JSON object can still point to the wrong source, municipality, code family, year, or population total when files drift independently.
 - Revisit when: a reviewed domain schema replaces or extends the current Santa Cruz-specific baseline validator.
+
+## D-008 — Keep source freshness and identity checks at the registry boundary
+
+- Date: 2026-09-05
+- Context: source leads can be structurally valid while being future-dated, non-web links, or same-name municipality matches.
+- Decision: reject those conditions in `validateSourceRegistry` before facts or canonical domain records are evaluated.
+- Reason: downstream provenance checks should receive a source ledger that is temporally bounded, web-addressable, and identity-safe.
+- Revisit when: the registry adds a reviewed non-web evidence type or a versioned source snapshot contract.

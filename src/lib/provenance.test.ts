@@ -114,6 +114,38 @@ describe('validateCivicRegistry', () => {
     );
   });
 
+  it('rejects a source whose retrieval date is after the validation cutoff', () => {
+    expect(() =>
+      validateSourceRegistry(
+        {
+          sources: [{ ...source, retrievedAt: '2026-09-06' }],
+        },
+        '2026-09-05'
+      )
+    ).toThrow(/Future source date/);
+  });
+
+  it('rejects a Santa Cruz source that contains a same-name municipality', () => {
+    expect(() =>
+      validateSourceRegistry({
+        sources: [
+          {
+            ...source,
+            sourceTitle: 'Santa Cruz Compliance Audit Report 2024 — Zambales',
+          },
+        ],
+      })
+    ).toThrow(/wrong municipality|Zambales/i);
+  });
+
+  it('rejects non-web source URLs', () => {
+    expect(() =>
+      validateSourceRegistry({
+        sources: [{ ...source, sourceUrl: 'ftp://example.com/source' }],
+      })
+    ).toThrow(/sourceUrl/);
+  });
+
   it('rejects a civic fact whose source text identifies another Santa Cruz', () => {
     const wrongMunicipalitySource = {
       ...source,
