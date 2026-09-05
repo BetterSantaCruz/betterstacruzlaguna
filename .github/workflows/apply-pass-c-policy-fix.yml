@@ -1,4 +1,4 @@
-name: Temporary Pass C Policy Repair
+name: Temporary Pass C Formatter
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  repair:
+  format:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout feature branch
@@ -28,215 +28,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Apply reviewed collector policy and test edits
-        shell: python
-        run: |
-          from pathlib import Path
-          import re
-
-          collector = Path('scripts/legislation/sbstacruz/collector.ts')
-          text = collector.read_text()
-
-          replacements = [
-              ('const DEFAULT_DELAY_MS = 1_500;', 'const DEFAULT_DELAY_MS = 2_500;'),
-              ('const REQUEST_TIMEOUT_MS = 20_000;', 'const REQUEST_TIMEOUT_MS = 30_000;'),
-              (
-                  '  const delayMs = options.delayMs ?? DEFAULT_DELAY_MS;',
-                  '  const delayMs = Math.max(\n    options.delayMs ?? DEFAULT_DELAY_MS,\n    DEFAULT_DELAY_MS\n  );',
-              ),
-          ]
-          for old, new in replacements:
-              if old not in text:
-                  raise SystemExit(f'expected collector text not found: {old!r}')
-              text = text.replace(old, new, 1)
-
-          marker = 'async function fetchWithPolicy(\n'
-          helper = '''function retryAfterDelayMs(value: string | null): number | null {
-            if (!value) return null;
-            const trimmed = value.trim();
-            const seconds = Number(trimmed);
-            if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1_000;
-
-            const retryAt = Date.parse(trimmed);
-            if (Number.isNaN(retryAt)) return null;
-            return Math.max(0, retryAt - Date.now());
-          }
-
-          '''
-          if marker not in text:
-              raise SystemExit('fetchWithPolicy marker not found')
-          text = text.replace(marker, helper + marker, 1)
-
-          pattern = re.compile(
-              r"      if \(response\.status === 429\) \{\n"
-              r"        throw new CollectorFailure\(\n"
-              r"          `HTTP 429 from \$\{url\.pathname\}; stopping immediately`,\n"
-              r"          'http_429'\n"
-              r"        \);\n"
-              r"      \}\n"
-          )
-          replacement = '''      if (response.status === 429) {
-            const retryAfterMs = retryAfterDelayMs(
-              response.headers.get('retry-after')
-            );
-
-            if (attempt === 0 && retryAfterMs !== null && retryAfterMs <= 30_000) {
-              await sleep(retryAfterMs);
-              continue;
-            }
-
-            throw new CollectorFailure(
-              `HTTP 429 from ${url.pathname}; stopping after bounded Retry-After handling`,
-              'http_429'
-            );
-          }
-'''
-          text, count = pattern.subn(replacement, text, count=1)
-          if count != 1:
-              raise SystemExit(f'expected exactly one 429 block, replaced {count}')
-          collector.write_text(text)
-
-          tests = Path('scripts/legislation/sbstacruz/collector.test.ts')
-          test_text = tests.read_text()
-          old_test = '''  it('stops immediately on HTTP 429 instead of retrying or evading rate limits', async () => {
-            const fetchImpl = vi
-              .fn<typeof fetch>()
-              .mockResolvedValueOnce(sourcePage())
-              .mockResolvedValueOnce(new Response('Too Many Requests', { status: 429 }));
-
-            const result = await collectSource({
-              sourceKey: 'resolutions',
-              limit: 20,
-              fetchImpl,
-              sleep: noSleep,
-              delayMs: 0,
-              now: fixedNow,
-            });
-
-            expect(result.manifest.status).toBe('failed');
-            expect(result.manifest.http429).toBe(1);
-            expect(fetchImpl).toHaveBeenCalledTimes(2);
-          });
-'''
-          new_tests = '''  it('honors a bounded Retry-After once and then continues when the source recovers', async () => {
-            const fetchImpl = vi
-              .fn<typeof fetch>()
-              .mockResolvedValueOnce(sourcePage())
-              .mockResolvedValueOnce(
-                new Response('Too Many Requests', {
-                  status: 429,
-                  headers: { 'retry-after': '5' },
-                })
-              )
-              .mockResolvedValueOnce(dataResponse([row(1)]));
-            const sleep = vi.fn(async () => undefined);
-
-            const result = await collectSource({
-              sourceKey: 'resolutions',
-              limit: 1,
-              fetchImpl,
-              sleep,
-              delayMs: 0,
-              now: fixedNow,
-            });
-
-            expect(result.manifest.status).toBe('success');
-            expect(result.manifest.http429).toBe(0);
-            expect(result.manifest.recordsObserved).toBe(1);
-            expect(fetchImpl).toHaveBeenCalledTimes(3);
-            expect(sleep).toHaveBeenCalledWith(2_500);
-            expect(sleep).toHaveBeenCalledWith(5_000);
-          });
-
-          it('stops on a repeated HTTP 429 after honoring the first Retry-After', async () => {
-            const fetchImpl = vi
-              .fn<typeof fetch>()
-              .mockResolvedValueOnce(sourcePage())
-              .mockResolvedValueOnce(
-                new Response('Too Many Requests', {
-                  status: 429,
-                  headers: { 'retry-after': '1' },
-                })
-              )
-              .mockResolvedValueOnce(
-                new Response('Too Many Requests', {
-                  status: 429,
-                  headers: { 'retry-after': '1' },
-                })
-              );
-            const sleep = vi.fn(async () => undefined);
-
-            const result = await collectSource({
-              sourceKey: 'resolutions',
-              limit: 20,
-              fetchImpl,
-              sleep,
-              delayMs: 0,
-              now: fixedNow,
-            });
-
-            expect(result.manifest.status).toBe('failed');
-            expect(result.manifest.http429).toBe(1);
-            expect(fetchImpl).toHaveBeenCalledTimes(3);
-            expect(sleep).toHaveBeenCalledWith(1_000);
-          });
-
-          it('does not invent a retry delay when HTTP 429 has no Retry-After header', async () => {
-            const fetchImpl = vi
-              .fn<typeof fetch>()
-              .mockResolvedValueOnce(sourcePage())
-              .mockResolvedValueOnce(new Response('Too Many Requests', { status: 429 }));
-            const sleep = vi.fn(async () => undefined);
-
-            const result = await collectSource({
-              sourceKey: 'resolutions',
-              limit: 20,
-              fetchImpl,
-              sleep,
-              delayMs: 0,
-              now: fixedNow,
-            });
-
-            expect(result.manifest.status).toBe('failed');
-            expect(result.manifest.http429).toBe(1);
-            expect(fetchImpl).toHaveBeenCalledTimes(2);
-            expect(sleep).toHaveBeenCalledTimes(1);
-            expect(sleep).toHaveBeenCalledWith(2_500);
-          });
-
-          it('refuses an excessive Retry-After rather than holding the collector open', async () => {
-            const fetchImpl = vi
-              .fn<typeof fetch>()
-              .mockResolvedValueOnce(sourcePage())
-              .mockResolvedValueOnce(
-                new Response('Too Many Requests', {
-                  status: 429,
-                  headers: { 'retry-after': '60' },
-                })
-              );
-            const sleep = vi.fn(async () => undefined);
-
-            const result = await collectSource({
-              sourceKey: 'resolutions',
-              limit: 20,
-              fetchImpl,
-              sleep,
-              delayMs: 0,
-              now: fixedNow,
-            });
-
-            expect(result.manifest.status).toBe('failed');
-            expect(result.manifest.http429).toBe(1);
-            expect(fetchImpl).toHaveBeenCalledTimes(2);
-            expect(sleep).toHaveBeenCalledTimes(1);
-            expect(sleep).toHaveBeenCalledWith(2_500);
-          });
-'''
-          if old_test not in test_text:
-              raise SystemExit('expected legacy 429 test not found')
-          tests.write_text(test_text.replace(old_test, new_tests, 1))
-
-      - name: Format Pass C implementation files
+      - name: Format Pass C files
         run: >-
           npx prettier --write
           config/data-sources/sbstacruz-legislation.json
@@ -250,25 +42,10 @@ jobs:
           scripts/legislation/sbstacruz/schemas.ts
           .github/workflows/sb-legislation-pilot.yml
 
-      - name: Run focused Pass C tests
-        run: >-
-          npx vitest run
-          scripts/legislation/sbstacruz/parse.test.ts
-          scripts/legislation/sbstacruz/collector.test.ts
-
-      - name: Type check
-        run: npx tsc --noEmit
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Verify formatting
-        run: npx prettier --check .
-
-      - name: Upload reviewed repair artifact
+      - name: Upload formatted files
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: pass-c-policy-repair
+          name: pass-c-formatted-files
           path: |
             config/data-sources/sbstacruz-legislation.json
             scripts/legislation/sbstacruz/characterize-interactions.ts
