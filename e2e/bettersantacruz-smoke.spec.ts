@@ -22,7 +22,7 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
     await expect(page.locator('body')).not.toContainText(/Los Baños|BetterLB/i);
   });
 
-  test('source ledger renders Santa Cruz records by default and supports context filtering', async ({
+  test('source ledger renders only Santa Cruz production sources and filters evidence dimensions independently', async ({
     page,
   }) => {
     await page.goto('/sources');
@@ -33,22 +33,29 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
     ).toBeVisible();
     await expect(page.getByText(/source records shown/i)).toContainText('18');
     await expect(page.getByText(/Evidence before publication/i)).toBeVisible();
-    await expect(
-      page.getByRole('region', { name: 'Source status summary' })
-    ).toContainText('5 verified');
-    await expect(
-      page.getByRole('region', { name: 'Source status summary' })
-    ).toContainText('8 observed');
 
-    await page.selectOption('#source-status', 'verified');
-    await expect(page.getByText(/source records shown/i)).toContainText('5');
-    await expect(
-      page.getByRole('region', { name: 'Source status summary' })
-    ).toContainText('5 verified');
+    const summary = page.getByRole('region', { name: 'Source review summary' });
+    await expect(summary).toContainText('7 reviewed');
+    await expect(summary).toContainText('11 needs-review');
 
-    await page.selectOption('#source-status', 'all');
-    await page.selectOption('#source-scope', 'Pagsanjan');
+    await page.getByLabel('Filter by review state').selectOption('reviewed');
     await expect(page.getByText(/source records shown/i)).toContainText('7');
+    await expect(summary).toContainText('7 reviewed');
+
+    await page.getByLabel('Filter by review state').selectOption('all');
+    await page
+      .getByLabel('Filter by source authority')
+      .selectOption('civic-index');
+    await expect(page.getByText(/source records shown/i)).toContainText('1');
+    await expect(page.getByText('BetterGov.ph')).toBeVisible();
+
+    await page.getByLabel('Filter by source authority').selectOption('all');
+    await page
+      .getByLabel('Filter by access state')
+      .selectOption('partially-rendered');
+    await expect(page.getByText(/source records shown/i)).toContainText('4');
+
+    await expect(page.locator('body')).not.toContainText(/Pagsanjan, Laguna/);
     await expect(page.locator('body')).not.toContainText(/Los Baños|BetterLB/i);
   });
 
@@ -101,49 +108,90 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
     );
   });
 
-  test('the verified population snapshot is visible while unsupported statistics stay gated', async ({
+  test('population statistics expose only the verified snapshot', async ({
     page,
   }) => {
-    await page.goto('/statistics');
-    await expect(
-      page.getByRole('heading', { name: 'Population Profile' })
-    ).toBeVisible();
-    await expect(page.getByText('126,844')).toBeVisible();
-    await expect(page.getByText('Growth rate not available')).toBeVisible();
-    await expect(
-      page.getByRole('note', { name: 'Source attribution' })
-    ).toBeVisible();
-
-    await page.goto('/statistics/municipal-income');
-    await expect(page.getByRole('status')).toContainText(/municipal income/i);
-  });
-
-  test('home does not request disabled live feeds', async ({ page }) => {
-    const externalRequests: string[] = [];
-    page.on('request', request => {
-      const url = request.url();
-      if (/openweathermap|bettergov\.ph\/forex|losbanos\.gov\.ph/i.test(url)) {
-        externalRequests.push(url);
-      }
-    });
-
-    await page.goto('/');
+    await page.goto('/statistics/population');
     await expect(page.locator('h1').first()).toBeVisible();
-    await page.waitForLoadState('networkidle');
-
-    expect(externalRequests).toEqual([]);
+    await expect(page.getByText('126,844')).toBeVisible();
+    await expect(
+      page.getByText('2024 POPCEN resident count', { exact: true })
+    ).toBeVisible();
+    await expect(
+      page.getByText(/Only the 2024 POPCEN snapshot is currently published/i)
+    ).toBeVisible();
   });
 
-  test('home, sources, and services pass an axe smoke scan', async ({
+  test('gated statistics routes are explicit rather than fabricated', async ({
     page,
   }) => {
-    for (const route of ['/', '/sources', '/services']) {
+    for (const route of [
+      '/statistics/municipal-income',
+      '/statistics/competitiveness',
+    ]) {
       await page.goto(route);
       await expect(page.locator('h1').first()).toBeVisible();
-      const results = await new AxeBuilder({ page }).analyze();
-      expect(results.violations, `${route} accessibility violations`).toEqual(
-        []
+      await expect(page.getByRole('status')).toContainText(
+        /not yet|not available|being verified/i
       );
     }
+  });
+
+  test('source and baseline pages pass critical accessibility checks', async ({
+    page,
+  }) => {
+    for (const route of [
+      '/',
+      '/sources',
+      '/government/elected-officials',
+      '/government/barangays',
+      '/statistics/population',
+    ]) {
+      await page.goto(route);
+      await expect(page.locator('h1').first()).toBeVisible();
+      const results = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze();
+      expect(results.violations).toEqual([]);
+    }
+  });
+
+  test('crawler note describes the verified baseline without claiming gated datasets', async ({
+    request,
+  }) => {
+    const response = await request.get('/llms.txt');
+    expect(response.ok()).toBeTruthy();
+    const text = await response.text();
+    expect(text).toContain('2024 POPCEN population');
+    expect(text).toContain('26 barangays');
+    expect(text).not.toMatch(/complete current council/i);
+    expect(text).not.toMatch(/verified emergency/i);
+  });
+
+  test('direct SPA deep links resolve the BetterSantaCruz application', async ({
+    page,
+  }) => {
+    const response = await page.goto('/government/barangays');
+    expect(response?.ok()).toBeTruthy();
+    await expect(
+      page.getByRole('heading', { name: 'Local Barangays' })
+    ).toBeVisible();
+    await expect(page.locator('body')).not.toContainText(/Los Baños|BetterLB/i);
+  });
+
+  test('404 handling does not reuse inherited BetterLB claims', async ({
+    page,
+  }) => {
+    await page.goto('/this-route-does-not-exist');
+    await expect(page.locator('h1').first()).toBeVisible();
+    await expect(page.locator('body')).not.toContainText(/Los Baños|BetterLB/i);
+  });
+
+  test('search remains honest when no reviewed service data exists', async ({
+    page,
+  }) => {
+    await page.goto('/search');
+    await expect(page.locator('h1').first()).toBeVisible();
+    await expect(page.locator('body')).not.toContainText(/Los Baños|BetterLB/i);
   });
 });

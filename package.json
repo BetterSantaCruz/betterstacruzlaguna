@@ -19,6 +19,7 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "validate:data": "tsx scripts/validate-civic-data.ts",
+    "migrate:evidence-v2": "tsx scripts/migrate-evidence-v2.ts",
     "test:e2e": "playwright test e2e/bettersantacruz-smoke.spec.ts e2e/utils/core.spec.ts --project=chromium --workers=1",
     "merge:services": "python scripts/merge_citizens_charter.py && npm run merge:data && npx prettier --write src/data/citizens-charter/*.json",
     "merge:data": "python scripts/merge_services.py",

@@ -1,119 +1,154 @@
 {
-  "municipality": "Santa Cruz",
-  "province": "Laguna",
-  "region": "Region IV-A (CALABARZON)",
+  "schemaVersion": 2,
+  "municipality": {
+    "name": "Santa Cruz",
+    "province": "Laguna",
+    "psgc10": "0403426000"
+  },
   "facts": [
     {
       "id": "sc-psa-psgc-code",
       "label": "PSGC 10-digit municipality code",
       "value": "0403426000",
-      "municipality": "Santa Cruz",
-      "sourceId": "sc-psa-psgc",
-      "sourceTitle": "Municipality of Santa Cruz — Philippine Standard Geographic Code barangays",
-      "sourceUrl": "https://psa.gov.ph/classification/psgc/barangays/0403426000",
-      "sourceOrganization": "Philippine Statistics Authority",
-      "publishedAt": null,
-      "retrievedAt": "2026-09-05",
-      "lastVerifiedAt": "2026-09-05",
-      "verificationStatus": "verified"
+      "evidence": {
+        "sourceIds": ["sc-psa-psgc"],
+        "verification": "single-source",
+        "assertionType": "direct",
+        "note": null
+      },
+      "publication": { "state": "published" },
+      "freshness": {
+        "lastVerifiedAt": "2026-09-05",
+        "reviewCadenceDays": 3650,
+        "validFrom": null,
+        "validUntil": null
+      }
     },
     {
       "id": "sc-psa-correspondence-code",
       "label": "PSGC correspondence code",
       "value": "043426000",
-      "municipality": "Santa Cruz",
-      "sourceId": "sc-psa-psgc",
-      "sourceTitle": "Municipality of Santa Cruz — Philippine Standard Geographic Code barangays",
-      "sourceUrl": "https://psa.gov.ph/classification/psgc/barangays/0403426000",
-      "sourceOrganization": "Philippine Statistics Authority",
-      "publishedAt": null,
-      "retrievedAt": "2026-09-05",
-      "lastVerifiedAt": "2026-09-05",
-      "verificationStatus": "verified"
+      "evidence": {
+        "sourceIds": ["sc-psa-psgc"],
+        "verification": "single-source",
+        "assertionType": "direct",
+        "note": null
+      },
+      "publication": { "state": "published" },
+      "freshness": {
+        "lastVerifiedAt": "2026-09-05",
+        "reviewCadenceDays": 3650,
+        "validFrom": null,
+        "validUntil": null
+      }
     },
     {
       "id": "sc-psa-population-2024",
       "label": "2024 POPCEN population",
       "value": 126844,
-      "municipality": "Santa Cruz",
-      "sourceId": "sc-psa-psgc",
-      "sourceTitle": "Municipality of Santa Cruz — Philippine Standard Geographic Code barangays",
-      "sourceUrl": "https://psa.gov.ph/classification/psgc/barangays/0403426000",
-      "sourceOrganization": "Philippine Statistics Authority",
-      "publishedAt": null,
-      "retrievedAt": "2026-09-05",
-      "lastVerifiedAt": "2026-09-05",
-      "verificationStatus": "verified"
+      "evidence": {
+        "sourceIds": ["sc-psa-psgc"],
+        "verification": "single-source",
+        "assertionType": "direct",
+        "note": null
+      },
+      "publication": { "state": "published" },
+      "freshness": {
+        "lastVerifiedAt": "2026-09-05",
+        "reviewCadenceDays": 365,
+        "validFrom": null,
+        "validUntil": null
+      }
     },
     {
       "id": "sc-psa-barangay-count",
       "label": "Barangay count",
       "value": 26,
-      "municipality": "Santa Cruz",
-      "sourceId": "sc-psa-psgc",
-      "sourceTitle": "Municipality of Santa Cruz — Philippine Standard Geographic Code barangays",
-      "sourceUrl": "https://psa.gov.ph/classification/psgc/barangays/0403426000",
-      "sourceOrganization": "Philippine Statistics Authority",
-      "publishedAt": null,
-      "retrievedAt": "2026-09-05",
-      "lastVerifiedAt": "2026-09-05",
-      "verificationStatus": "verified"
+      "evidence": {
+        "sourceIds": ["sc-psa-psgc"],
+        "verification": "single-source",
+        "assertionType": "direct",
+        "note": null
+      },
+      "publication": { "state": "published" },
+      "freshness": {
+        "lastVerifiedAt": "2026-09-05",
+        "reviewCadenceDays": 3650,
+        "validFrom": null,
+        "validUntil": null
+      }
     },
     {
       "id": "sc-mayor-2025",
       "label": "Current municipal mayor listed in the 2026 DBM directory",
       "value": "Joseph Kris Benjamin B. Agarao",
-      "municipality": "Santa Cruz",
-      "sourceId": "sc-dbm",
-      "sourceTitle": "2026 Philippine Government Directory of Agencies and Officials",
-      "sourceUrl": "https://www.dbm.gov.ph/wp-content/uploads/AboutDBM/2026-Philippine-Government-Directory-of-Agencies-and-Officials.pdf",
-      "sourceOrganization": "Department of Budget and Management",
-      "publishedAt": null,
-      "retrievedAt": "2026-09-05",
-      "lastVerifiedAt": "2026-09-05",
-      "verificationStatus": "verified"
+      "evidence": {
+        "sourceIds": ["sc-dbm"],
+        "verification": "single-source",
+        "assertionType": "direct",
+        "note": "The source supports the current listed officeholder and title, not a 2025–2028 term field."
+      },
+      "publication": { "state": "published" },
+      "freshness": {
+        "lastVerifiedAt": "2026-09-05",
+        "reviewCadenceDays": 90,
+        "validFrom": null,
+        "validUntil": null
+      }
     },
     {
       "id": "sc-vice-mayor-2025",
       "label": "Current municipal vice mayor listed in the 2026 DBM directory",
       "value": "Laarni A. Malibiran",
-      "municipality": "Santa Cruz",
-      "sourceId": "sc-dbm",
-      "sourceTitle": "2026 Philippine Government Directory of Agencies and Officials",
-      "sourceUrl": "https://www.dbm.gov.ph/wp-content/uploads/AboutDBM/2026-Philippine-Government-Directory-of-Agencies-and-Officials.pdf",
-      "sourceOrganization": "Department of Budget and Management",
-      "publishedAt": null,
-      "retrievedAt": "2026-09-05",
-      "lastVerifiedAt": "2026-09-05",
-      "verificationStatus": "verified"
+      "evidence": {
+        "sourceIds": ["sc-dbm"],
+        "verification": "single-source",
+        "assertionType": "direct",
+        "note": "The source supports the current listed officeholder and title, not a 2025–2028 term field."
+      },
+      "publication": { "state": "published" },
+      "freshness": {
+        "lastVerifiedAt": "2026-09-05",
+        "reviewCadenceDays": 90,
+        "validFrom": null,
+        "validUntil": null
+      }
     },
     {
       "id": "sc-procuring-entity-name",
       "label": "PhilGEPS procuring-entity name",
       "value": "MUNICIPALITY OF SANTA CRUZ, LAGUNA",
-      "municipality": "Santa Cruz",
-      "sourceId": "sc-philgeps-11459794",
-      "sourceTitle": "Printable Bid Notice Abstract 11459794",
-      "sourceUrl": "https://notices.philgeps.gov.ph/GEPSNONPILOT/Tender/PrintableBidNoticeAbstractUI.aspx?refid=11459794",
-      "sourceOrganization": "PhilGEPS / MUNICIPALITY OF SANTA CRUZ, LAGUNA",
-      "publishedAt": "2024-11-11T00:00:00+08:00",
-      "retrievedAt": "2026-09-04",
-      "lastVerifiedAt": "2026-09-04",
-      "verificationStatus": "verified"
+      "evidence": {
+        "sourceIds": ["sc-philgeps-11459794"],
+        "verification": "single-source",
+        "assertionType": "direct",
+        "note": null
+      },
+      "publication": { "state": "published" },
+      "freshness": {
+        "lastVerifiedAt": "2026-09-04",
+        "reviewCadenceDays": 365,
+        "validFrom": null,
+        "validUntil": null
+      }
     },
     {
       "id": "sc-sb-reported-barangay-count",
       "label": "Barangay count reported by Sangguniang Bayan source",
       "value": 26,
-      "municipality": "Santa Cruz",
-      "sourceId": "sc-sb-about",
-      "sourceTitle": "About Us — Sangguniang Bayan of Santa Cruz, Laguna",
-      "sourceUrl": "https://sbstacruz.com/aboutUs",
-      "sourceOrganization": "Sangguniang Bayan of Santa Cruz, Laguna",
-      "publishedAt": null,
-      "retrievedAt": "2026-09-04",
-      "lastVerifiedAt": "2026-09-04",
-      "verificationStatus": "observed"
+      "evidence": {
+        "sourceIds": ["sc-sb-about"],
+        "verification": "unverified",
+        "assertionType": "direct",
+        "note": "Observed at the SB source but not promoted as a public canonical fact from that source because the source remains under review."
+      },
+      "publication": { "state": "staged" },
+      "freshness": {
+        "lastVerifiedAt": "2026-09-04",
+        "reviewCadenceDays": 365,
+        "validFrom": null,
+        "validUntil": null
+      }
     }
   ]
 }

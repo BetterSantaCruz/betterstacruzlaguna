@@ -99,6 +99,7 @@
 - Decision: a civic fact's verification state must match the linked source record. Observed facts may remain in the evidence registry, while canonical directory and population records require a verified source.
 - Rationale: source observations and restricted leads must remain distinct from canonical public facts without discarding traceable research observations.
 - Revisit when: the project introduces an explicit reviewer decision model that separates evidence status from promotion status.
+- Status: superseded by D-015. The historical reason for this rule remains useful, but Evidence Model v2 now separates source review, fact verification, and publication state instead of forcing them to match.
 
 ## D-014 — Make source-ledger filtering view-only
 
@@ -106,3 +107,40 @@
 - Decision: expose municipality, evidence-status, and text filters through a pure source-record helper; filters must not alter registry records or their verification states.
 - Rationale: contributors need to isolate evidence classes during research, but the source ledger remains the immutable local description of what was observed.
 - Revisit when: the ledger gains server-side pagination or URL-persisted filter state.
+
+## D-015 — Split evidence dimensions instead of overloading verification status
+
+- Date: 2026-09-05
+- Context: the legacy `verificationStatus` vocabulary mixed authority (`secondary`), access (`access-restricted`, `unreachable`), review (`pending`), and evidence confidence/promotion (`verified`, `observed`) in one field. This became unsafe before high-volume legislation ingestion.
+- Alternatives: retain the legacy enum and add more values; encode publication decisions in UI conditions; or introduce independent dimensions.
+- Decision: Evidence Model v2 separates source authority, source access state, source review state, source-ledger visibility, fact verification, assertion type, publication state, and derived freshness metadata.
+- Reason: each dimension answers a different question and must be independently testable. A source can be official but blocked, reachable but unreviewed, or reviewed while a particular fact remains staged.
+- Consequence: source/fact schemas and source-ledger filters are more explicit; legacy status values are no longer the publication contract.
+- Revisit when: a future data class needs an additional orthogonal dimension that cannot be represented by domain-specific policy.
+
+## D-016 — Require positive Santa Cruz identity in every production source
+
+- Date: 2026-09-05
+- Context: the old source schema stored only a municipality label/location and the validator supplied `province: 'Laguna'` itself when checking Santa Cruz identity.
+- Decision: every production source stores the full Santa Cruz identity envelope, including province Laguna and municipality PSGC `0403426000`, plus how that identity was resolved. Production validation checks the stored identity. The same-name exclusion list remains secondary defense.
+- Reason: source identity must be evidence carried by the record, not a fact injected by validation code.
+- Consequence: production source records are Santa Cruz-only and can be safely reused by future collectors/staging pipelines.
+- Revisit when: the application intentionally becomes multi-LGU, at which point the identity envelope should become a generalized LGU identity contract rather than relaxing the current Santa Cruz invariant.
+
+## D-017 — Keep Pagsanjan research outside BetterSantaCruz production data
+
+- Date: 2026-09-05
+- Context: Pagsanjan research was useful during ecosystem discovery, but BetterPagsanjan already has a separate public project/maintainer and should not appear as a normal BetterSantaCruz production source scope.
+- Decision: preserve Pagsanjan research under `docs/research/pagsanjan/`, but remove it from the production source registry, public source-ledger filtering, civic validator, and future Santa Cruz search/publication pipeline.
+- Reason: municipality boundaries are part of data integrity and project governance. Research retention does not justify public cross-LGU mixing.
+- Consequence: production source counts now describe Santa Cruz only; Pagsanjan context remains available for handoff/collaboration without implying ownership.
+- Revisit when: a future federated BetterLGU architecture explicitly defines cross-LGU data contracts.
+
+## D-018 — Require field-level provenance for mixed-source civic records
+
+- Date: 2026-09-05
+- Context: a domain record may combine fields supported by different sources. The prior executive records used DBM for name/role while also carrying a `2025–2028` term that DBM did not directly establish.
+- Decision: domain records can attach source IDs/assertion type at field level. A non-null executive term requires term-specific provenance. Until an authoritative term source is registered, the mayor/vice-mayor term field remains `null`.
+- Reason: record-level provenance must not imply that one source supports fields it never stated.
+- Consequence: current executive names/roles remain published while unsupported term metadata is withheld.
+- Revisit when: a richer generalized claim/provenance graph replaces field provenance without weakening traceability.

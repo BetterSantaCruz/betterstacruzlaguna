@@ -3,18 +3,18 @@ import { describe, expect, it } from 'vitest';
 import { summarizeSourceStatuses } from './source-summary';
 
 describe('summarizeSourceStatuses', () => {
-  it('counts the visible evidence states in a stable review order', () => {
+  it('counts visible source review states in a stable review order', () => {
     expect(
       summarizeSourceStatuses([
-        { verificationStatus: 'observed' },
-        { verificationStatus: 'verified' },
-        { verificationStatus: 'observed' },
-        { verificationStatus: 'access-restricted' },
+        { reviewState: 'needs-review' },
+        { reviewState: 'reviewed' },
+        { reviewState: 'needs-review' },
+        { reviewState: 'unreviewed' },
       ])
     ).toEqual([
-      { status: 'verified', count: 1 },
-      { status: 'observed', count: 2 },
-      { status: 'access-restricted', count: 1 },
+      { status: 'reviewed', count: 1 },
+      { status: 'needs-review', count: 2 },
+      { status: 'unreviewed', count: 1 },
     ]);
   });
 

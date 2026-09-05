@@ -32,6 +32,21 @@
   }
 }
 
+/*
+ * The Carbon-inspired visual pass uses two Kapwa semantic text utilities in
+ * ordinary public copy. Kapwa's package values for these states are intended
+ * for visually de-emphasized UI and fall below the WCAG AA contrast threshold
+ * at the normal text sizes used by BetterSantaCruz. Override the utilities at
+ * the application boundary instead of mutating the upstream design system.
+ */
+.text-kapwa-text-disabled {
+  color: #6f6f6f !important;
+}
+
+.text-kapwa-text-accent-orange {
+  color: #a84000 !important;
+}
+
 /* --- LEAFLET MAP OVERRIDES --- */
 .leaflet-popup-content-wrapper {
   border-radius: 12px !important;
@@ -56,7 +71,7 @@
 }
 
 .leaflet-popup-close-button {
-  color: var(--color-text-kapwa-text-disabled) !important;
+  color: #6f6f6f !important;
   padding: 8px !important;
 }
 
