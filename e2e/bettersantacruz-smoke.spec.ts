@@ -32,6 +32,12 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
     ).toBeVisible();
     await expect(page.getByText(/source records shown/i)).toContainText('18');
     await expect(page.getByText(/Evidence before publication/i)).toBeVisible();
+    await expect(
+      page.getByRole('region', { name: 'Source status summary' })
+    ).toContainText('5 verified');
+    await expect(
+      page.getByRole('region', { name: 'Source status summary' })
+    ).toContainText('8 observed');
 
     await page.selectOption('#source-scope', 'Pagsanjan');
     await expect(page.getByText(/source records shown/i)).toContainText('7');

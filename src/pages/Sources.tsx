@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Card, CardContent } from '@/components/ui/Card';
 import { SEO } from '@/components/layout/SEO';
 import type { SourceRecord } from '@/lib/provenance';
+import { summarizeSourceStatuses } from '@/lib/source-summary';
 
 type Scope = 'all' | 'Santa Cruz' | 'Pagsanjan';
 type BadgeVariant = 'success' | 'warning' | 'error' | 'slate' | 'primary';
@@ -56,6 +57,11 @@ export default function SourcesPage() {
         .includes(normalizedQuery);
     });
   }, [query, scope]);
+
+  const statusSummary = useMemo(
+    () => summarizeSourceStatuses(filteredSources),
+    [filteredSources]
+  );
 
   return (
     <main className='bg-kapwa-bg-surface-raised min-h-screen'>
@@ -149,6 +155,30 @@ export default function SourcesPage() {
               </label>
             </div>
           </div>
+
+          <section
+            aria-label='Source status summary'
+            className='border-kapwa-border-weak bg-kapwa-bg-surface mx-auto mb-6 flex max-w-5xl flex-col gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between'
+          >
+            <div>
+              <h3 className='text-kapwa-text-strong text-sm font-bold'>
+                Evidence status
+              </h3>
+              <p className='text-kapwa-text-support mt-1 text-xs'>
+                Counts reflect the source records currently shown.
+              </p>
+            </div>
+            <ul className='flex flex-wrap gap-2'>
+              {statusSummary.map(({ status, count }) => (
+                <li
+                  key={status}
+                  className='border-kapwa-border-weak bg-kapwa-bg-surface-raised text-kapwa-text-support rounded-full border px-3 py-1 text-xs'
+                >
+                  {count} {status}
+                </li>
+              ))}
+            </ul>
+          </section>
 
           <div className='grid gap-4'>
             {filteredSources.map(source => (
