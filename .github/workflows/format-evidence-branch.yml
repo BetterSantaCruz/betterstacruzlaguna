@@ -30,6 +30,8 @@ jobs:
       - name: Format Pass B files
         run: >-
           npx prettier --write
+          e2e/bettersantacruz-smoke.spec.ts
+          src/index.css
           src/data/civic-registry.json
           src/data/directory/executive.json
           src/data/sources/source-registry.json
@@ -59,5 +61,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add --all
-          git commit -m "style(data): format evidence v2 changes"
+          git commit -m "style(data): format final evidence v2 files"
           git push origin HEAD:refactor/evidence-model-v2
