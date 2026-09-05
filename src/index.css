@@ -13,17 +13,16 @@
     'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /*
-   * The Carbon-inspired visual pass uses Kapwa's disabled/support tokens as
-   * ordinary explanatory text in several public civic surfaces. Kapwa's
-   * default disabled gray is intentionally faint and does not meet WCAG AA
-   * when used as normal text on the light surfaces in this app. Override the
-   * public text token with a Carbon Gray 60-equivalent value so informational
-   * copy remains readable while preserving the neutral hierarchy.
+   * Tailwind's `text-kapwa-text-disabled` utility resolves through the
+   * `--color-kapwa-text-disabled` theme token. The Carbon-inspired visual
+   * pass uses that token for ordinary explanatory copy, so Kapwa's intentionally
+   * faint disabled gray is not appropriate here. Use a Carbon Gray 60-like
+   * value that remains readable on the application's light surfaces.
    */
-  --color-text-kapwa-text-disabled: #6f6f6f;
+  --color-kapwa-text-disabled: #6f6f6f;
 
   /* Keep orange semantic labels above the 4.5:1 normal-text threshold. */
-  --color-text-kapwa-text-accent-orange: #a84000;
+  --color-kapwa-text-accent-orange: #a84000;
 }
 
 @layer base {
@@ -69,7 +68,7 @@
 }
 
 .leaflet-popup-close-button {
-  color: var(--color-text-kapwa-text-disabled) !important;
+  color: var(--color-kapwa-text-disabled) !important;
   padding: 8px !important;
 }
 
