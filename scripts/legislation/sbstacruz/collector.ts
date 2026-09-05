@@ -27,7 +27,7 @@ export type SourceKey = 'ordinances' | 'resolutions';
 type FetchLike = typeof fetch;
 type SleepLike = (milliseconds: number) => Promise<void>;
 
-type SourceDefinition = {
+export type SourceDefinition = {
   key: SourceKey;
   documentType: DocumentType;
   sourceId: 'sc-sb-ordinances' | 'sc-sb-resolutions';
@@ -80,7 +80,7 @@ export type CollectionResult = {
   warnings: CollectorWarning[];
 };
 
-class CollectorFailure extends Error {
+export class CollectorFailure extends Error {
   constructor(
     message: string,
     readonly kind:
@@ -101,7 +101,10 @@ function defaultSleep(milliseconds: number) {
   return new Promise<void>(resolve => setTimeout(resolve, milliseconds));
 }
 
-function assertAllowedUrl(rawUrl: string, source: SourceDefinition): URL {
+export function assertAllowedUrl(
+  rawUrl: string,
+  source: SourceDefinition
+): URL {
   const url = new URL(rawUrl);
   if (url.protocol !== 'https:' || url.hostname !== 'www.sbstacruz.com') {
     throw new CollectorFailure(
@@ -144,6 +147,9 @@ function buildDataTablesUrl(
     url.searchParams.set(`columns[${index}][search][regex]`, 'false');
   }
 
+  // Preserve the exact ordering/filter shape observed during characterization.
+  // We do not guess a semantic meaning for column 3; it is only an upstream
+  // DataTables ordering parameter observed in the public browser request.
   url.searchParams.set('order[0][column]', '3');
   url.searchParams.set('order[0][dir]', 'desc');
   url.searchParams.set('start', String(start));
@@ -159,15 +165,30 @@ function buildDataTablesUrl(
   return url.toString();
 }
 
-function htmlText(value: unknown, preserveBreaks = false): string {
-  const raw = String(value ?? '');
-  const $ = load(`<body>${raw}</body>`);
-  if (preserveBreaks) $('br').replaceWith('\n');
+function cleanText(value: unknown): string {
+  return String(value ?? '')
+    .replace(/\u00a0/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function htmlText(value: unknown): string {
+  const $ = load(`<body>${String(value ?? '')}</body>`);
+  return cleanText($('body').text());
+}
+
+function htmlLines(value: unknown): string[] {
+  const $ = load(`<body>${String(value ?? '')}</body>`);
+  $('br').replaceWith('\n');
+  $('li').each((_, element) => {
+    $(element).append('\n');
+  });
   return $('body')
     .text()
     .replace(/\u00a0/g, ' ')
-    .replace(preserveBreaks ? /[ \t]+/g : /\s+/g, ' ')
-    .trim();
+    .split(/\r?\n/)
+    .map(cleanText)
+    .filter(Boolean);
 }
 
 function firstHref(value: unknown): string | null {
@@ -184,6 +205,82 @@ function firstHref(value: unknown): string | null {
   }
 }
 
+function valueAfterLabel(lines: string[], label: RegExp): string | null {
+  for (let index = 0; index < lines.length; index += 1) {
+    if (label.test(lines[index])) {
+      return lines[index + 1] ?? null;
+    }
+  }
+  return null;
+}
+
+export type ParsedDetailsCell = {
+  sourceDocumentType: string | null;
+  numberLabel: string;
+  sourceCategory: string | null;
+};
+
+export function parseDetailsCell(value: unknown): ParsedDetailsCell {
+  const lines = htmlLines(value);
+  return {
+    sourceDocumentType: valueAfterLabel(lines, /^type\s*:?$/i),
+    numberLabel: valueAfterLabel(lines, /^number\s*:?$/i) ?? '',
+    sourceCategory: valueAfterLabel(lines, /^category\s*:?$/i),
+  };
+}
+
+function namesUnderHeading(
+  value: unknown,
+  headingPattern: RegExp
+): string[] {
+  const $ = load(`<body>${String(value ?? '')}</body>`);
+  const names: string[] = [];
+
+  $('b, strong').each((_, heading) => {
+    const headingText = cleanText($(heading).text());
+    if (!headingPattern.test(headingText)) return;
+
+    let sibling = $(heading).next();
+    while (sibling.length > 0) {
+      if (sibling.is('b, strong')) break;
+
+      const candidates = sibling.is('ul, ol')
+        ? sibling.find('li')
+        : sibling.find('li');
+      candidates.each((__, item) => {
+        const name = cleanText($(item).text());
+        if (name) names.push(name);
+      });
+      sibling = sibling.next();
+    }
+  });
+
+  return [...new Set(names)];
+}
+
+export type ParsedSponsorsCell = {
+  mainSponsors: string[];
+  coSponsors: string[];
+};
+
+export function parseSponsorsCell(value: unknown): ParsedSponsorsCell {
+  return {
+    mainSponsors: namesUnderHeading(value, /^main\s+sponsor(?:\(s\))?\s*:?$/i),
+    coSponsors: namesUnderHeading(value, /^co[-\s]?sponsor(?:\(s\))?\s*:?$/i),
+  };
+}
+
+function parseTagsCell(value: unknown): string[] {
+  const $ = load(`<body>${String(value ?? '')}</body>`);
+  const badgeTags = $('[class*="badge"]')
+    .map((_, element) => cleanText($(element).text()))
+    .get()
+    .filter(Boolean);
+
+  if (badgeTags.length > 0) return [...new Set(badgeTags)];
+  return [...new Set(htmlLines(value))];
+}
+
 export function rowToRawPayload(row: unknown[]): RawLegislationPayload {
   if (row.length !== 7) {
     throw new CollectorFailure(
@@ -192,23 +289,31 @@ export function rowToRawPayload(row: unknown[]): RawLegislationPayload {
     );
   }
 
+  const details = parseDetailsCell(row[1]);
+  const sponsors = parseSponsorsCell(row[3]);
   const actionText = htmlText(row[6]);
   const actionHref = firstHref(row[6]);
   const isRequestCopy = /request\s+(?:a\s+)?copy/i.test(actionText);
 
   return {
-    sourceNativeId: String(row[0] ?? '').trim(),
-    detailUrl: firstHref(row[1]),
-    numberLabel: htmlText(row[1]),
+    sourceNativeId: cleanText(row[0]),
+    // The characterized Details column is structured metadata, not a record
+    // hyperlink. Keep detailUrl null rather than fabricating a detail route.
+    detailUrl: null,
+    numberLabel: details.numberLabel,
     title: htmlText(row[2]),
-    authors: htmlText(row[3], true),
-    // The characterized table has no separate co-author column. Do not infer
-    // co-authors from sponsors or from unrelated author pages.
-    coAuthors: [],
-    tags: htmlText(row[4], true),
+    // These roles are explicitly labelled by the source. Mapping them is an
+    // observation, not an inference from names or unrelated author pages.
+    authors: sponsors.mainSponsors,
+    coAuthors: sponsors.coSponsors,
+    tags: parseTagsCell(row[4]),
     approvedDate: htmlText(row[5]),
     actionText,
+    // "Request a Copy" is not a public document URL. Preserve its href only
+    // as raw source evidence and keep documentUrl null.
     documentUrl: isRequestCopy ? null : actionHref,
+    sourceDocumentType: details.sourceDocumentType,
+    sourceCategory: details.sourceCategory,
     rawActionHref: actionHref,
     rawRow: row,
     rawColumns: {
@@ -346,6 +451,12 @@ async function fetchDataPage(
   return parsed.data;
 }
 
+function expectedSourceType(documentType: DocumentType): RegExp {
+  return documentType === 'ordinance'
+    ? /^(?:ordinance|kautusang\s+bayan)$/i
+    : /^(?:resolution|kapasiyahan)$/i;
+}
+
 export async function collectSource(options: {
   sourceKey: SourceKey;
   limit: number;
@@ -436,6 +547,20 @@ export async function collectSource(options: {
           observed,
           source.documentType
         );
+
+        const sourceDocumentType = cleanText(rawPayload.sourceDocumentType);
+        if (
+          !sourceDocumentType ||
+          !expectedSourceType(source.documentType).test(sourceDocumentType)
+        ) {
+          stagedRecord.anomalies.push({
+            code: 'source_identity_mismatch',
+            severity: 'blocking',
+            note: `Expected ${source.documentType}; source Details Type was ${
+              sourceDocumentType || '(missing)'
+            }`,
+          });
+        }
 
         if (
           observed.sourceNativeId &&
