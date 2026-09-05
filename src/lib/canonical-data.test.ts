@@ -54,11 +54,7 @@ describe('canonical Santa Cruz data validation', () => {
     );
 
     expect(() =>
-      validateExecutiveDirectory(
-        executiveData,
-        candidateSources,
-        '2026-09-05'
-      )
+      validateExecutiveDirectory(executiveData, candidateSources, '2026-09-05')
     ).toThrow(/reviewed primary-official source/i);
   });
 

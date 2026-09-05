@@ -111,7 +111,8 @@ function defaultAuthority(source: LegacySource): SourceAuthority {
 }
 
 function defaultAccess(source: LegacySource): SourceAccessState {
-  if (ACCESS_OVERRIDES[source.sourceId]) return ACCESS_OVERRIDES[source.sourceId];
+  if (ACCESS_OVERRIDES[source.sourceId])
+    return ACCESS_OVERRIDES[source.sourceId];
   switch (source.verificationStatus) {
     case 'verified':
     case 'observed':
@@ -129,7 +130,8 @@ function defaultAccess(source: LegacySource): SourceAccessState {
 }
 
 function defaultReview(source: LegacySource): SourceReviewState {
-  if (REVIEW_OVERRIDES[source.sourceId]) return REVIEW_OVERRIDES[source.sourceId];
+  if (REVIEW_OVERRIDES[source.sourceId])
+    return REVIEW_OVERRIDES[source.sourceId];
   switch (source.verificationStatus) {
     case 'verified':
     case 'secondary':
@@ -152,7 +154,9 @@ export function migrateLegacySource(source: LegacySource): CivicSource {
     );
   }
   if (source.municipality !== 'Santa Cruz') {
-    throw new Error(`Non-Santa Cruz source must be separated: ${source.sourceId}`);
+    throw new Error(
+      `Non-Santa Cruz source must be separated: ${source.sourceId}`
+    );
   }
 
   const accessState = defaultAccess(source);
@@ -226,14 +230,22 @@ export function migrateLegacySourceRegistry(value: unknown): {
     .map(migrateLegacySource);
 
   return {
-    registry: sourceRegistrySchema.parse({ schemaVersion: 2, sources: migrated }),
+    registry: sourceRegistrySchema.parse({
+      schemaVersion: 2,
+      sources: migrated,
+    }),
     separatedResearch,
   };
 }
 
 function cadenceForFact(id: string): number {
   if (id === 'sc-mayor-2025' || id === 'sc-vice-mayor-2025') return 90;
-  if (id === 'sc-psa-psgc-code' || id === 'sc-psa-correspondence-code' || id === 'sc-psa-barangay-count') return 3650;
+  if (
+    id === 'sc-psa-psgc-code' ||
+    id === 'sc-psa-correspondence-code' ||
+    id === 'sc-psa-barangay-count'
+  )
+    return 3650;
   return 365;
 }
 

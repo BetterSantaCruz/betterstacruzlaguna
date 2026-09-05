@@ -24,8 +24,9 @@ import { summarizeSourceStatuses } from '@/lib/source-summary';
 
 type BadgeVariant = 'success' | 'warning' | 'error' | 'slate' | 'primary';
 
-const sources = (sourceRegistry as { schemaVersion: 2; sources: SourceRecord[] })
-  .sources;
+const sources = (
+  sourceRegistry as { schemaVersion: 2; sources: SourceRecord[] }
+).sources;
 
 const reviewVariant: Record<string, BadgeVariant> = {
   reviewed: 'success',
@@ -247,7 +248,11 @@ export default function SourcesPage() {
                         >
                           {source.reviewState}
                         </Badge>
-                        <Badge variant={accessVariant[source.access.state] ?? 'slate'}>
+                        <Badge
+                          variant={
+                            accessVariant[source.access.state] ?? 'slate'
+                          }
+                        >
                           {source.access.state}
                         </Badge>
                         <Badge variant='outline'>{source.authority}</Badge>

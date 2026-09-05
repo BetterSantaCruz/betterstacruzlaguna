@@ -27,10 +27,7 @@ export function filterSourceRecords(
   const normalizedQuery = query.trim().toLowerCase();
 
   return sources.filter(source => {
-    if (
-      scope !== 'all' &&
-      source.identity.municipality !== scope
-    ) {
+    if (scope !== 'all' && source.identity.municipality !== scope) {
       return false;
     }
     if (status !== 'all' && source.reviewState !== status) return false;

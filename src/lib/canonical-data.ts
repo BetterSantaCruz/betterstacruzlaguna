@@ -188,13 +188,17 @@ function assertFieldProvenance(
   for (const sourceId of provenance.sourceIds) {
     const source = sources.find(candidate => candidate.sourceId === sourceId);
     if (!source) {
-      throw new Error(`unknown field provenance sourceId for ${context}: ${sourceId}`);
+      throw new Error(
+        `unknown field provenance sourceId for ${context}: ${sourceId}`
+      );
     }
     if (
       source.identity.municipalityPsgc !== SANTA_CRUZ_IDENTITY.psgc10 ||
       source.reviewState !== 'reviewed'
     ) {
-      throw new Error(`Ineligible field provenance source for ${context}: ${sourceId}`);
+      throw new Error(
+        `Ineligible field provenance source for ${context}: ${sourceId}`
+      );
     }
   }
 }
@@ -301,16 +305,34 @@ export function validateExecutiveDirectory(
       today,
       `executive ${record.slug}`
     );
-    assertFieldProvenance(record.fieldProvenance.name, sources, `${record.slug}.name`);
-    assertFieldProvenance(record.fieldProvenance.role, sources, `${record.slug}.role`);
+    assertFieldProvenance(
+      record.fieldProvenance.name,
+      sources,
+      `${record.slug}.name`
+    );
+    assertFieldProvenance(
+      record.fieldProvenance.role,
+      sources,
+      `${record.slug}.role`
+    );
     if (record.fieldProvenance.office) {
-      assertFieldProvenance(record.fieldProvenance.office, sources, `${record.slug}.office`);
+      assertFieldProvenance(
+        record.fieldProvenance.office,
+        sources,
+        `${record.slug}.office`
+      );
     }
     if (record.term && !record.fieldProvenance.term) {
-      throw new Error(`Executive term requires field-level provenance: ${record.slug}`);
+      throw new Error(
+        `Executive term requires field-level provenance: ${record.slug}`
+      );
     }
     if (record.fieldProvenance.term) {
-      assertFieldProvenance(record.fieldProvenance.term, sources, `${record.slug}.term`);
+      assertFieldProvenance(
+        record.fieldProvenance.term,
+        sources,
+        `${record.slug}.term`
+      );
     }
   }
 

@@ -78,6 +78,8 @@ describe('Santa Cruz source registry v2', () => {
   });
 
   it('does not expose Pagsanjan records in the production registry', () => {
-    expect(sources.some(source => source.sourceId.startsWith('pg-'))).toBe(false);
+    expect(sources.some(source => source.sourceId.startsWith('pg-'))).toBe(
+      false
+    );
   });
 });

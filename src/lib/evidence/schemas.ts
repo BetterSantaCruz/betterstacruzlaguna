@@ -1,6 +1,9 @@
 import { z } from 'zod';
 
-import { SANTA_CRUZ_IDENTITY, assertSantaCruzIdentity } from '../municipality-identity';
+import {
+  SANTA_CRUZ_IDENTITY,
+  assertSantaCruzIdentity,
+} from '../municipality-identity';
 import {
   assertionTypes,
   factVerificationStates,
@@ -21,7 +24,9 @@ export const municipalityIdentitySchema = z.object({
   region: z.literal('Region IV-A'),
   regionName: z.literal('CALABARZON'),
   municipalityPsgc: z.literal(SANTA_CRUZ_IDENTITY.psgc10),
-  correspondenceCode: z.literal(SANTA_CRUZ_IDENTITY.correspondenceCode).nullable(),
+  correspondenceCode: z
+    .literal(SANTA_CRUZ_IDENTITY.correspondenceCode)
+    .nullable(),
 });
 
 export const sourceAccessSchema = z
@@ -101,7 +106,11 @@ export const freshnessMetadataSchema = z
     validUntil: dateSchema.nullable(),
   })
   .superRefine((value, ctx) => {
-    if (value.validFrom && value.validUntil && value.validFrom > value.validUntil) {
+    if (
+      value.validFrom &&
+      value.validUntil &&
+      value.validFrom > value.validUntil
+    ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'validFrom must not be after validUntil',
@@ -130,14 +139,20 @@ export const civicFactSchema = z.object({
           path: ['sourceIds'],
         });
       }
-      if (evidence.verification === 'single-source' && evidence.sourceIds.length !== 1) {
+      if (
+        evidence.verification === 'single-source' &&
+        evidence.sourceIds.length !== 1
+      ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'single-source verification requires exactly one source',
           path: ['sourceIds'],
         });
       }
-      if (evidence.verification === 'corroborated' && evidence.sourceIds.length < 2) {
+      if (
+        evidence.verification === 'corroborated' &&
+        evidence.sourceIds.length < 2
+      ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'corroborated verification requires at least two sources',

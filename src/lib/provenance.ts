@@ -19,7 +19,14 @@ export * from './evidence/schemas';
 
 /** Backward-compatible type name used throughout the application. */
 export type SourceRecord = CivicSource;
-export type { CivicFact, CivicRegistry, FieldProvenance, FreshnessMetadata, MunicipalityIdentity, SourceRegistry };
+export type {
+  CivicFact,
+  CivicRegistry,
+  FieldProvenance,
+  FreshnessMetadata,
+  MunicipalityIdentity,
+  SourceRegistry,
+};
 
 export function validateSourceRecord(value: unknown): SourceRecord {
   const source = civicSourceSchema.parse(value);
@@ -64,7 +71,8 @@ export function validateSourceRegistry(
       throw new Error(`Future source access date: ${source.sourceId}`);
     }
 
-    for (const evidenceSourceId of source.identityResolution.evidenceSourceIds) {
+    for (const evidenceSourceId of source.identityResolution
+      .evidenceSourceIds) {
       if (evidenceSourceId === source.sourceId) {
         throw new Error(
           `Source identity resolution cannot cite itself: ${source.sourceId}`
@@ -74,7 +82,8 @@ export function validateSourceRegistry(
   }
 
   for (const source of registry.sources) {
-    for (const evidenceSourceId of source.identityResolution.evidenceSourceIds) {
+    for (const evidenceSourceId of source.identityResolution
+      .evidenceSourceIds) {
       if (!ids.has(evidenceSourceId)) {
         throw new Error(
           `Unknown identity evidence sourceId for ${source.sourceId}: ${evidenceSourceId}`
@@ -118,7 +127,9 @@ export function validateCivicRegistry(
       fact.publication.state === 'published' &&
       !canPublishFact(fact, sources)
     ) {
-      throw new Error(`Published civic fact is not evidence-eligible: ${fact.id}`);
+      throw new Error(
+        `Published civic fact is not evidence-eligible: ${fact.id}`
+      );
     }
   }
 

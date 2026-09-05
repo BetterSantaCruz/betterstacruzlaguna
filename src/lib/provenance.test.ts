@@ -120,7 +120,14 @@ describe('validateSourceRecord', () => {
   it('requires an access check date for reachable sources', () => {
     expect(() =>
       validateSourceRecord(
-        makeSource({ access: { state: 'reachable', checkedAt: null, httpStatus: null, note: null } })
+        makeSource({
+          access: {
+            state: 'reachable',
+            checkedAt: null,
+            httpStatus: null,
+            note: null,
+          },
+        })
       )
     ).toThrow(/checkedAt/i);
   });
@@ -144,7 +151,10 @@ describe('validateSourceRecord', () => {
 describe('validateSourceRegistry', () => {
   it('rejects duplicate source IDs', () => {
     expect(() =>
-      validateSourceRegistry({ schemaVersion: 2, sources: [makeSource(), makeSource()] })
+      validateSourceRegistry({
+        schemaVersion: 2,
+        sources: [makeSource(), makeSource()],
+      })
     ).toThrow(/Duplicate sourceId/);
   });
 
@@ -153,7 +163,12 @@ describe('validateSourceRegistry', () => {
       validateSourceRegistry(
         {
           schemaVersion: 2,
-          sources: [makeSource({ retrievedAt: '2026-09-06', lastVerifiedAt: '2026-09-06' })],
+          sources: [
+            makeSource({
+              retrievedAt: '2026-09-06',
+              lastVerifiedAt: '2026-09-06',
+            }),
+          ],
         },
         '2026-09-05'
       )

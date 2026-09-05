@@ -33,15 +33,15 @@ export function canPublishFact(
   if (resolved.length !== fact.evidence.sourceIds.length) return false;
   if (resolved.some(source => source.reviewState !== 'reviewed')) return false;
   if (
-    resolved.some(
-      source => source.identity.municipalityPsgc !== '0403426000'
-    )
+    resolved.some(source => source.identity.municipalityPsgc !== '0403426000')
   ) {
     return false;
   }
 
   if (fact.evidence.verification === 'single-source') {
-    return resolved.length === 1 && resolved[0].authority === 'primary-official';
+    return (
+      resolved.length === 1 && resolved[0].authority === 'primary-official'
+    );
   }
 
   return resolved.some(source => source.authority === 'primary-official');

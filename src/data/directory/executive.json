@@ -14,8 +14,16 @@
     "lastVerifiedAt": "2026-09-05",
     "verificationStatus": "verified",
     "fieldProvenance": {
-      "name": {"sourceIds":["sc-dbm"],"assertionType":"direct","note":null},
-      "role": {"sourceIds":["sc-dbm"],"assertionType":"direct","note":null}
+      "name": {
+        "sourceIds": ["sc-dbm"],
+        "assertionType": "direct",
+        "note": null
+      },
+      "role": {
+        "sourceIds": ["sc-dbm"],
+        "assertionType": "direct",
+        "note": null
+      }
     },
     "address": null,
     "phone": null,
@@ -37,8 +45,16 @@
     "lastVerifiedAt": "2026-09-05",
     "verificationStatus": "verified",
     "fieldProvenance": {
-      "name": {"sourceIds":["sc-dbm"],"assertionType":"direct","note":null},
-      "role": {"sourceIds":["sc-dbm"],"assertionType":"direct","note":null}
+      "name": {
+        "sourceIds": ["sc-dbm"],
+        "assertionType": "direct",
+        "note": null
+      },
+      "role": {
+        "sourceIds": ["sc-dbm"],
+        "assertionType": "direct",
+        "note": null
+      }
     },
     "address": null,
     "phone": null,

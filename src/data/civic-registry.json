@@ -10,65 +10,145 @@
       "id": "sc-psa-psgc-code",
       "label": "PSGC 10-digit municipality code",
       "value": "0403426000",
-      "evidence": {"sourceIds":["sc-psa-psgc"],"verification":"single-source","assertionType":"direct","note":null},
-      "publication": {"state":"published"},
-      "freshness": {"lastVerifiedAt":"2026-09-05","reviewCadenceDays":3650,"validFrom":null,"validUntil":null}
+      "evidence": {
+        "sourceIds": ["sc-psa-psgc"],
+        "verification": "single-source",
+        "assertionType": "direct",
+        "note": null
+      },
+      "publication": { "state": "published" },
+      "freshness": {
+        "lastVerifiedAt": "2026-09-05",
+        "reviewCadenceDays": 3650,
+        "validFrom": null,
+        "validUntil": null
+      }
     },
     {
       "id": "sc-psa-correspondence-code",
       "label": "PSGC correspondence code",
       "value": "043426000",
-      "evidence": {"sourceIds":["sc-psa-psgc"],"verification":"single-source","assertionType":"direct","note":null},
-      "publication": {"state":"published"},
-      "freshness": {"lastVerifiedAt":"2026-09-05","reviewCadenceDays":3650,"validFrom":null,"validUntil":null}
+      "evidence": {
+        "sourceIds": ["sc-psa-psgc"],
+        "verification": "single-source",
+        "assertionType": "direct",
+        "note": null
+      },
+      "publication": { "state": "published" },
+      "freshness": {
+        "lastVerifiedAt": "2026-09-05",
+        "reviewCadenceDays": 3650,
+        "validFrom": null,
+        "validUntil": null
+      }
     },
     {
       "id": "sc-psa-population-2024",
       "label": "2024 POPCEN population",
       "value": 126844,
-      "evidence": {"sourceIds":["sc-psa-psgc"],"verification":"single-source","assertionType":"direct","note":null},
-      "publication": {"state":"published"},
-      "freshness": {"lastVerifiedAt":"2026-09-05","reviewCadenceDays":365,"validFrom":null,"validUntil":null}
+      "evidence": {
+        "sourceIds": ["sc-psa-psgc"],
+        "verification": "single-source",
+        "assertionType": "direct",
+        "note": null
+      },
+      "publication": { "state": "published" },
+      "freshness": {
+        "lastVerifiedAt": "2026-09-05",
+        "reviewCadenceDays": 365,
+        "validFrom": null,
+        "validUntil": null
+      }
     },
     {
       "id": "sc-psa-barangay-count",
       "label": "Barangay count",
       "value": 26,
-      "evidence": {"sourceIds":["sc-psa-psgc"],"verification":"single-source","assertionType":"direct","note":null},
-      "publication": {"state":"published"},
-      "freshness": {"lastVerifiedAt":"2026-09-05","reviewCadenceDays":3650,"validFrom":null,"validUntil":null}
+      "evidence": {
+        "sourceIds": ["sc-psa-psgc"],
+        "verification": "single-source",
+        "assertionType": "direct",
+        "note": null
+      },
+      "publication": { "state": "published" },
+      "freshness": {
+        "lastVerifiedAt": "2026-09-05",
+        "reviewCadenceDays": 3650,
+        "validFrom": null,
+        "validUntil": null
+      }
     },
     {
       "id": "sc-mayor-2025",
       "label": "Current municipal mayor listed in the 2026 DBM directory",
       "value": "Joseph Kris Benjamin B. Agarao",
-      "evidence": {"sourceIds":["sc-dbm"],"verification":"single-source","assertionType":"direct","note":"The source supports the current listed officeholder and title, not a 2025–2028 term field."},
-      "publication": {"state":"published"},
-      "freshness": {"lastVerifiedAt":"2026-09-05","reviewCadenceDays":90,"validFrom":null,"validUntil":null}
+      "evidence": {
+        "sourceIds": ["sc-dbm"],
+        "verification": "single-source",
+        "assertionType": "direct",
+        "note": "The source supports the current listed officeholder and title, not a 2025–2028 term field."
+      },
+      "publication": { "state": "published" },
+      "freshness": {
+        "lastVerifiedAt": "2026-09-05",
+        "reviewCadenceDays": 90,
+        "validFrom": null,
+        "validUntil": null
+      }
     },
     {
       "id": "sc-vice-mayor-2025",
       "label": "Current municipal vice mayor listed in the 2026 DBM directory",
       "value": "Laarni A. Malibiran",
-      "evidence": {"sourceIds":["sc-dbm"],"verification":"single-source","assertionType":"direct","note":"The source supports the current listed officeholder and title, not a 2025–2028 term field."},
-      "publication": {"state":"published"},
-      "freshness": {"lastVerifiedAt":"2026-09-05","reviewCadenceDays":90,"validFrom":null,"validUntil":null}
+      "evidence": {
+        "sourceIds": ["sc-dbm"],
+        "verification": "single-source",
+        "assertionType": "direct",
+        "note": "The source supports the current listed officeholder and title, not a 2025–2028 term field."
+      },
+      "publication": { "state": "published" },
+      "freshness": {
+        "lastVerifiedAt": "2026-09-05",
+        "reviewCadenceDays": 90,
+        "validFrom": null,
+        "validUntil": null
+      }
     },
     {
       "id": "sc-procuring-entity-name",
       "label": "PhilGEPS procuring-entity name",
       "value": "MUNICIPALITY OF SANTA CRUZ, LAGUNA",
-      "evidence": {"sourceIds":["sc-philgeps-11459794"],"verification":"single-source","assertionType":"direct","note":null},
-      "publication": {"state":"published"},
-      "freshness": {"lastVerifiedAt":"2026-09-04","reviewCadenceDays":365,"validFrom":null,"validUntil":null}
+      "evidence": {
+        "sourceIds": ["sc-philgeps-11459794"],
+        "verification": "single-source",
+        "assertionType": "direct",
+        "note": null
+      },
+      "publication": { "state": "published" },
+      "freshness": {
+        "lastVerifiedAt": "2026-09-04",
+        "reviewCadenceDays": 365,
+        "validFrom": null,
+        "validUntil": null
+      }
     },
     {
       "id": "sc-sb-reported-barangay-count",
       "label": "Barangay count reported by Sangguniang Bayan source",
       "value": 26,
-      "evidence": {"sourceIds":["sc-sb-about"],"verification":"unverified","assertionType":"direct","note":"Observed at the SB source but not promoted as a public canonical fact from that source because the source remains under review."},
-      "publication": {"state":"staged"},
-      "freshness": {"lastVerifiedAt":"2026-09-04","reviewCadenceDays":365,"validFrom":null,"validUntil":null}
+      "evidence": {
+        "sourceIds": ["sc-sb-about"],
+        "verification": "unverified",
+        "assertionType": "direct",
+        "note": "Observed at the SB source but not promoted as a public canonical fact from that source because the source remains under review."
+      },
+      "publication": { "state": "staged" },
+      "freshness": {
+        "lastVerifiedAt": "2026-09-04",
+        "reviewCadenceDays": 365,
+        "validFrom": null,
+        "validUntil": null
+      }
     }
   ]
 }
