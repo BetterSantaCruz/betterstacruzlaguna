@@ -86,3 +86,6 @@ graphify-out/
 context/transcripts/
 .memsearch/
 ide_state.json/
+
+# Design guidelines
+design.md

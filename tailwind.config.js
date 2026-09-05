@@ -9,7 +9,7 @@ module.exports = {
       // Kapwa Design System provides all design tokens via @bettergov/kapwa package
       // Custom theme extensions are kept minimal to avoid conflicts
       fontFamily: {
-        // Use Inter from index.css, not Figtree
+        // Use IBM Plex Sans as the default
         sans: ['var(--font-kapwa-sans)'],
         mono: ['var(--font-kapwa-mono)'],
       },
