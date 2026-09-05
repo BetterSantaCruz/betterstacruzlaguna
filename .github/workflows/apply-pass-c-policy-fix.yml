@@ -7,7 +7,7 @@ on:
       - '.github/workflows/apply-pass-c-policy-fix.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   format:
@@ -28,7 +28,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Format Pass C files
+      - name: Format scoped Pass C files
         run: >-
           npx prettier --write
           config/data-sources/sbstacruz-legislation.json
@@ -42,20 +42,43 @@ jobs:
           scripts/legislation/sbstacruz/schemas.ts
           .github/workflows/sb-legislation-pilot.yml
 
-      - name: Upload formatted files
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: pass-c-formatted-files
-          path: |
-            config/data-sources/sbstacruz-legislation.json
-            scripts/legislation/sbstacruz/characterize-interactions.ts
-            scripts/legislation/sbstacruz/characterize.ts
-            scripts/legislation/sbstacruz/collector.test.ts
-            scripts/legislation/sbstacruz/collector.ts
-            scripts/legislation/sbstacruz/parse.test.ts
-            scripts/legislation/sbstacruz/parse.ts
-            scripts/legislation/sbstacruz/pilot.ts
-            scripts/legislation/sbstacruz/schemas.ts
+      - name: Verify scoped diff and tests
+        run: |
+          git diff --check
+          npx vitest run scripts/legislation/sbstacruz/parse.test.ts scripts/legislation/sbstacruz/collector.test.ts
+          npx tsc --noEmit
+
+      - name: Commit formatting only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- \
+            config/data-sources/sbstacruz-legislation.json \
+            scripts/legislation/sbstacruz/characterize-interactions.ts \
+            scripts/legislation/sbstacruz/characterize.ts \
+            scripts/legislation/sbstacruz/collector.test.ts \
+            scripts/legislation/sbstacruz/collector.ts \
+            scripts/legislation/sbstacruz/parse.test.ts \
+            scripts/legislation/sbstacruz/parse.ts \
+            scripts/legislation/sbstacruz/pilot.ts \
+            scripts/legislation/sbstacruz/schemas.ts \
+            .github/workflows/sb-legislation-pilot.yml; then
+            echo "No scoped formatting changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- \
+            config/data-sources/sbstacruz-legislation.json \
+            scripts/legislation/sbstacruz/characterize-interactions.ts \
+            scripts/legislation/sbstacruz/characterize.ts \
+            scripts/legislation/sbstacruz/collector.test.ts \
+            scripts/legislation/sbstacruz/collector.ts \
+            scripts/legislation/sbstacruz/parse.test.ts \
+            scripts/legislation/sbstacruz/parse.ts \
+            scripts/legislation/sbstacruz/pilot.ts \
+            scripts/legislation/sbstacruz/schemas.ts \
             .github/workflows/sb-legislation-pilot.yml
-          if-no-files-found: error
-          retention-days: 7
+          git commit -m "style(data): format Pass C implementation"
+          gh auth setup-git
+          git push origin HEAD:feat/sb-legislation-staging
