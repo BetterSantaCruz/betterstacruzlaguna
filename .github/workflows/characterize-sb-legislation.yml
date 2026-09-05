@@ -3,6 +3,10 @@ name: Temporary SB Legislation Characterization
 on:
   push:
     branches: [feat/sb-legislation-staging]
+    paths:
+      - '.github/workflows/characterize-sb-legislation.yml'
+      - 'scripts/legislation/sbstacruz/characterize.ts'
+      - 'scripts/legislation/sbstacruz/characterize-interactions.ts'
 
 permissions:
   contents: read
@@ -30,16 +34,21 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Characterize public SB legislation transport
+      - name: Characterize public SB initial transport
         run: >-
           npx tsx scripts/legislation/sbstacruz/characterize.ts
           --output pipeline/openlgu/sbstacruz-legislation/characterization/characterization.json
           --wait-ms 8000
 
+      - name: Characterize public pagination and filters
+        run: >-
+          npx tsx scripts/legislation/sbstacruz/characterize-interactions.ts
+          --output pipeline/openlgu/sbstacruz-legislation/characterization/interactions.json
+
       - name: Upload characterization artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: sb-legislation-characterization
-          path: pipeline/openlgu/sbstacruz-legislation/characterization/characterization.json
+          path: pipeline/openlgu/sbstacruz-legislation/characterization
           if-no-files-found: error
           retention-days: 7
