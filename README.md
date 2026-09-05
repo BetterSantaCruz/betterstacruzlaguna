@@ -16,6 +16,7 @@ The first release is source-led and intentionally incomplete. It now publishes a
 - Kapwa semantic design tokens, responsive UI, and English/Filipino i18n seams.
 - Machine-readable source registry and provenance validation.
 - A verified population snapshot route with explicit unavailable states for unsupported statistical datasets.
+- A committed Vercel SPA fallback for BrowserRouter deep links; no deployment is configured by this repository.
 - Separate seams for civic data, Citizens' Charter services, OpenLGU legislation, transparency, and future review/promotion workflows.
 - Documentation of Santa Cruz evidence, gaps, identity safeguards, and Pagsanjan collaboration context.
 

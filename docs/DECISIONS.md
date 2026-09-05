@@ -71,3 +71,10 @@
 - Decision: label the verified barangay baseline and two top executives as published, while naming the incomplete council, department, contact, and official datasets as gated.
 - Reason: accurate status language is part of the evidence boundary; stale “not published” copy can hide usable records or confuse contributors about what is actually supported.
 - Revisit when: a reviewed roster or office dataset changes the public scope.
+
+## D-010 — Preserve direct links for a future static Vercel release
+
+- Date: 2026-09-05
+- Decision: commit the Vercel SPA rewrite for the existing `BrowserRouter` application, but keep deployment and domain configuration outside this repository until explicitly authorized.
+- Rationale: Vercel's Vite guidance requires a root `vercel.json` rewrite for SPA deep links. The config prevents direct civic routes from falling through to a host-level 404 without asserting that the site is deployed.
+- Revisit when: the deployment target changes, the router becomes multi-page/SSR, or a deliberate production release is approved.

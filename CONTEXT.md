@@ -58,6 +58,7 @@ The architecture is intentionally retained while gated modules remain empty. The
 - `src/lib/provenance.ts` and its tests define the first source-record validation boundary, including HTTP(S) URLs, date cutoffs, municipality identity, and unique source IDs.
 - `src/lib/canonical-data.ts` and `scripts/validate-civic-data.ts` enforce the published PSA/DBM/population data shape, source parity, Santa Cruz code family, and population reconciliation before a build.
 - `scripts/generate-llms-txt.js` regenerates the crawler-facing publication boundary during `npm run build`; keep it aligned with the same verified/gated scope as the UI and docs.
+- `vercel.json` contains the static SPA rewrite required for BrowserRouter deep links if a future Vercel deployment is intentionally configured. It does not imply that a deployment or domain exists.
 - `src/data/sources/source-registry.json` is the source ledger; `src/data/civic-registry.json` contains only facts that have passed the current evidence gate.
 - `raw_data/README.md` documents selective source retention. Do not restore BetterLB/Los Baños raw exports into this repository.
 - The config must not invent Santa Cruz coordinates, a BetterSantaCruz domain, social links, contact email, service records, office contacts, or municipal branding. The published official records are limited to the PSA barangay baseline and the two DBM-listed top executives, with their provenance attached in the data files.

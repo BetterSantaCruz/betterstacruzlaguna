@@ -16,6 +16,7 @@ As of 2026-09-05, BetterSantaCruz is a public foundation under active implementa
 - Government and home surfaces now distinguish the published PSA/DBM baseline from gated council, department, contact, and barangay-official records; inherited Santa Cruz copy no longer says the published barangay baseline is absent.
 - The generated `public/llms.txt` crawler note mirrors the same verified baseline and gated-dataset boundary.
 - The statistics module exposes the verified population snapshot and explicitly gates CMCI and municipal-income routes when their datasets are unavailable.
+- The repository includes and tests the Vercel SPA rewrite needed for direct BrowserRouter deep links; no Vercel project or deployment is configured.
 
 ## In progress
 
