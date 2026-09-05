@@ -43,7 +43,9 @@ test.describe('BetterSantaCruz evidence-gated MVP', () => {
     await expect(summary).toContainText('7 reviewed');
 
     await page.getByLabel('Filter by review state').selectOption('all');
-    await page.getByLabel('Filter by source authority').selectOption('civic-index');
+    await page
+      .getByLabel('Filter by source authority')
+      .selectOption('civic-index');
     await expect(page.getByText(/source records shown/i)).toContainText('1');
     await expect(page.getByText('BetterGov.ph')).toBeVisible();
 
