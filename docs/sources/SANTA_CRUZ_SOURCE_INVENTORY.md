@@ -30,7 +30,7 @@ Checked: 2026-09-05. The registry at `src/data/sources/source-registry.json` is 
 ## Excluded or unresolved identity
 
 - `https://stacruz.gov.ph` was excluded: it is a different Santa Cruz in Davao del Sur.
-- Search snippets and blocked DTI/PSA results are not used as canonical evidence.
+- Search snippets and blocked DTI results are not used as canonical evidence. The directly inspectable PSA municipality page supplies the current verified baseline.
 - The verified baseline publishes the PSA identity/population/26-barangay records and the two DBM-listed top executives. No complete current officials roster, office directory, official municipal address, Citizens' Charter, emergency contact, budget, audit finding, or infrastructure status is published by this foundation yet.
 
 ## Research next actions

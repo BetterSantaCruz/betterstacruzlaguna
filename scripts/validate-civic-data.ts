@@ -7,6 +7,11 @@ import {
   validateSourceRegistry,
   type SourceRecord,
 } from '../src/lib/provenance';
+import {
+  validateBarangayDirectory,
+  validateExecutiveDirectory,
+  validatePopulationData,
+} from '../src/lib/canonical-data';
 
 const projectRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -103,6 +108,22 @@ function main(): void {
   const civicRegistry = validateCivicRegistry(
     readJson('src/data/civic-registry.json'),
     sources,
+    today
+  );
+  const barangayDirectory = validateBarangayDirectory(
+    readJson('src/data/directory/barangays.json'),
+    sources,
+    today
+  );
+  validateExecutiveDirectory(
+    readJson('src/data/directory/executive.json'),
+    sources,
+    today
+  );
+  validatePopulationData(
+    readJson('src/data/statistics/population.json'),
+    sources,
+    barangayDirectory.map(barangay => barangay.psgc10),
     today
   );
 

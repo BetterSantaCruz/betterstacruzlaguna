@@ -47,3 +47,11 @@
 - Decision: publish the PSA municipality identity, 2024 POPCEN population, 26 barangays, and the DBM-listed mayor and vice mayor; keep all unsupported fields empty or disabled.
 - Reason: these records have direct, date-stamped provenance, while a complete officials roster, office directory, services, legislation, finance, and contacts still lack sufficient evidence.
 - Revisit when: a newer primary source changes the baseline or a separate corroboration closes one of the remaining data gaps.
+
+## D-007 — Validate promoted records across data files before builds
+
+- Date: 2026-09-05
+- Context: the published baseline spans directory and statistics files whose relationships are not expressed by the inherited JSON schemas alone.
+- Decision: run canonical-data shape, provenance, identity, and reconciliation checks from `validate:data` before every production build.
+- Reason: a valid individual JSON object can still point to the wrong source, municipality, code family, year, or population total when files drift independently.
+- Revisit when: a reviewed domain schema replaces or extends the current Santa Cruz-specific baseline validator.

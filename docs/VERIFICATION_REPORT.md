@@ -5,7 +5,7 @@ Research and repository audit date: 2026-09-05
 ## Verified in this pass
 
 - Authenticated GitHub identity: `Diannn3` (local `gh` auth check).
-- Public repository: [Diannn3/betterstacruzlaguna](https://github.com/Diannn3/betterstacruzlaguna), default branch `main`, current verified local baseline commit `6fad7fe`.
+- Public repository: [Diannn3/betterstacruzlaguna](https://github.com/Diannn3/betterstacruzlaguna), default branch `main`; the local implementation is committed and no production deployment is claimed.
 - BetterLGU PR #244 is open, titled `Add Santa Cruz, Laguna to directory`, and names `@Diannn3`; directory status is `🔵 Planned`.
 - BetterLB is a suitable architectural base; its full checkout structure is present locally.
 - PhilGEPS notice 11459794 visibly uses the exact procuring-entity name `MUNICIPALITY OF SANTA CRUZ, LAGUNA`.
@@ -13,6 +13,7 @@ Research and repository audit date: 2026-09-05
 - The 2026 DBM directory lists Joseph Kris Benjamin B. Agarao as mayor and Laarni A. Malibiran as vice mayor. These two records are promoted; the full council and department roster remains unverified.
 - DPWH provides a Santa Cruz municipal-hall rehabilitation planning document with a preliminary ABC of PHP 20,000,000 and 240-day duration. It is retained as planning evidence, not project-status proof.
 - The population route renders the PSA-backed 2024 snapshot and leaves growth, CMCI, and municipal-income values unavailable where comparable or authoritative data is not present.
+- Canonical-data validation now checks the published directory/statistics relationship, source metadata parity, Santa Cruz PSGC family, and population reconciliation before builds.
 - The BetterGov exact-organization route exists as a public index surface; changing counts are not treated as facts.
 - Pagsanjan's official portal and BetterPagsanjan public repository were located; existing maintainer ownership is preserved.
 
@@ -31,4 +32,4 @@ Research and repository audit date: 2026-09-05
 
 ## Repository verification status
 
-Civic-data validation, focused civic-data tests, lint, TypeScript, and Prettier pass for the baseline promotion. Full unit, production-build, and browser smoke verification is rerun after the implementation slices; the broader inherited E2E files remain retained architecture/reference coverage and are not claimed as a full passing suite. The public repository is verified; no production deployment is claimed by this report.
+Civic-data validation, 386 unit tests, lint, TypeScript, Prettier, the production build, and the 11-test browser smoke suite pass for the current local implementation. The broader inherited E2E files remain retained architecture/reference coverage and are not claimed as a full passing suite. The public repository is verified; no production deployment is claimed by this report.

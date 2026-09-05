@@ -32,7 +32,9 @@ Facts in `src/data/civic-registry.json` are deliberately small and carry the sou
 
 ## Future domain records
 
-Officials, departments, barangays, services, legislation, procurement, projects, statistics, and contacts should use explicit domain schemas plus provenance. A record with no source is a staging candidate, not canonical public data.
+Officials, departments, barangays, services, legislation, procurement, projects, statistics, and contacts should use explicit domain schemas plus provenance. A record with no source is a staging candidate, not canonical public data. The currently published PSA barangay baseline, DBM executive records, and population snapshot are checked by `src/lib/canonical-data.ts`; `npm run validate:data` runs those checks before the production build.
+
+The current canonical checks also reconcile the 26 barangay records to the Santa Cruz PSGC family and population total, require source metadata to match the source registry, and require population barangay IDs and latest-year totals to match the directory. Empty or gated datasets remain valid when their routes do not claim publication.
 
 ## Identity rules
 
